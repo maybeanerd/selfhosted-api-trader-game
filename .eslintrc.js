@@ -23,5 +23,6 @@ module.exports = {
       'error',
       { devDependencies: ['**/*.spec.ts', '**/*.e2e-spec.ts'] },
     ],
+    'import/extensions': 0,
   },
 };
