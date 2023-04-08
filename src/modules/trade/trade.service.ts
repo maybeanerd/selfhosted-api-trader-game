@@ -6,7 +6,7 @@ import { ResourceService } from '@/modules/resource/resource.service';
 export class TradeService {
   constructor(private readonly resourceService: ResourceService) {}
 
-  getResource(type: Resource, amount: number) {
+  takeResource(type: Resource, amount: number) {
     const receivedAmount = this.resourceService.takeAmountOfResource(
       type,
       amount,
