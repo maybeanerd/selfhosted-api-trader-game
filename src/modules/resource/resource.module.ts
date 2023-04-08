@@ -5,5 +5,6 @@ import { ResourceService } from '@/modules/resource/resource.service';
   imports: [],
   controllers: [],
   providers: [ResourceService],
+  exports: [ResourceService],
 })
 export class ResourceModule {}

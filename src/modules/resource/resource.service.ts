@@ -23,4 +23,13 @@ export class ResourceService {
   getAmountOfResource(type: Resource): number {
     return availableResources.get(type) ?? 0;
   }
+
+  takeAmountOfResource(type: Resource, amount: number): number {
+    const currentAmount = availableResources.get(type) ?? 0;
+    if (amount > currentAmount) {
+      return 0;
+    }
+    availableResources.set(type, currentAmount - amount);
+    return amount;
+  }
 }
