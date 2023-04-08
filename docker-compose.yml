@@ -1,7 +1,29 @@
 version: "3.9"
+
 services:
-  main:
+  gameservice:
     build: .
     image: ${IMAGE_NAME}
+    networks:
+      - default
     environment:
       - DUMMY_ENV_VAR=${DUMMY_ENV_VAR}
+
+  database:
+    image: postgres:15 
+    networks:
+      - default
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+volumes:
+  db-data:
+
+networks:
+  default:
