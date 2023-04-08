@@ -40,8 +40,15 @@ describe('AppController (e2e)', () => {
   it('/v1/trade (GET)', () => {
     return request(app.getHttpServer())
       .get('/v1/trade')
-      .query({ given: 'wood' })
+      .query({ type: 'wood', amount: 69 })
       .expect(200)
-      .expect({ name: 'stone', amount: 69 });
+      .expect({ type: 'wood', amount: 0 });
+  });
+
+  it('/v1/resource/wood (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/v1/resource/wood')
+      .expect(200)
+      .expect('0');
   });
 });
