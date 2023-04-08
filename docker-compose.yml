@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  main:
+    build: .
+    image: ${IMAGE_NAME}
+    environment:
+      - DUMMY_ENV_VAR=${DUMMY_ENV_VAR}

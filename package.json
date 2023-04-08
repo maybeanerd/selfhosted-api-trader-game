@@ -1,0 +1,37 @@
+{
+  "name": "selfhosted-api-trader-game",
+  "version": "0.0.1",
+  "description": "A WIP game.",
+  "main": "dist/index.js",
+  "engines": {
+    "node": "18.15.0"
+  },
+  "devDependencies": {
+    "@types/centra": "2.2.0",
+    "@types/node": "18.15.11",
+    "@typescript-eslint/eslint-plugin": "5.57.1",
+    "@typescript-eslint/parser": "5.57.1",
+    "eslint": "8.38.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "prettier": "2.8.7",
+    "rimraf": "4.4.1",
+    "typescript": "5.0.4"
+  },
+  "scripts": {
+    "dev": "npm run build && node dist/index.js",
+    "lint": "eslint \"src/**/*\"",
+    "lint:fix": "eslint \"src/**/*\" --fix",
+    "build": "rimraf ./dist && tsc",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/T0TProduction/selfhosted-api-trader-game.git"
+  },
+  "author": "Sebastian Di Luzio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/T0TProduction/selfhosted-api-trader-game/issues"
+  },
+  "homepage": "https://github.com/T0TProduction/selfhosted-api-trader-game#readme"
+}
