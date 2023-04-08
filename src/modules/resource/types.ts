@@ -76,4 +76,26 @@ Cobalt is required for certain types of high-tech manufacturing.
 
 Own ideas:
 Paper is required to sign contracts: to automate trading
+
+Wood will enable carts and wheels so that trades can be finished faster, and have more capacity
+It could also enable ships later on
+Similarly tires could enable cars, or electricity and steam power/coal could enable trains
+
+
+Chat GPT ideas:
+In order to promote trading between villages/players, it's a good idea to make certain resources scarce in some areas and more abundant in others. This will encourage players to trade with each other to obtain the resources they need to grow and develop their villages. Here are some suggestions for basic resources and how you could make them scarce:
+
+Wood: This could be the most abundant resource, as it is available in most areas of the game world. However, you could make it scarce in certain regions that have been heavily deforested, or in areas that are too dry or too cold to support dense forests.
+
+Stone: This could be another fairly common resource, but you could make it scarce in regions that lack natural rock formations or have already been heavily mined.
+
+Water: While water may not be a resource that players can trade directly, you could make it scarce in regions that are prone to droughts, or in areas where water pollution is a problem. This would make it difficult for players to grow crops and sustain their villages without trading for water.
+
+Food: You could make certain types of food scarce in different regions, depending on the climate and soil conditions. For example, wheat may be abundant in fertile river valleys, while fish may be scarce in landlocked regions.
+
+Metals: Different types of metals could be scarce in different regions, depending on the geology and availability of mineral resources. For example, iron may be abundant in some regions but scarce in others, while gold and silver may be found in limited quantities only in certain areas.
+
+Fuel: Depending on the technological level of your game world, different types of fuel could be scarce in different regions. For example, coal may be abundant in some regions but scarce in others, while regions without access to fossil fuels may rely heavily on wood or biofuels.
+
+To determine the weighting of each resource, you could consider factors such as the overall availability of the resource in your game world, the importance of the resource to the game mechanics, and the relative value of the resource to players. You could also adjust the scarcity of resources over time, based on player actions and events in the game world.
  */
