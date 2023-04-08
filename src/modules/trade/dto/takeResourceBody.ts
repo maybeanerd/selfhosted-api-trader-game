@@ -1,7 +1,7 @@
 import { Resource } from '@/modules/resource/types';
 import { IsEnum, IsNumber, Min } from 'class-validator';
 
-export class TakeResourceQuery {
+export class TakeResourceBody {
   @IsNumber()
   @Min(1)
     amount: number;

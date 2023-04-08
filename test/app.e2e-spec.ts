@@ -37,12 +37,19 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
-  it('/v1/trade (GET)', () => {
+  it('/v1/trade (DELETE)', () => {
     return request(app.getHttpServer())
-      .get('/v1/trade')
-      .query({ type: 'wood', amount: 69 })
+      .delete('/v1/trade')
+      .send({ type: 'wood', amount: 69 })
       .expect(200)
       .expect({ type: 'wood', amount: 0 });
+  });
+
+  it('/v1/trade (DELETE)', () => {
+    return request(app.getHttpServer())
+      .delete('/v1/trade')
+      .send({ type: 'wooood', amount: 69 })
+      .expect(400);
   });
 
   it('/v1/resource/wood (GET)', () => {
