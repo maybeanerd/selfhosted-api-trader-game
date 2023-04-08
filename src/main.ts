@@ -4,8 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { serverInfo } from '@/config/serverInfo';
+import { initializeApp } from '@/appInitialization';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,16 +12,7 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
-  // Set up open api spec generation
-  const config = new DocumentBuilder()
-    .setTitle(serverInfo.name)
-    .setDescription('TODO')
-    .setVersion(serverInfo.version)
-    .addTag(serverInfo.version)
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  initializeApp(app);
 
   await app.listen(3000);
 }
