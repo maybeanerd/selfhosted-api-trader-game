@@ -1,4 +1,9 @@
-dist
-node_modules
 .git
 .env
+
+dist
+node_modules
+coverage
+
+docker-compose.yml
+Dockerfile
