@@ -1,7 +1,7 @@
 import { Body, Controller, Delete } from '@nestjs/common';
 import { TradeService } from '@/modules/trade/trade.service';
-import { TakeResourceResponse } from './dto/takeResourceResponse';
-import { TakeResourceBody } from './dto/takeResourceBody';
+import { TakeResourceResponse } from './dto/takeResourceResponse.dto';
+import { TakeResourceBody } from './dto/takeResourceBody.dto';
 
 @Controller({ path: 'trade', version: '1' })
 export class TradeController {
