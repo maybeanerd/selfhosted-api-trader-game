@@ -21,7 +21,8 @@
     "noUnusedLocals": true /* Report errors on unused locals. */,
     "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true,    
+    "strictPropertyInitialization": false,
     "paths": {
     "@/*": ["src/*"],
     },
