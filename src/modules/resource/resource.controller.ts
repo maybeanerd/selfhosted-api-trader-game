@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ResourceService } from '@/modules/resource/resource.service';
-import { ResourceInPath } from './dto/ResourceInPath';
+import { ResourceInPath } from './dto/ResourceInPath.dto';
 
 @Controller({ path: 'resource', version: '1' })
 export class ResourceController {
