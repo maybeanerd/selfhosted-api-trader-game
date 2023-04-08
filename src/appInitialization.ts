@@ -11,9 +11,8 @@ export function initializeApp(app: INestApplication) {
   // Set up open api spec generation
   const config = new DocumentBuilder()
     .setTitle(serverInfo.name)
-    .setDescription('TODO')
+    .setDescription(serverInfo.desciption)
     .setVersion(serverInfo.version)
-    .addTag(serverInfo.version)
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
