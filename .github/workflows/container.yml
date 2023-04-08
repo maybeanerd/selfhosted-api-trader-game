@@ -1,4 +1,4 @@
-name: Pull request
+name: Build container
 on: 
   pull_request: 
     branches: 
@@ -8,7 +8,7 @@ jobs:
   build_container:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: ghcr.io/t0tproduction/magibot-main-pr
+      IMAGE_NAME: ghcr.io/t0tproduction/selfhosted-api-trader-game-main-pr
 
     steps:
       - name: Checkout

@@ -1,4 +1,4 @@
-name: Linting
+name: Build and test
 
 on: 
   push:
@@ -22,11 +22,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm ci
-        run: npm ci
+      - name : Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm i
       - name: lint
-        run: npm run lint
+        run: pnpm run lint
       - name: build
-        run: npm run build
-      - name: test
-        run: npm run test --if-present
+        run: pnpm run build
+      - name: unit test (with coverage)
+        run: pnpm run test:cov  
+      - name: e2e test
+        run: pnpm run test:e2e
