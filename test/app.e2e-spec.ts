@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from '@/app.module';
+import request from 'supertest';
+import { AppModule } from '@/modules/app.module';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { initializeApp } from '@/appInitialization';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -18,6 +19,8 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
     );
+
+    initializeApp(app);
 
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
@@ -32,5 +35,13 @@ describe('AppController (e2e)', () => {
       .get('/')
       .expect(200)
       .expect('Hello World!');
+  });
+
+  it('/v1/trade (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/v1/trade')
+      .query({ given: 'wood' })
+      .expect(200)
+      .expect({ name: 'stone', amount: 69 });
   });
 });
