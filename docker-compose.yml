@@ -7,7 +7,7 @@ services:
     networks:
       - default
     environment:
-      - DUMMY_ENV_VAR=${DUMMY_ENV_VAR}
+      - INSTANCE_NAME=${INSTANCE_NAME}
 
   database:
     image: postgres:15 
