@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { TradeService } from '@/modules/trade/trade.service';
-import { TradeOfferInput } from './dto/tradeOfferInput';
-import { TradeOffer } from './dto/tradeOffer';
+import { TradeOfferInput } from './dto/TradeOfferInput';
+import { TradeOffer } from './dto/TradeOffer';
 import { randomUUID } from 'crypto';
 import { Id } from '@/dto/id.dto';
 import { Resource } from '@/modules/resource/types';
