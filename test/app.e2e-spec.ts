@@ -7,6 +7,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { initializeApp } from '@/appInitialization';
+import { randomUUID } from 'crypto';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -31,11 +32,12 @@ describe('AppController (e2e)', () => {
   });
 
   it('/v1/trade (DELETE)', () => {
+    const id = randomUUID();
     return request(app.getHttpServer())
       .delete('/v1/trade')
-      .send({ type: 'wood', amount: 69 })
+      .send({ id })
       .expect(200)
-      .expect({ type: 'wood', amount: 0 });
+      .expect({ id, requestedResources: [], offeredResources: [] });
   });
 
   it('/v1/trade (DELETE)', () => {
@@ -49,6 +51,6 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/v1/resource/wood')
       .expect(200)
-      .expect('0');
+      .expect({ amount: 0, accumulationPerTick: 0 });
   });
 });
