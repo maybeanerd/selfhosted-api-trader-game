@@ -1,4 +1,4 @@
-import { Id } from '@/dto/id.dto';
+import { Id } from '@/dto/Id.dto';
 import { ResourceWithAmount } from '@/modules/resource/dto/ResourceWithAmount.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';

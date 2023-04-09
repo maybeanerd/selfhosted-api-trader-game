@@ -3,7 +3,7 @@ import { TradeService } from '@/modules/trade/trade.service';
 import { TradeOfferInput } from './dto/TradeOfferInput';
 import { TradeOffer } from './dto/TradeOffer';
 import { randomUUID } from 'crypto';
-import { Id } from '@/dto/id.dto';
+import { Id } from '@/dto/Id.dto';
 import { Resource } from '@/modules/resource/types';
 
 @Controller({ path: 'trade', version: '1' })
