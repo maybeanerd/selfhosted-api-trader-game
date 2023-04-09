@@ -10,7 +10,7 @@ services:
       - INSTANCE_NAME=${INSTANCE_NAME}
 
   database:
-    image: mongo:4
+    image: mongo:6
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
