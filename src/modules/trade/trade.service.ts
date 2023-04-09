@@ -17,4 +17,13 @@ export class TradeService {
       amount: receivedAmount,
     };
   }
+
+  addResource(type: Resource, amount: number) {
+    const addedAmount = this.resourceService.addAmountOfResource(type, amount);
+
+    return {
+      type: type,
+      amount: addedAmount,
+    };
+  }
 }
