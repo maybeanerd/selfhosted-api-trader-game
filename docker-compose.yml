@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   gameservice:
@@ -10,17 +10,17 @@ services:
       - INSTANCE_NAME=${INSTANCE_NAME}
 
   database:
-    image: postgres:15 
+    image: mongo:4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    restart: always
     networks:
       - default
     ports:
-      - 5432:5432
+      - 27017:27017
     volumes:
-      - db-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - db-data:/data/db
 
 volumes:
   db-data:
