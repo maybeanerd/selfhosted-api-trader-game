@@ -30,13 +30,6 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
-  });
-
   it('/v1/trade (DELETE)', () => {
     return request(app.getHttpServer())
       .delete('/v1/trade')

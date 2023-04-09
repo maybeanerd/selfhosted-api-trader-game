@@ -32,4 +32,11 @@ export class ResourceService {
     availableResources.set(type, currentAmount - amount);
     return amount;
   }
+
+  addAmountOfResource(type: Resource, amount: number): number {
+    const currentAmount = availableResources.get(type) ?? 0;
+    const newAmount = currentAmount + amount;
+    availableResources.set(type, newAmount);
+    return newAmount;
+  }
 }
