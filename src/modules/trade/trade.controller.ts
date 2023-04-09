@@ -12,6 +12,8 @@ export class TradeController {
 
   @Get()
   getTradeOffers(): Array<TradeOffer> {
+    // TODO build logic around this
+
     return [
       {
         id: randomUUID(),
@@ -43,7 +45,7 @@ export class TradeController {
   }
 
   @Put()
-  acceptTrade(@Body() body: Id): TradeOffer {
+  acceptTradeOffer(@Body() body: Id): TradeOffer {
     // TODO build logic around this
     return { ...body, requestedResources: [], offeredResources: [] };
   }
