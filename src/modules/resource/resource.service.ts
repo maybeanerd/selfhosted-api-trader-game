@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Resource } from './types';
+import { ResourceStatistic } from './dto/ResourceStatistic.dto';
 
 const availableResources = new Map<Resource, number>(
   Object.values(Resource).map((resource) => [resource, 0]),
@@ -18,6 +19,11 @@ export class ResourceService {
 
     const amountOfWood = this.getAmountOfResource(Resource.WOOD);
     availableResources.set(Resource.WOOD, amountOfWood + 5);
+  }
+
+  getStatisticOfResource(type: Resource): ResourceStatistic {
+    const amount = this.getAmountOfResource(type);
+    return { amount, accumulationPerTick: 0 };
   }
 
   getAmountOfResource(type: Resource): number {
