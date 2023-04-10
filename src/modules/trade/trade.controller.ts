@@ -1,17 +1,17 @@
 import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { TradeService } from '@/modules/trade/trade.service';
-import { TradeOfferInput } from './dto/TradeOfferInput';
-import { TradeOffer } from './dto/TradeOffer';
+import { TradeOfferInputDto } from './dto/TradeOfferInput';
+import { TradeOfferDto } from './dto/TradeOffer';
 import { randomUUID } from 'crypto';
-import { Id } from '@/dto/Id.dto';
-import { Resource } from '@/modules/resource/types';
+import { IdDto } from '@/dto/Id.dto';
+import { ResourceType } from '@/modules/resource/types';
 
 @Controller({ path: 'trade', version: '1' })
 export class TradeController {
   constructor(private readonly tradeService: TradeService) {}
 
   @Get()
-  getTradeOffers(): Array<TradeOffer> {
+  getTradeOffers(): Array<TradeOfferDto> {
     // TODO build logic around this
 
     return [
@@ -19,13 +19,13 @@ export class TradeController {
         id: randomUUID(),
         requestedResources: [
           {
-            type: Resource.WOOD,
+            type: ResourceType.WOOD,
             amount: 10,
           },
         ],
         offeredResources: [
           {
-            type: Resource.STONE,
+            type: ResourceType.STONE,
             amount: 10,
           },
         ],
@@ -34,7 +34,7 @@ export class TradeController {
   }
 
   @Post()
-  offerTrade(@Body() body: TradeOfferInput): TradeOffer {
+  offerTrade(@Body() body: TradeOfferInputDto): TradeOfferDto {
     // TODO build logic around this
 
     body.offeredResources.forEach((resource) => {
@@ -45,13 +45,13 @@ export class TradeController {
   }
 
   @Put()
-  acceptTradeOffer(@Body() body: Id): TradeOffer {
+  acceptTradeOffer(@Body() body: IdDto): TradeOfferDto {
     // TODO build logic around this
     return { ...body, requestedResources: [], offeredResources: [] };
   }
 
   @Delete()
-  removeTradeOffer(@Body() body: Id): TradeOffer {
+  removeTradeOffer(@Body() body: IdDto): TradeOfferDto {
     // TODO build logic around this
     return { ...body, requestedResources: [], offeredResources: [] };
   }

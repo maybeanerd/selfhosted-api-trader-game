@@ -1,11 +1,11 @@
 import { IsEnum, IsNumber, Min } from 'class-validator';
-import { Resource } from '../types';
+import { ResourceType } from '../types';
 
-export class ResourceWithAmount {
+export class ResourceWithAmountDto {
   @IsNumber()
   @Min(0)
     amount: number;
 
-  @IsEnum(Resource)
-    type: Resource;
+  @IsEnum(ResourceType)
+    type: ResourceType;
 }

@@ -8,12 +8,15 @@ services:
       - default
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
 
   database:
     image: mongo:6
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MONGO_INITDB_DATABASE: nest
     restart: always
     networks:
       - default
@@ -22,11 +25,11 @@ services:
     volumes:
       - db-data:/data/db
 
-  authserver:
-    image: oryd/kratos:v0.11
-    restart: always
-    networks:
-      - default
+#  authserver:
+#    image: oryd/kratos:v0.11
+#    restart: always
+#    networks:
+#      - default
 
 volumes:
   db-data:
