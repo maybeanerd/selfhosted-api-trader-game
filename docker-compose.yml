@@ -22,6 +22,12 @@ services:
     volumes:
       - db-data:/data/db
 
+  authserver:
+    image: oryd/kratos:v0.11
+    restart: always
+    networks:
+      - default
+
 volumes:
   db-data:
 

@@ -1,11 +1,11 @@
-FROM node:18
+FROM node:18.15.0
 WORKDIR /app
 
 # Install pnpm
 RUN npm install -g pnpm
 
 # Intall dependencies
-COPY ["package.json", "package-lock.json*", "./"]
+COPY ["package.json", "pnpm-lock.yaml", "./"]
 RUN pnpm i
 
 # Build
