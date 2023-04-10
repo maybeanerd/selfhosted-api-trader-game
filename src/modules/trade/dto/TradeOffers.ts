@@ -1,16 +1,16 @@
 import { Type } from 'class-transformer';
 import { IsArray, ValidateNested } from 'class-validator';
-import { TradeOffer } from './TradeOffer';
+import { TradeOfferDto } from './TradeOffer';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class TradeOffers {
+export class TradeOffersDto {
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => TradeOffer)
+  @Type(() => TradeOfferDto)
   @ApiProperty({
     // Seems like auto detection of array types is not working for swagger
     isArray: true,
-    type: TradeOffer,
+    type: TradeOfferDto,
   })
-    availableOffers: Array<TradeOffer>;
+    availableOffers: Array<TradeOfferDto>;
 }

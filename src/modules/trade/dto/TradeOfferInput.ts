@@ -1,4 +1,4 @@
-import { TradeOffer } from './TradeOffer';
+import { TradeOfferDto } from './TradeOffer';
 import { OmitType } from '@nestjs/swagger';
 
-export class TradeOfferInput extends OmitType(TradeOffer, ['id']) {}
+export class TradeOfferInputDto extends OmitType(TradeOfferDto, ['id']) {}

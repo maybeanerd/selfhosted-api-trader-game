@@ -1,7 +1,7 @@
 import { IsEnum, IsNumber, Min } from 'class-validator';
-import { Resource } from '../types';
+import { ResourceType } from '../types';
 
-export class ResourceStatistic {
+export class ResourceStatisticDto {
   @IsNumber()
   @Min(0)
     amount: number;
@@ -10,6 +10,6 @@ export class ResourceStatistic {
   @Min(0)
     accumulationPerTick: number;
 
-  @IsEnum(Resource)
-    type: Resource;
+  @IsEnum(ResourceType)
+    type: ResourceType;
 }

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ResourceService } from './resource.service';
-import { Resource } from './types';
+import { ResourceType } from './types';
 
 describe('ResourceService', () => {
   let resourceService: ResourceService;
@@ -15,7 +15,7 @@ describe('ResourceService', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(resourceService.getAmountOfResource(Resource.DIAMOND)).toBe(0);
+      expect(resourceService.getAmountOfResource(ResourceType.DIAMOND)).toBe(0);
     });
   });
 });

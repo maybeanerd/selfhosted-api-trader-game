@@ -2,12 +2,19 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TradeModule } from '@/modules/trade/trade.module';
 import { ResourceModule } from '@/modules/resource/resource.module';
-// import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
+import { dbConfig } from '@/config/dbConfig';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    // MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot('mongodb://database:27017', {
+      auth: {
+        username: dbConfig.userName,
+        password: dbConfig.password,
+      },
+      dbName: 'nest',
+    }),
 
     TradeModule,
     ResourceModule,
