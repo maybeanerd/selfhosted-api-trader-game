@@ -51,6 +51,6 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/v1/resource/wood')
       .expect(200)
-      .expect({ amount: 0, accumulationPerTick: 0 });
+      .expect({ type: 'wood', amount: 0, accumulationPerTick: 0 });
   });
 });

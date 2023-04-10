@@ -11,9 +11,6 @@ const availableResources = new Map<Resource, number>(
 export class ResourceService {
   @Cron(CronExpression.EVERY_5_SECONDS)
   handleCron() {
-    console.log('Called every 5 seconds');
-    console.log(availableResources);
-
     const amountOfStone = this.getAmountOfResource(Resource.STONE);
     availableResources.set(Resource.STONE, amountOfStone + 3);
 
@@ -21,13 +18,30 @@ export class ResourceService {
     availableResources.set(Resource.WOOD, amountOfWood + 5);
   }
 
-  getStatisticOfResource(type: Resource): ResourceStatistic {
-    const amount = this.getAmountOfResource(type);
-    return { amount, accumulationPerTick: 0 };
-  }
-
   getAmountOfResource(type: Resource): number {
     return availableResources.get(type) ?? 0;
+  }
+
+  getAmountOfAllResources() {
+    return Array.from(availableResources).map(([type, amount]) => ({
+      type,
+      amount,
+    }));
+  }
+
+  getStatisticOfAllResources(): Array<ResourceStatistic> {
+    const amounts = this.getAmountOfAllResources();
+    const statistics = amounts.map(({ type, amount }) => ({
+      type,
+      amount,
+      accumulationPerTick: 0,
+    }));
+    return statistics;
+  }
+
+  getStatisticOfResource(type: Resource): ResourceStatistic {
+    const amount = this.getAmountOfResource(type);
+    return { amount, type, accumulationPerTick: 0 };
   }
 
   takeAmountOfResource(type: Resource, amount: number): number {

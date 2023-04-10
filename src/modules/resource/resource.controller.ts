@@ -8,7 +8,12 @@ export class ResourceController {
   constructor(private readonly resourceService: ResourceService) {}
 
   @Get(':type')
-  getAmountOfResource(@Param() params: ResourceType): ResourceStatistic {
+  getStatisticOfResource(@Param() params: ResourceType): ResourceStatistic {
     return this.resourceService.getStatisticOfResource(params.type);
+  }
+
+  @Get()
+  getStatisticOfAllResources(): Array<ResourceStatistic> {
+    return this.resourceService.getStatisticOfAllResources();
   }
 }
