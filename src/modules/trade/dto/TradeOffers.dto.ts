@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsArray, ValidateNested } from 'class-validator';
-import { TradeOfferDto } from './TradeOffer';
+import { TradeOfferDto } from './TradeOffer.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TradeOffersDto {

@@ -12,7 +12,7 @@ export class Resource {
   @Prop({ required: true })
     accumulationPerTick: number;
 
-  @Prop({ required: true, type: String, enum: ResourceType })
+  @Prop({ required: true, type: String, enum: ResourceType, index: true })
     type: ResourceType;
 }
 

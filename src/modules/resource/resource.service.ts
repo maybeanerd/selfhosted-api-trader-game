@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Resource, ResourceDocument } from './schemas/Resource.schema';
-import { Model } from 'mongoose';
+import { Connection, Model } from 'mongoose';
+import { transaction } from '@/util/mongoDbTransaction';
 
 function mapResourceDocumentToResourceStatisticDto(
   resourceDocument: ResourceDocument,
@@ -22,6 +23,7 @@ export class ResourceService {
   constructor(
     @InjectModel(Resource.name)
     private resourceModel: Model<Resource>,
+    @InjectConnection() private readonly connection: Connection,
   ) {}
 
   @Cron(CronExpression.EVERY_5_SECONDS)
@@ -99,5 +101,56 @@ export class ResourceService {
       return 0;
     }
     return amount;
+  }  
+  
+  
+  async addAmountsOfResources(
+    resources: Array<{ type: ResourceType; amount: number }>,
+  ): Promise<boolean> {
+    return transaction(this.connection, async (session) => {
+      const addedResources = await Promise.all(
+        resources.map(({ type, amount }) =>
+        // TODO make this create the resource if it doesn't exist yet
+          this.resourceModel
+            .findOneAndUpdate(
+              { type },
+              { $inc: { amount } },
+            )
+            .session(session)
+            .exec(),
+        ),
+      );
+
+      const failedToAddAllResources = addedResources.includes(null);
+
+      return !failedToAddAllResources;
+    });
+  }
+
+  async takeAmountsOfResources(
+    resources: Array<{ type: ResourceType; amount: number }>,
+  ): Promise<boolean> {
+    return transaction(this.connection, async (session) => {
+      const tookResources = await Promise.all(
+        resources.map(({ type, amount }) =>
+          this.resourceModel
+            .findOneAndUpdate(
+              {
+                type: type,
+                amount: {
+                  $gte: amount,
+                },
+              },
+              { $inc: { amount: -amount } },
+            )
+            .session(session)
+            .exec(),
+        ),
+      );
+
+      const failedToTakeAllResources = tookResources.includes(null);
+
+      return !failedToTakeAllResources;
+    });
   }
 }
