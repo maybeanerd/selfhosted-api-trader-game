@@ -1,7 +1,16 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { TradeService } from '@/modules/trade/trade.service';
-import { TradeOfferInputDto } from './dto/TradeOfferInput';
-import { TradeOfferDto } from './dto/TradeOffer';
+import { TradeOfferInputDto } from './dto/TradeOfferInput.dto';
+import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { randomUUID } from 'crypto';
 import { IdDto } from '@/dto/Id.dto';
 import { ResourceType } from '@/modules/resource/types';
@@ -34,14 +43,12 @@ export class TradeController {
   }
 
   @Post()
-  offerTrade(@Body() body: TradeOfferInputDto): TradeOfferDto {
-    // TODO build logic around this
-
-    body.offeredResources.forEach((resource) => {
-      this.tradeService.takeResource(resource.type, resource.amount);
-    });
-
-    return { ...body, id: randomUUID() };
+  async offerTrade(@Body() body: TradeOfferInputDto): Promise<TradeOfferDto> {
+    const createdTrade = await this.tradeService.createTradeOffer(body);
+    if (createdTrade === null) {
+      throw new HttpException('Not enough resources', HttpStatus.FORBIDDEN);
+    }
+    return createdTrade;
   }
 
   @Put()
