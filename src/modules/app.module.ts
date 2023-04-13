@@ -8,7 +8,7 @@ import { dbConfig } from '@/config/dbConfig';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    MongooseModule.forRoot('mongodb://database:27017', {
+    MongooseModule.forRoot(`mongodb://${dbConfig.host}:27017`, {
       auth: {
         username: dbConfig.userName,
         password: dbConfig.password,
