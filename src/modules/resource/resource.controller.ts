@@ -15,7 +15,7 @@ export class ResourceController {
   }
 
   @Get()
-  getStatisticOfAllResources(): Array<ResourceStatisticDto> {
+  getStatisticOfAllResources(): Promise<Array<ResourceStatisticDto>> {
     return this.resourceService.getStatisticOfAllResources();
   }
 }

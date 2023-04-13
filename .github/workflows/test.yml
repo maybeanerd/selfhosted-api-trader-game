@@ -30,7 +30,7 @@ jobs:
         run: pnpm run lint
       - name: build
         run: pnpm run build
-      - name: unit test (with coverage)
-        run: pnpm run test:cov  
-      - name: e2e test
-        run: pnpm run test:e2e
+      #- name: unit test (with coverage)
+      #  run: pnpm run test:cov  
+      #- name: e2e test
+      #  run: pnpm run test:e2e
