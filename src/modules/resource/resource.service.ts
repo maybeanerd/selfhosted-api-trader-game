@@ -3,12 +3,19 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Resource } from './schemas/Resource.schema';
+import { Resource, ResourceDocument } from './schemas/Resource.schema';
 import { Model } from 'mongoose';
 
-const availableResources = new Map<ResourceType, number>(
-  Object.values(ResourceType).map((resource) => [resource, 0]),
-);
+function mapResourceDocumentToResourceStatisticDto(
+  resourceDocument: ResourceDocument,
+): ResourceStatisticDto {
+  const resource = resourceDocument.toObject();
+  return {
+    type: resource.type,
+    amount: resource.amount,
+    accumulationPerTick: resource.accumulationPerTick,
+  };
+}
 
 @Injectable()
 export class ResourceService {
@@ -21,11 +28,17 @@ export class ResourceService {
   async handleCron() {
     console.log('Cron is running...');
 
+    const resources = await this.getStatisticOfAllResources();
+    // TODO this could probably be a dedicated function that uses mongoose directly, to limit the amount of requests we send
+    await Promise.all(
+      resources.map((resource) =>
+        this.addAmountOfResource(resource.type, resource.accumulationPerTick),
+      ),
+    );
+
     const stone = await this.getStatisticOfResource(ResourceType.STONE);
-    this.addAmountOfResource(ResourceType.STONE, stone.accumulationPerTick);
 
     const wood = await this.getStatisticOfResource(ResourceType.WOOD);
-    this.addAmountOfResource(ResourceType.WOOD, wood.accumulationPerTick);
 
     console.log({ amountOfStone: stone.amount, amountOfWood: wood.amount });
   }
@@ -33,7 +46,7 @@ export class ResourceService {
   async getStatisticOfAllResources(): Promise<Array<ResourceStatisticDto>> {
     const resources = await this.resourceModel.find();
 
-    return resources.map((resource) => resource.toObject());
+    return resources.map(mapResourceDocumentToResourceStatisticDto);
   }
 
   async getStatisticOfResource(
@@ -47,18 +60,18 @@ export class ResourceService {
         accumulationPerTick: 0,
       };
     }
-    return resource.toObject();
+    return mapResourceDocumentToResourceStatisticDto(resource);
   }
 
   async addAmountOfResource(
     type: ResourceType,
     amount: number,
   ): Promise<number> {
-    const incremented = await this.resourceModel.findOneAndUpdate(
+    const incrementedEntry = await this.resourceModel.findOneAndUpdate(
       { type },
       { $inc: { amount } },
     );
-    if (incremented === null) {
+    if (incrementedEntry === null) {
       const createdEntry = await this.resourceModel.create({
         type,
         amount,
@@ -66,15 +79,25 @@ export class ResourceService {
       });
       return createdEntry.amount;
     }
-    return incremented.amount;
+    return incrementedEntry.amount;
   }
 
-  takeAmountOfResource(type: ResourceType, amount: number): number {
-    const currentAmount = availableResources.get(type) ?? 0;
-    if (amount > currentAmount) {
+  async takeAmountOfResource(
+    type: ResourceType,
+    amount: number,
+  ): Promise<number> {
+    const decrementedEntry = await this.resourceModel.findOneAndUpdate(
+      {
+        type,
+        amount: {
+          $gte: amount,
+        },
+      },
+      { $inc: { amount: -amount } },
+    );
+    if (decrementedEntry === null) {
       return 0;
     }
-    availableResources.set(type, currentAmount - amount);
     return amount;
   }
 }
