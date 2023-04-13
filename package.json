@@ -44,7 +44,7 @@
     "rxjs": "7.8.0"
   },
   "devDependencies": {
-    "@fastify/static": "6.10.0",
+    "@fastify/static": "6.10.1",
     "@nestjs/cli": "9.4.0",
     "@nestjs/schematics": "9.1.0",
     "@nestjs/testing": "9.4.0",
