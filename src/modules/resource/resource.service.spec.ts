@@ -15,7 +15,7 @@ describe('ResourceService', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(resourceService.getAmountOfResource(ResourceType.DIAMOND)).toBe(0);
+      expect(resourceService.getStatisticOfResource(ResourceType.DIAMOND)).toBe(0);
     });
   });
 });

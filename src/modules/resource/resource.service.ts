@@ -21,42 +21,52 @@ export class ResourceService {
   async handleCron() {
     console.log('Cron is running...');
 
-    const amountOfStone = await this.getAmountOfResource(ResourceType.STONE);
-    availableResources.set(ResourceType.STONE, amountOfStone + 3);
+    const stone = await this.getStatisticOfResource(ResourceType.STONE);
+    this.addAmountOfResource(ResourceType.STONE, stone.accumulationPerTick);
 
-    const amountOfWood = await this.getAmountOfResource(ResourceType.WOOD);
-    availableResources.set(ResourceType.WOOD, amountOfWood + 5);
+    const wood = await this.getStatisticOfResource(ResourceType.WOOD);
+    this.addAmountOfResource(ResourceType.WOOD, wood.accumulationPerTick);
 
-    console.log({ amountOfStone, amountOfWood });
+    console.log({ amountOfStone: stone.amount, amountOfWood: wood.amount });
   }
 
-  async getAmountOfResource(type: ResourceType): Promise<number> {
-    const resource = await this.resourceModel.findOne({ type });
-    return resource?.amount ?? 0;
-  }
+  async getStatisticOfAllResources(): Promise<Array<ResourceStatisticDto>> {
+    const resources = await this.resourceModel.find();
 
-  getAmountOfAllResources() {
-    return Array.from(availableResources).map(([type, amount]) => ({
-      type,
-      amount,
-    }));
-  }
-
-  getStatisticOfAllResources(): Array<ResourceStatisticDto> {
-    const amounts = this.getAmountOfAllResources();
-    const statistics = amounts.map(({ type, amount }) => ({
-      type,
-      amount,
-      accumulationPerTick: 0,
-    }));
-    return statistics;
+    return resources.map((resource) => resource.toObject());
   }
 
   async getStatisticOfResource(
     type: ResourceType,
   ): Promise<ResourceStatisticDto> {
-    const amount = await this.getAmountOfResource(type);
-    return { amount, type, accumulationPerTick: 0 };
+    const resource = await this.resourceModel.findOne({ type });
+    if (resource === null) {
+      return {
+        type,
+        amount: 0,
+        accumulationPerTick: 0,
+      };
+    }
+    return resource.toObject();
+  }
+
+  async addAmountOfResource(
+    type: ResourceType,
+    amount: number,
+  ): Promise<number> {
+    const incremented = await this.resourceModel.findOneAndUpdate(
+      { type },
+      { $inc: { amount } },
+    );
+    if (incremented === null) {
+      const createdEntry = await this.resourceModel.create({
+        type,
+        amount,
+        accumulationPerTick: 2,
+      });
+      return createdEntry.amount;
+    }
+    return incremented.amount;
   }
 
   takeAmountOfResource(type: ResourceType, amount: number): number {
@@ -66,12 +76,5 @@ export class ResourceService {
     }
     availableResources.set(type, currentAmount - amount);
     return amount;
-  }
-
-  addAmountOfResource(type: ResourceType, amount: number): number {
-    const currentAmount = availableResources.get(type) ?? 0;
-    const newAmount = currentAmount + amount;
-    availableResources.set(type, newAmount);
-    return newAmount;
   }
 }
