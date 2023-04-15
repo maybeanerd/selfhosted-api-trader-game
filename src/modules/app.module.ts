@@ -9,10 +9,6 @@ import { dbConfig } from '@/config/dbConfig';
   imports: [
     ScheduleModule.forRoot(),
     MongooseModule.forRoot(`mongodb://${dbConfig.host}:27017`, {
-      auth: {
-        username: dbConfig.userName,
-        password: dbConfig.password,
-      },
       dbName: 'nest',
     }),
 

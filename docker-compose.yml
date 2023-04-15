@@ -8,15 +8,12 @@ services:
       - default
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
-      - DATABASE_USER=${DATABASE_USER}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_HOST=database
 
   database:
     image: mongo:6
+    command:  --replSet rs0 # create a replica set to allow for things like transactions
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MONGO_INITDB_DATABASE: nest
     restart: always
     networks:
@@ -25,6 +22,15 @@ services:
       - 27017:27017
     volumes:
       - db-data:/data/db
+
+  # Initilize the replica set once the database is up
+  mongoinit:
+    image: mongo:6
+    depends_on:
+      - database
+    restart: "no"
+    entrypoint: [ "bash", "-c", "mongosh --host database:27017 --eval 'rs.initiate()'"]
+ 
 
 #  authserver:
 #    image: oryd/kratos:v0.11
