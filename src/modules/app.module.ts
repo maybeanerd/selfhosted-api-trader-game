@@ -5,6 +5,8 @@ import { ResourceModule } from '@/modules/resource/resource.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { dbConfig } from '@/config/dbConfig';
 
+// TODO fix localhost issues that might relate to this: https://mongoosejs.com/docs/connections.html#replicaset-hostnames
+
 @Module({
   imports: [
     ScheduleModule.forRoot(),
