@@ -44,4 +44,10 @@ export class TradeService {
 
     return mapTradeDocumentToTradeOfferDto(trade);
   }
+
+  async getAllTradeOffers(): Promise<Array<Trade>> {
+    const trades = await this.tradeModel.find();
+
+    return trades.map(mapTradeDocumentToTradeOfferDto);
+  }
 }
