@@ -4,7 +4,7 @@ import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Resource, ResourceDocument } from './schemas/Resource.schema';
-import { Connection, Model } from 'mongoose';
+import { ClientSession, Connection, Model } from 'mongoose';
 import { transaction } from '@/util/mongoDbTransaction';
 
 function mapResourceDocumentToResourceStatisticDto(
@@ -114,56 +114,66 @@ export class ResourceService {
 
   async addAmountsOfResources(
     resources: Array<{ type: ResourceType; amount: number }>,
+    passedTransactionSession?: ClientSession,
   ): Promise<boolean> {
-    return transaction(this.connection, async (session) => {
-      await Promise.all(
-        resources.map(async ({ type, amount }) => {
-          const updatedModel = await this.resourceModel
-            .findOneAndUpdate({ type }, { $inc: { amount } })
-            .session(session)
-            .exec();
+    return transaction(
+      this.connection,
+      async (session) => {
+        await Promise.all(
+          resources.map(async ({ type, amount }) => {
+            const updatedResource = await this.resourceModel
+              .findOneAndUpdate({ type }, { $inc: { amount } })
+              .session(session)
+              .exec();
 
-          if (updatedModel === null) {
-            await this.resourceModel.create(
-              {
-                type,
-                amount,
-                accumulationPerTick: 0,
-              },
-              { session },
-            );
-          }
-        }),
-      );
+            if (updatedResource === null) {
+              await this.resourceModel.create(
+                {
+                  type,
+                  amount,
+                  accumulationPerTick: 0,
+                },
+                { session },
+              );
+            }
+          }),
+        );
 
-      return true;
-    });
+        return true;
+      },
+      passedTransactionSession,
+    );
   }
 
   async takeAmountsOfResources(
     resources: Array<{ type: ResourceType; amount: number }>,
+    passedTransactionSession?: ClientSession,
   ): Promise<boolean> {
-    return transaction(this.connection, async (session) => {
-      const tookResources = await Promise.all(
-        resources.map(({ type, amount }) =>
-          this.resourceModel
-            .findOneAndUpdate(
-              {
-                type: type,
-                amount: {
-                  $gte: amount,
+    return transaction(
+      this.connection,
+      async (session) => {
+        const tookResources = await Promise.all(
+          resources.map(({ type, amount }) =>
+            this.resourceModel
+              .findOneAndUpdate(
+                {
+                  type: type,
+                  amount: {
+                    $gte: amount,
+                  },
                 },
-              },
-              { $inc: { amount: -amount } },
-            )
-            .session(session)
-            .exec(),
-        ),
-      );
+                { $inc: { amount: -amount } },
+              )
+              .session(session)
+              .exec(),
+          ),
+        );
 
-      const failedToTakeAllResources = tookResources.includes(null);
+        const failedToTakeAllResources = tookResources.includes(null);
 
-      return !failedToTakeAllResources;
-    });
+        return !failedToTakeAllResources;
+      },
+      passedTransactionSession,
+    );
   }
 }

@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ResourceType } from '@/modules/resource/types';
 import { ResourceService } from '@/modules/resource/resource.service';
 import { Trade, TradeDocument } from './schemas/Trade.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model } from 'mongoose';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
+import { transaction } from '@/util/mongoDbTransaction';
 
 function mapTradeDocumentToTradeOfferDto(
   tradeDocument: TradeDocument,
@@ -23,7 +24,14 @@ export class TradeService {
     private readonly resourceService: ResourceService,
     @InjectModel(Trade.name)
     private tradeModel: Model<Trade>,
+    @InjectConnection() private readonly connection: Connection,
   ) {}
+
+  async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {
+    const trades = await this.tradeModel.find();
+
+    return trades.map(mapTradeDocumentToTradeOfferDto);
+  }
 
   async createTradeOffer(offeredTrade: {
     requestedResources: Array<{ type: ResourceType; amount: number }>;
@@ -45,9 +53,30 @@ export class TradeService {
     return mapTradeDocumentToTradeOfferDto(trade);
   }
 
-  async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {
-    const trades = await this.tradeModel.find();
+  async removeTradeOffer(id: string): Promise<TradeOfferDto | null> {
+    return transaction(this.connection, async (session) => {
+      const removedTradeOffer = await this.tradeModel
+        .findOneAndDelete({ id })
+        .session(session)
+        .exec();
 
-    return trades.map(mapTradeDocumentToTradeOfferDto);
+      if (removedTradeOffer === null) {
+        return null;
+      }
+
+      const resourcesToReturn = removedTradeOffer.offeredResources.map(
+        (resource) => ({
+          type: resource.type,
+          amount: Math.floor(resource.amount * 0.8),
+        }),
+      );
+
+      await this.resourceService.addAmountsOfResources(
+        resourcesToReturn,
+        session,
+      );
+
+      return mapTradeDocumentToTradeOfferDto(removedTradeOffer);
+    });
   }
 }

@@ -38,8 +38,11 @@ export class TradeController {
   }
 
   @Delete()
-  removeTradeOffer(@Body() body: IdDto): TradeOfferDto {
-    // TODO build logic around this
-    return { ...body, requestedResources: [], offeredResources: [] };
+  async removeTradeOffer(@Body() body: IdDto): Promise<TradeOfferDto> {
+    const removedTrade = await this.tradeService.removeTradeOffer(body.id);
+    if (removedTrade === null) {
+      throw new HttpException('Trade offer not found', HttpStatus.NOT_FOUND);
+    }
+    return removedTrade;
   }
 }
