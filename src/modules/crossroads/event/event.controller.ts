@@ -8,8 +8,6 @@ import {
 
 @Controller({ path: 'crossroads/event', version: '1' })
 export class EventController {
-  // GET a list of events from a specific date on, maybe even filter by type of event later on?
-  // POST events that this server should be aware of
   constructor(private readonly eventService: EventService) {}
 
   @Get()

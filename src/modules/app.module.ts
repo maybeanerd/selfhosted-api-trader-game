@@ -5,6 +5,7 @@ import { ResourceModule } from '@/modules/resource/resource.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { dbConfig } from '@/config/dbConfig';
 import { EventModule } from './crossroads/event/event.module';
+import { TreatyModule } from './crossroads/treaty/treaty.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { EventModule } from './crossroads/event/event.module';
     TradeModule,
     ResourceModule,
     EventModule,
+    TreatyModule,
   ],
   controllers: [],
   providers: [],
