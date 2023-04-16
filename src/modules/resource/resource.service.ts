@@ -39,16 +39,14 @@ export class ResourceService {
       ),
     );
 
-    const stone = await this.getStatisticOfResource(ResourceType.STONE);
-
-    const wood = await this.getStatisticOfResource(ResourceType.WOOD);
-
-    console.log({ amountOfStone: stone.amount, amountOfWood: wood.amount });
+    console.log(resources);
 
     // TODO remove this temporary solution to creating some initial resource growth
+    const stone = await this.getStatisticOfResource(ResourceType.STONE);
     if (stone.accumulationPerTick === 0) {
       await this.addAmountOfResource(ResourceType.STONE, 0);
     }
+    const wood = await this.getStatisticOfResource(ResourceType.WOOD);
     if (wood.accumulationPerTick === 0) {
       await this.addAmountOfResource(ResourceType.WOOD, 0);
     }

@@ -11,35 +11,15 @@ import {
 import { TradeService } from '@/modules/trade/trade.service';
 import { TradeOfferInputDto } from './dto/TradeOfferInput.dto';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
-import { randomUUID } from 'crypto';
 import { IdDto } from '@/dto/Id.dto';
-import { ResourceType } from '@/modules/resource/types';
 
 @Controller({ path: 'trade', version: '1' })
 export class TradeController {
   constructor(private readonly tradeService: TradeService) {}
 
   @Get()
-  getTradeOffers(): Array<TradeOfferDto> {
-    // TODO build logic around this
-
-    return [
-      {
-        id: randomUUID(),
-        requestedResources: [
-          {
-            type: ResourceType.WOOD,
-            amount: 10,
-          },
-        ],
-        offeredResources: [
-          {
-            type: ResourceType.STONE,
-            amount: 10,
-          },
-        ],
-      },
-    ];
+  getTradeOffers(): Promise<Array<TradeOfferDto>> {
+    return this.tradeService.getAllTradeOffers();
   }
 
   @Post()
