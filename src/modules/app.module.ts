@@ -4,7 +4,7 @@ import { TradeModule } from '@/modules/trade/trade.module';
 import { ResourceModule } from '@/modules/resource/resource.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { dbConfig } from '@/config/dbConfig';
-import { EventModule } from './eventstream/trade.module';
+import { EventModule } from './crossroads/event/event.module';
 
 @Module({
   imports: [
