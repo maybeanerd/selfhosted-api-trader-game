@@ -79,4 +79,35 @@ export class TradeService {
       return mapTradeDocumentToTradeOfferDto(removedTradeOffer);
     });
   }
+
+  async acceptTradeOffer(id: string): Promise<TradeOfferDto | null> {
+    return transaction(this.connection, async (session) => {
+      const removedTradeOffer = await this.tradeModel
+        .findOneAndDelete({ id })
+        .session(session)
+        .exec();
+
+      if (removedTradeOffer === null) {
+        return null;
+      }
+
+      const resourcesToPay = removedTradeOffer.requestedResources;
+
+      const wasAbleToPay = await this.resourceService.takeAmountsOfResources(
+        resourcesToPay,
+        session,
+      );
+      if (!wasAbleToPay) {
+        throw new Error('Missing resources to complete the trade.');
+      }
+
+      await this.resourceService.addAmountsOfResources(
+        removedTradeOffer.offeredResources,
+        session,
+      );
+      // TODO give resources that have been received to the originally offering player as well
+
+      return mapTradeDocumentToTradeOfferDto(removedTradeOffer);
+    });
+  }
 }

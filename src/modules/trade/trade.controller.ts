@@ -26,22 +26,33 @@ export class TradeController {
   async offerTrade(@Body() body: TradeOfferInputDto): Promise<TradeOfferDto> {
     const createdTrade = await this.tradeService.createTradeOffer(body);
     if (createdTrade === null) {
-      throw new HttpException('Not enough resources', HttpStatus.FORBIDDEN);
+      throw new HttpException('Not enough resources.', HttpStatus.FORBIDDEN);
     }
     return createdTrade;
   }
 
   @Put()
-  acceptTradeOffer(@Body() body: IdDto): TradeOfferDto {
-    // TODO build logic around this
-    return { ...body, requestedResources: [], offeredResources: [] };
+  async acceptTradeOffer(@Body() body: IdDto): Promise<TradeOfferDto> {
+    let acceptedTradeOffer: TradeOfferDto | null;
+    try {
+      acceptedTradeOffer = await this.tradeService.acceptTradeOffer(body.id);
+    } catch (e) {
+      throw new HttpException(
+        'Failed to accept trade offer: ' + e,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    if (acceptedTradeOffer === null) {
+      throw new HttpException('Trade offer not found.', HttpStatus.NOT_FOUND);
+    }
+    return acceptedTradeOffer;
   }
 
   @Delete()
   async removeTradeOffer(@Body() body: IdDto): Promise<TradeOfferDto> {
     const removedTrade = await this.tradeService.removeTradeOffer(body.id);
     if (removedTrade === null) {
-      throw new HttpException('Trade offer not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Trade offer not found.', HttpStatus.NOT_FOUND);
     }
     return removedTrade;
   }
