@@ -25,11 +25,26 @@ export class Trade {
   })
     id: string;
 
+  @Prop({
+    required: true,
+    index: true,
+  })
+    creatorId: string;
+
   @Prop({ required: true, type: [ResourceWithAmountSchema], _id: false })
     offeredResources: Array<ResourceWithAmount>;
 
   @Prop({ required: true, type: [ResourceWithAmountSchema], _id: false })
     requestedResources: Array<ResourceWithAmount>;
+
+  /**
+   * The Id of a connected remote instance if the trade comes from a remote one.
+   */
+  @Prop({
+    required: false,
+    index: true,
+  })
+    remoteInstanceId?: string;
 }
 
 export type TradeDocument = HydratedDocument<Trade>;

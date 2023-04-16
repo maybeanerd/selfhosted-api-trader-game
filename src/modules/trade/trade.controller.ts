@@ -12,6 +12,7 @@ import { TradeService } from '@/modules/trade/trade.service';
 import { TradeOfferInputDto } from './dto/TradeOfferInput.dto';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { IdDto } from '@/dto/Id.dto';
+import { randomUUID } from 'crypto';
 
 @Controller({ path: 'trade', version: '1' })
 export class TradeController {
@@ -24,7 +25,12 @@ export class TradeController {
 
   @Post()
   async offerTrade(@Body() body: TradeOfferInputDto): Promise<TradeOfferDto> {
-    const createdTrade = await this.tradeService.createTradeOffer(body);
+    const createdTrade = await this.tradeService.createTradeOffer(
+      {
+        ...body,
+      },
+      randomUUID(), // TODO get the user id from the request
+    );
     if (createdTrade === null) {
       throw new HttpException('Not enough resources.', HttpStatus.FORBIDDEN);
     }
