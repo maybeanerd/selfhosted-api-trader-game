@@ -17,6 +17,7 @@ const ResourceWithAmountSchema =
 @Schema()
 export class Trade {
   @Prop({
+    required: true,
     unique: true,
     default: function generateUUID() {
       return randomUUID();

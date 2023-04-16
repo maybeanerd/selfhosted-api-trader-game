@@ -6,6 +6,7 @@ import { EventPayload, EventType } from '../types';
 @Schema()
 export class StoredEvent {
   @Prop({
+    required: true,
     unique: true,
     default: function generateUUID() {
       return randomUUID();
