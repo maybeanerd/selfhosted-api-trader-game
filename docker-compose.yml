@@ -28,6 +28,8 @@ services:
     image: mongo:6
     depends_on:
       - database
+    networks:
+      - default
     restart: "no"
     entrypoint: [ "bash", "-c", "mongosh --host database:27017 --eval 'rs.initiate()'"]
  
