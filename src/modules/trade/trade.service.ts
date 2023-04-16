@@ -15,6 +15,8 @@ function mapTradeDocumentToTradeOfferDto(
     id: trade.id,
     offeredResources: trade.offeredResources,
     requestedResources: trade.requestedResources,
+    creatorId: trade.creatorId,
+    isLocal: trade.remoteInstanceId === undefined,
   };
 }
 
@@ -33,10 +35,14 @@ export class TradeService {
     return trades.map(mapTradeDocumentToTradeOfferDto);
   }
 
-  async createTradeOffer(offeredTrade: {
-    requestedResources: Array<{ type: ResourceType; amount: number }>;
-    offeredResources: Array<{ type: ResourceType; amount: number }>;
-  }): Promise<TradeOfferDto | null> {
+  // TODO once we get remote ones, we probably want a second function for that, e.g. trackTradeOffer or something
+  async createTradeOffer(
+    offeredTrade: {
+      requestedResources: Array<{ type: ResourceType; amount: number }>;
+      offeredResources: Array<{ type: ResourceType; amount: number }>;
+    },
+    creatorId: string,
+  ): Promise<TradeOfferDto | null> {
     const couldReserveAllResources =
       await this.resourceService.takeAmountsOfResources(
         offeredTrade.offeredResources,
@@ -46,7 +52,10 @@ export class TradeService {
       return null;
     }
 
-    const trade = new this.tradeModel(offeredTrade);
+    const trade = new this.tradeModel({
+      ...offeredTrade,
+      creatorId,
+    });
 
     await trade.save();
 
