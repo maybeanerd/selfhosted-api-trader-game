@@ -13,6 +13,9 @@ class ResourceWithAmount {
   @Prop({ required: true, type: String, enum: ResourceType })
     type: ResourceType;
 }
+// Generate a Mongoose Schema before use as Subdocument
+const ResourceWithAmountSchema =
+  SchemaFactory.createForClass(ResourceWithAmount);
 
 @Schema()
 export class Trade {
@@ -25,10 +28,10 @@ export class Trade {
   })
     id: string;
 
-  @Prop({ required: true, type: Array<ResourceWithAmount> })
+  @Prop({ required: true, type: [ResourceWithAmountSchema] })
     offeredResources: Array<ResourceWithAmount>;
 
-  @Prop({ required: true, type: Array<ResourceWithAmount> })
+  @Prop({ required: true, type: [ResourceWithAmountSchema] })
     requestedResources: Array<ResourceWithAmount>;
 }
 
