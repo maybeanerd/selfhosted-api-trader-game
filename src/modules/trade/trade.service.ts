@@ -28,7 +28,7 @@ export class TradeService {
   async createTradeOffer(offeredTrade: {
     requestedResources: Array<{ type: ResourceType; amount: number }>;
     offeredResources: Array<{ type: ResourceType; amount: number }>;
-  }): Promise<Trade | null> {
+  }): Promise<TradeOfferDto | null> {
     const couldReserveAllResources =
       await this.resourceService.takeAmountsOfResources(
         offeredTrade.offeredResources,
@@ -45,7 +45,7 @@ export class TradeService {
     return mapTradeDocumentToTradeOfferDto(trade);
   }
 
-  async getAllTradeOffers(): Promise<Array<Trade>> {
+  async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {
     const trades = await this.tradeModel.find();
 
     return trades.map(mapTradeDocumentToTradeOfferDto);

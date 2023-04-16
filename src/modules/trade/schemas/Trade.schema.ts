@@ -3,8 +3,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { randomUUID } from 'crypto';
 import { HydratedDocument } from 'mongoose';
 
-export type TradeDocument = HydratedDocument<Trade>;
-
 @Schema()
 class ResourceWithAmount {
   @Prop({ required: true })
@@ -13,7 +11,6 @@ class ResourceWithAmount {
   @Prop({ required: true, type: String, enum: ResourceType })
     type: ResourceType;
 }
-// Generate a Mongoose Schema before use as Subdocument
 const ResourceWithAmountSchema =
   SchemaFactory.createForClass(ResourceWithAmount);
 
@@ -28,11 +25,12 @@ export class Trade {
   })
     id: string;
 
-  @Prop({ required: true, type: [ResourceWithAmountSchema] })
+  @Prop({ required: true, type: [ResourceWithAmountSchema], _id: false })
     offeredResources: Array<ResourceWithAmount>;
 
-  @Prop({ required: true, type: [ResourceWithAmountSchema] })
+  @Prop({ required: true, type: [ResourceWithAmountSchema], _id: false })
     requestedResources: Array<ResourceWithAmount>;
 }
 
+export type TradeDocument = HydratedDocument<Trade>;
 export const TradeSchema = SchemaFactory.createForClass(Trade);

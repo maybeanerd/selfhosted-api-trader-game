@@ -2,8 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { ResourceType } from '../types';
 
-export type ResourceDocument = HydratedDocument<Resource>;
-
 @Schema()
 export class Resource {
   @Prop({ required: true })
@@ -16,4 +14,5 @@ export class Resource {
     type: ResourceType;
 }
 
+export type ResourceDocument = HydratedDocument<Resource>;
 export const ResourceSchema = SchemaFactory.createForClass(Resource);
