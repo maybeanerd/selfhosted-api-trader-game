@@ -2,6 +2,7 @@ import { IdDto } from '@/dto/Id.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
   IsArray,
   IsDate,
   IsEnum,
@@ -35,6 +36,7 @@ export class EventDto extends IdDto {
 
 export class EventsDto {
   @IsArray()
+  @ArrayMaxSize(50)
   @ValidateNested({ each: true })
   @Type(() => EventDto)
   @ApiProperty({
