@@ -1,11 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { EventService } from './event.service';
 import {
-  EventDto,
   EventsInputDto,
   EventsOfTimeframeDto,
+  GetEventsOfTimeframeDto,
 } from './dto/Event.dto';
-import { IdDto } from '@/dto/Id.dto';
 
 @Controller({ path: 'crossroads/event', version: '1' })
 export class EventController {
@@ -14,11 +13,20 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get()
-  async getAllEvents(@Body() body: IdDto): Promise<EventsOfTimeframeDto> {
-    // TODO
-    console.log(body.id); // This is the id of the instance that wants to see events. We could filter out their own events, or even verify if we want to answer this instance.
-    const events = new Array<EventDto>();
-    return { events, from: new Date(), to: new Date() };
+  async getAllEvents(
+    @Body() body: GetEventsOfTimeframeDto,
+  ): Promise<EventsOfTimeframeDto> {
+    const events = await this.eventService.getEventsOfTimeframe(
+      body.id,
+      body.from,
+      body.to,
+    );
+
+    return {
+      events,
+      from: body.from,
+      to: body.to ?? new Date(),
+    };
   }
 
   @Post()

@@ -1,9 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { StoredEvent } from './schemas/Event.schema';
+import { StoredEvent, StoredEventDocument } from './schemas/Event.schema';
 import { Event } from './types';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { EventsInputDto } from './dto/Event.dto';
+import { EventDto, EventsInputDto } from './dto/Event.dto';
+
+function mapStoredEventDocumentToEventDto(
+  storedEvent: StoredEventDocument,
+  instanceId: string,
+): EventDto {
+  return {
+    id: storedEvent.id,
+    type: storedEvent.type,
+    payload: storedEvent.payload,
+    createdOn: storedEvent.createdOn,
+    sourceInstanceId: storedEvent.remoteInstanceId ?? instanceId, // if it's a local event, the source is this instance
+  };
+}
 
 @Injectable()
 export class EventService {
@@ -12,9 +25,21 @@ export class EventService {
     private eventModel: Model<StoredEvent>,
   ) {}
 
-  async getEventsOfTimeframe(sourceInstanceId: string, from: Date, to?: Date) {
-    console.log(sourceInstanceId, from, to);
-    // TODO
+  async getEventsOfTimeframe(
+    sourceInstanceId: string,
+    from: Date,
+    to?: Date,
+  ): Promise<Array<EventDto>> {
+    const events = await this.eventModel.find({
+      receivedOn: { $gte: from, $lte: to },
+      remoteInstanceId: { $ne: sourceInstanceId },
+    });
+
+    const instanceId = 'TODO'; // TODO get this instance ID based off of the sourceInstanceId
+
+    return events.map((event) =>
+      mapStoredEventDocumentToEventDto(event, instanceId),
+    );
   }
 
   /** For internal use to add events that we want to share. */

@@ -7,6 +7,7 @@ import {
   IsDate,
   IsEnum,
   IsObject,
+  IsOptional,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
@@ -54,6 +55,23 @@ export class EventsInputDto extends EventsDto {
    *  */
   @IsUUID(4)
     sourceInstanceId: string;
+}
+
+export class GetEventsOfTimeframeDto extends IdDto {
+  /**
+   * The date from when on these events are.
+   *
+   * Use this to paginate through events if your are catching up on old ones.
+   */
+  @IsDate()
+    from: Date;
+
+  /**
+   * The date until when these events are.
+   */
+  @IsDate()
+  @IsOptional()
+    to?: Date;
 }
 
 export class EventsOfTimeframeDto extends EventsDto {
