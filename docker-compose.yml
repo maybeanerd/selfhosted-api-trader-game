@@ -5,7 +5,9 @@ services:
     build: .
     image: ${IMAGE_NAME}
     networks:
-      - default
+      - default 
+    ports:
+      - 3000:3000
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
       - DATABASE_HOST=database
