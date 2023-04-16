@@ -1,5 +1,9 @@
 version: '3.9'
 
+# name the resulting compose project after the name of the instance
+# this enables us to easily host multiple instances on a single machine
+name: ${INSTANCE_NAME:-self-hosted-api-trader-game}
+
 services:
   gameservice:
     build: .
