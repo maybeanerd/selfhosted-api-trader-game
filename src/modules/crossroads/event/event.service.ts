@@ -12,18 +12,23 @@ export class EventService {
     private eventModel: Model<StoredEvent>,
   ) {}
 
+  async getEventsOfTimeframe(sourceInstanceId: string, from: Date, to?: Date) {
+    console.log(sourceInstanceId, from, to);
+    // TODO
+  }
+
   /** For internal use to add events that we want to share. */
   async createEvent(event: Omit<Event, 'id'>) {
     await this.eventModel.create({ type: event.type, payload: event.payload });
     // TODO already post to other instances from here, or via cronjob?
   }
 
-  async addEvents(events: EventsInputDto) {
-    const sourceInstanceId = events.sourceInstanceId;
+  async addEvents(eventsInput: EventsInputDto) {
+    const sourceInstanceId = eventsInput.sourceInstanceId;
     console.log(sourceInstanceId);
     // TODO validate the source instance ID
 
-    await this.eventModel.insertMany(events.events);
+    await this.eventModel.insertMany(eventsInput.events);
 
     // TODO post to other instances
 
