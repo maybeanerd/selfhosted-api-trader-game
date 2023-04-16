@@ -19,7 +19,13 @@ export class EventService {
 
   /** For internal use to add events that we want to share. */
   async createEvent(event: Omit<Event, 'id'>) {
-    await this.eventModel.create({ type: event.type, payload: event.payload });
+    const createdOn = new Date();
+    await this.eventModel.create({
+      type: event.type,
+      payload: event.payload,
+      createdOn,
+      receivedOn: createdOn,
+    });
     // TODO already post to other instances from here, or via cronjob?
   }
 
@@ -28,7 +34,11 @@ export class EventService {
     console.log(sourceInstanceId);
     // TODO validate the source instance ID
 
-    await this.eventModel.insertMany(eventsInput.events);
+    const receivedOn = new Date();
+
+    await this.eventModel.insertMany(
+      eventsInput.events.map((e) => ({ ...e, receivedOn })),
+    );
 
     // TODO post to other instances
 

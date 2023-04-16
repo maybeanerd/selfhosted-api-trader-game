@@ -14,6 +14,21 @@ export class StoredEvent {
   })
     id: string;
 
+  /**
+   * The creation date of the event.
+   */
+  @Prop({
+    required: true,
+    index: true,
+  })
+    createdOn: Date;
+
+  /**
+   * The date this instance first received this event.
+   *
+   * Maybe in the future this can be used to determine lag between instances or similar things.
+   *
+   */
   @Prop({
     required: true,
     index: true,
@@ -21,7 +36,7 @@ export class StoredEvent {
       return new Date();
     },
   })
-    createdOn: Date;
+    receivedOn: Date;
 
   @Prop({ required: true, type: String, enum: EventType, index: true })
     type: EventType;

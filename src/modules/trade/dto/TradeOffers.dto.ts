@@ -1,10 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsArray, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, IsArray, ValidateNested } from 'class-validator';
 import { TradeOfferDto } from './TradeOffer.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TradeOffersDto {
   @IsArray()
+  @ArrayMaxSize(200)
   @ValidateNested({ each: true })
   @Type(() => TradeOfferDto)
   @ApiProperty({

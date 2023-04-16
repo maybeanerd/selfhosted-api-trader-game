@@ -14,7 +14,7 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get()
-  async getAllRecentEvents(@Body() body: IdDto): Promise<EventsOfTimeframeDto> {
+  async getAllEvents(@Body() body: IdDto): Promise<EventsOfTimeframeDto> {
     // TODO
     console.log(body.id); // This is the id of the instance that wants to see events. We could filter out their own events, or even verify if we want to answer this instance.
     const events = new Array<EventDto>();

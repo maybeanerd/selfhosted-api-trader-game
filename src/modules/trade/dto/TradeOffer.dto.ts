@@ -2,10 +2,11 @@ import { IdDto } from '@/dto/Id.dto';
 import { ResourceWithAmountDto } from '@/modules/resource/dto/ResourceWithAmount.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsUUID, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsUUID, ValidateNested } from 'class-validator';
 
 export class TradeOfferDto extends IdDto {
   @IsArray()
+  @ArrayMaxSize(50)
   @ValidateNested({ each: true })
   @Type(() => ResourceWithAmountDto)
   @ApiProperty({
@@ -16,6 +17,7 @@ export class TradeOfferDto extends IdDto {
     requestedResources: Array<ResourceWithAmountDto>;
 
   @IsArray()
+  @ArrayMaxSize(50)
   @ValidateNested({ each: true })
   @Type(() => ResourceWithAmountDto)
   @ApiProperty({
