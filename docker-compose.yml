@@ -5,7 +5,7 @@ services:
     build: .
     image: ${IMAGE_NAME}
     networks:
-      - default 
+      - default
     ports:
       - 3000:3000
     environment:
@@ -14,7 +14,7 @@ services:
 
   database:
     image: mongo:6
-    command:  --replSet rs0 # create a replica set to allow for things like transactions
+    command: --replSet rs0 # create a replica set to allow for things like transactions
     environment:
       MONGO_INITDB_DATABASE: nest
     restart: always
@@ -32,9 +32,9 @@ services:
       - database
     networks:
       - default
-    restart: "no"
-    entrypoint: [ "bash", "-c", "mongosh --host database:27017 --eval 'rs.initiate()'"]
- 
+    restart: 'no'
+    entrypoint:
+      ['bash', '-c', "mongosh --host database:27017 --eval 'rs.initiate()'"]
 
 #  authserver:
 #    image: oryd/kratos:v0.11
