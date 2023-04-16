@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { randomUUID } from 'crypto';
 import { HydratedDocument } from 'mongoose';
+import { EventPayload, EventType } from '../types';
 
 @Schema()
-export class Event {
+export class StoredEvent {
   @Prop({
     unique: true,
     default: function generateUUID() {
@@ -16,8 +17,17 @@ export class Event {
   @Prop({
     required: true,
     index: true,
+    default: function generateDate() {
+      return new Date();
+    },
   })
-    creatorId: string;
+    createdOn: Date;
+
+  @Prop({ required: true, type: String, enum: EventType, index: true })
+    type: EventType;
+
+  @Prop({ required: true, type: Object })
+    payload: EventPayload;
 
   /**
    * The Id of a connected remote instance if the trade comes from a remote one.
@@ -29,5 +39,5 @@ export class Event {
     remoteInstanceId?: string;
 }
 
-export type EventDocument = HydratedDocument<Event>;
-export const EventSchema = SchemaFactory.createForClass(Event);
+export type StoredEventDocument = HydratedDocument<StoredEvent>;
+export const StoredEventSchema = SchemaFactory.createForClass(StoredEvent);

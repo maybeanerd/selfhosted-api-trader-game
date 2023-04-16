@@ -23,8 +23,6 @@ export class EventController {
 
   @Post()
   async receiveEvents(@Body() body: EventsInputDto): Promise<void> {
-    // TODO
-    console.log(body.events);
-    return;
+    await this.eventService.addEvents(body);
   }
 }

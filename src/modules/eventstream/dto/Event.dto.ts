@@ -9,7 +9,7 @@ import {
   IsUUID,
   ValidateNested,
 } from 'class-validator';
-import { EventType, TradeOfferCreatedEventPayload } from '../types';
+import { EventPayload, EventType } from '../types';
 
 export class EventDto extends IdDto {
   /**
@@ -24,7 +24,7 @@ export class EventDto extends IdDto {
 
   /** The payload of the event. */
   @IsObject()
-    payload: TradeOfferCreatedEventPayload;
+    payload: EventPayload;
 
   /**
    * The Id of the instance that created this event. If the event is from this instance, it will be set dynamically depending on who requests the info/who we send it to.
