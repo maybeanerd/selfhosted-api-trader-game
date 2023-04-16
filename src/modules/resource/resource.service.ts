@@ -29,6 +29,7 @@ export class ResourceService {
   @Cron(CronExpression.EVERY_5_SECONDS)
   async handleCron() {
     console.log('Cron is running...');
+    console.time('resource-cron');
 
     const resources = await this.getStatisticOfAllResources();
     // TODO this could probably be a dedicated function that uses mongoose directly, to limit the amount of requests we send
@@ -43,6 +44,16 @@ export class ResourceService {
     const wood = await this.getStatisticOfResource(ResourceType.WOOD);
 
     console.log({ amountOfStone: stone.amount, amountOfWood: wood.amount });
+
+    // TODO remove this temporary solution to creating some initial resource growth
+    if (stone.accumulationPerTick === 0) {
+      await this.addAmountOfResource(ResourceType.STONE, 0);
+    }
+    if (wood.accumulationPerTick === 0) {
+      await this.addAmountOfResource(ResourceType.WOOD, 0);
+    }
+
+    console.timeEnd('resource-cron');
   }
 
   async getStatisticOfAllResources(): Promise<Array<ResourceStatisticDto>> {
@@ -101,29 +112,33 @@ export class ResourceService {
       return 0;
     }
     return amount;
-  }  
-  
-  
+  }
+
   async addAmountsOfResources(
     resources: Array<{ type: ResourceType; amount: number }>,
   ): Promise<boolean> {
     return transaction(this.connection, async (session) => {
-      const addedResources = await Promise.all(
-        resources.map(({ type, amount }) =>
-        // TODO make this create the resource if it doesn't exist yet
-          this.resourceModel
-            .findOneAndUpdate(
-              { type },
-              { $inc: { amount } },
-            )
+      await Promise.all(
+        resources.map(async ({ type, amount }) => {
+          const updatedModel = await this.resourceModel
+            .findOneAndUpdate({ type }, { $inc: { amount } })
             .session(session)
-            .exec(),
-        ),
+            .exec();
+
+          if (updatedModel === null) {
+            await this.resourceModel.create(
+              {
+                type,
+                amount,
+                accumulationPerTick: 0,
+              },
+              { session },
+            );
+          }
+        }),
       );
 
-      const failedToAddAllResources = addedResources.includes(null);
-
-      return !failedToAddAllResources;
+      return true;
     });
   }
 
