@@ -1,6 +1,14 @@
 import { IsEnum, IsOptional, IsUUID, IsUrl } from 'class-validator';
 import { TreatyStatus } from '../schemas/Treaty.schema';
 
+export class TreatyOfferDto {
+  /**
+   * The URL this instance can be reached at.
+   */
+  @IsUrl()
+    url: string;
+}
+
 export class ProposeTreatyDto {
   /**
    * The Id of the instance that wants to sign a treaty.
@@ -32,10 +40,10 @@ export class UpdateTreatyDto {
    */
   @IsOptional()
   @IsUrl()
-    url: string;
+    url?: string;
 
   /** The status of the treaty. */
   @IsOptional()
   @IsEnum(TreatyStatus)
-    status: TreatyStatus;
+    status?: TreatyStatus;
 }

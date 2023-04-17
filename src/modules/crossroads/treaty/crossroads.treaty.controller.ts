@@ -6,8 +6,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { TreatyService } from './treaty.service';
-import { ProposeTreatyDto, TreatyDto, UpdateTreatyDto } from './dto/Treaty.dto';
+import { TreatyService } from '@/modules/treaty/treaty.service';
+import {
+  ProposeTreatyDto,
+  TreatyDto,
+  UpdateTreatyDto,
+} from '@/modules/treaty/dto/Treaty.dto';
 
 @Controller({ path: 'crossroads/treaty', version: '1' })
 export class TreatyController {
