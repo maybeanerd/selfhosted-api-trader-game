@@ -5,11 +5,11 @@ version: '3.9'
 name: ${INSTANCE_NAME:-self-hosted-api-trader-game}
 
 services:
-  gameservice:
+  gameserver:
     build: .
     image: ${IMAGE_NAME}
     networks:
-      - default
+      - internal
     ports:
       - 3000:3000
     environment:
@@ -23,19 +23,19 @@ services:
       MONGO_INITDB_DATABASE: nest
     restart: always
     networks:
-      - default
+      - internal
     ports:
       - 27017:27017
     volumes:
       - db-data:/data/db
 
   # Initilize the replica set once the database is up
-  mongoinit:
+  db-init:
     image: mongo:6
     depends_on:
       - database
     networks:
-      - default
+      - internal
     restart: 'no'
     entrypoint:
       ['bash', '-c', "mongosh --host database:27017 --eval 'rs.initiate()'"]
@@ -50,4 +50,4 @@ volumes:
   db-data:
 
 networks:
-  default:
+  internal:
