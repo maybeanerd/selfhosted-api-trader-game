@@ -1,6 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
+export enum TreatyStatus {
+  Requested = 'requested',
+  Denied = 'denied',
+  Signed = 'signed',
+}
+
 @Schema()
 export class StoredTreaty {
   @Prop({
@@ -21,7 +27,7 @@ export class StoredTreaty {
     instanceBaseUrl: string;
 
   /**
-   * The date this treaty was signed on.
+   * The date this treaty was created on.
    */
   @Prop({
     required: true,
@@ -29,7 +35,16 @@ export class StoredTreaty {
       return new Date();
     },
   })
-    signedOn: Date;
+    createdOn: Date;
+
+  /** The state of the treaty. A treaty is a request at first, and then either gets accepted or denied by the other instance. */
+  @Prop({
+    required: true,
+    type: String,
+    enum: TreatyStatus,
+    index: true,
+  })
+    status: TreatyStatus;
 }
 
 export type StoredTreatyDocument = HydratedDocument<StoredTreaty>;
