@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { StoredTreaty } from './schemas/Treaty.schema';
-import { StoredTreatyBasis } from './schemas/TreatyBasis.schema';
+import { ServerState } from './schemas/ServerState.schema';
 import { SignTreatyDto } from './dto/Treaty.dto';
 
 @Injectable()
@@ -10,18 +10,18 @@ export class TreatyService {
   constructor(
     @InjectModel(StoredTreaty.name)
     private treatyModel: Model<StoredTreaty>,
-    @InjectModel(StoredTreatyBasis.name)
-    private treatyBasisModel: Model<StoredTreatyBasis>,
+    @InjectModel(ServerState.name)
+    private serverStateModel: Model<ServerState>,
   ) {
-    this.ensureTreatyBasis();
+    this.ensureServerId();
   }
 
-  async ensureTreatyBasis() {
-    const treatyBasis = await this.treatyBasisModel.findOne().exec();
+  async ensureServerId() {
+    const treatyBasis = await this.serverStateModel.findOne().exec();
     if (treatyBasis !== null) {
       return treatyBasis;
     }
-    const newlyCreatedTreatyBasis = this.treatyBasisModel.create({});
+    const newlyCreatedTreatyBasis = this.serverStateModel.create({});
     return newlyCreatedTreatyBasis;
   }
 
@@ -29,7 +29,7 @@ export class TreatyService {
     sourceInstanceId: string,
     instanceBaseUrl: string,
   ): Promise<SignTreatyDto> {
-    const treatyBasis = await this.ensureTreatyBasis();
+    const treatyBasis = await this.ensureServerId();
 
     await this.treatyModel.create({
       sourceInstanceId,
@@ -46,7 +46,7 @@ export class TreatyService {
     sourceInstanceId: string,
     instanceBaseUrl: string,
   ): Promise<SignTreatyDto | null> {
-    const treatyBasis = await this.ensureTreatyBasis();
+    const treatyBasis = await this.ensureServerId();
 
     const existingTreaty = await this.treatyModel
       .findOne({ instanceId: sourceInstanceId })

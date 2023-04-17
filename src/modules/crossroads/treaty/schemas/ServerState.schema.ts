@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { HydratedDocument } from 'mongoose';
 
 @Schema()
-export class StoredTreatyBasis {
+export class ServerState {
   /**
    * The Id we created for this instance.
    */
@@ -18,6 +18,5 @@ export class StoredTreatyBasis {
     instanceId: string;
 }
 
-export type StoredTreatyBasisDocument = HydratedDocument<StoredTreatyBasis>;
-export const StoredTreatyBasisSchema =
-  SchemaFactory.createForClass(StoredTreatyBasis);
+export type ServerStateDocument = HydratedDocument<ServerState>;
+export const ServerStateSchema = SchemaFactory.createForClass(ServerState);

@@ -3,16 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TreatyController } from './treaty.controller';
 import { TreatyService } from './treaty.service';
 import { StoredTreaty, StoredTreatySchema } from './schemas/Treaty.schema';
-import {
-  StoredTreatyBasis,
-  StoredTreatyBasisSchema,
-} from './schemas/TreatyBasis.schema';
+import { ServerState, ServerStateSchema } from './schemas/ServerState.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: StoredTreaty.name, schema: StoredTreatySchema },
-      { name: StoredTreatyBasis.name, schema: StoredTreatyBasisSchema },
+      { name: ServerState.name, schema: ServerStateSchema },
     ]),
   ],
   controllers: [TreatyController],
