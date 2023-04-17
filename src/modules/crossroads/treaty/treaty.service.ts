@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { StoredTreaty } from './schemas/Treaty.schema';
+import { StoredTreaty, TreatyStatus } from './schemas/Treaty.schema';
 import { ServerState } from './schemas/ServerState.schema';
-import { SignTreatyDto } from './dto/Treaty.dto';
+import { TreatyDto } from './dto/Treaty.dto';
 
 @Injectable()
 export class TreatyService {
@@ -25,28 +25,30 @@ export class TreatyService {
     return newlyCreatedTreatyBasis;
   }
 
-  async signTreaty(
+  async createTreaty(
     sourceInstanceId: string,
     instanceBaseUrl: string,
-  ): Promise<SignTreatyDto> {
-    const treatyBasis = await this.ensureServerId();
+  ): Promise<TreatyDto> {
+    const serverState = await this.ensureServerId();
 
-    await this.treatyModel.create({
+    const createdTreaty = await this.treatyModel.create({
       sourceInstanceId,
-      instanceBaseUrl,
+      instanceBaseUrl: instanceBaseUrl,
+      status: TreatyStatus.Requested,
     });
 
     return {
-      instanceId: treatyBasis.instanceId,
-      url: 'TODO', // TODO this instances URL
+      instanceId: serverState.instanceId,
+      url: createdTreaty.instanceBaseUrl,
+      status: createdTreaty.status,
     };
   }
 
   async updateTreaty(
     sourceInstanceId: string,
-    instanceBaseUrl: string,
-  ): Promise<SignTreatyDto | null> {
-    const treatyBasis = await this.ensureServerId();
+    update: { url?: string; status?: TreatyStatus },
+  ): Promise<TreatyDto | null> {
+    const serverState = await this.ensureServerId();
 
     const existingTreaty = await this.treatyModel
       .findOne({ instanceId: sourceInstanceId })
@@ -56,14 +58,26 @@ export class TreatyService {
       return null;
     }
 
-    existingTreaty.instanceBaseUrl = instanceBaseUrl;
+    if (update.url) {
+      existingTreaty.instanceBaseUrl = update.url;
+    }
+    if (update.status) {
+      existingTreaty.status = update.status;
+    }
     await existingTreaty.save();
 
     return {
-      instanceId: treatyBasis.instanceId,
-      url: 'TODO', // TODO this instances URL
+      instanceId: serverState.instanceId,
+      url: existingTreaty.instanceBaseUrl,
+      status: existingTreaty.status,
     };
   }
 
-  // TODO remove treaty
+  async removeTreaty(sourceInstanceId: string): Promise<boolean> {
+    const removedTreaty = await this.treatyModel
+      .deleteOne({ instanceId: sourceInstanceId })
+      .exec();
+
+    return removedTreaty.deletedCount > 0;
+  }
 }
