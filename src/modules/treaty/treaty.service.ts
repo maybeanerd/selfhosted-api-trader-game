@@ -5,6 +5,14 @@ import { StoredTreaty, TreatyStatus } from './schemas/Treaty.schema';
 import { ServerState } from './schemas/ServerState.schema';
 import { TreatyDto } from './dto/Treaty.dto';
 
+function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
+  return {
+    instanceId: treaty.instanceId,
+    url: treaty.instanceBaseUrl,
+    status: treaty.status,
+  };
+}
+
 @Injectable()
 export class TreatyService {
   constructor(
@@ -25,6 +33,12 @@ export class TreatyService {
     return newlyCreatedTreatyBasis;
   }
 
+  async getAllTreaties(): Promise<Array<TreatyDto>> {
+    const treaties = await this.treatyModel.find();
+
+    return treaties.map(mapTreatyDocumentToTreatyDto);
+  }
+
   async createTreaty(
     sourceInstanceId: string,
     instanceBaseUrl: string,
@@ -43,6 +57,8 @@ export class TreatyService {
       status: createdTreaty.status,
     };
   }
+
+  // TODO add offerTreaty
 
   async updateTreaty(
     sourceInstanceId: string,

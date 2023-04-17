@@ -4,8 +4,8 @@ import { TradeModule } from '@/modules/trade/trade.module';
 import { ResourceModule } from '@/modules/resource/resource.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { dbConfig } from '@/config/dbConfig';
-import { EventModule } from './crossroads/event/event.module';
-import { TreatyModule } from './crossroads/treaty/treaty.module';
+import { TreatyModule } from '@/modules/treaty/treaty.module';
+import { CrossroadsModule } from '@/modules/crossroads/crossroads.module';
 
 @Module({
   imports: [
@@ -14,10 +14,13 @@ import { TreatyModule } from './crossroads/treaty/treaty.module';
       dbName: 'nest',
     }),
 
+    // Modules for clients
     TradeModule,
     ResourceModule,
-    EventModule,
     TreatyModule,
+
+    // Module for inter instance communication
+    CrossroadsModule,
   ],
   controllers: [],
   providers: [],
