@@ -12,8 +12,9 @@ import {
   TreatyDto,
   UpdateTreatyDto,
 } from '@/modules/treaty/dto/Treaty.dto';
+import { crossroadsTreatyBasePath } from '@/config/apiPaths';
 
-@Controller({ path: 'crossroads/treaty', version: '1' })
+@Controller({ path: crossroadsTreatyBasePath, version: '1' })
 export class TreatyController {
   constructor(private readonly treatyService: TreatyService) {}
 

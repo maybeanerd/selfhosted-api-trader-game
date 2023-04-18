@@ -4,6 +4,8 @@ import { Event } from './types';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { EventDto, EventsInputDto } from './dto/Event.dto';
+// import { HttpService } from '@nestjs/axios';
+import { TreatyService } from '@/modules/treaty/treaty.service';
 
 function mapStoredEventDocumentToEventDto(
   storedEvent: StoredEventDocument,
@@ -23,6 +25,8 @@ export class EventService {
   constructor(
     @InjectModel(StoredEvent.name)
     private eventModel: Model<StoredEvent>,
+    private readonly treatyService: TreatyService,
+    // private readonly httpService: HttpService,
   ) {}
 
   async getEventsOfTimeframe(
@@ -35,10 +39,10 @@ export class EventService {
       remoteInstanceId: { $ne: sourceInstanceId },
     });
 
-    const instanceId = 'TODO'; // TODO get this instance ID based off of the sourceInstanceId
+    const serverState = await this.treatyService.ensureServerId();
 
     return events.map((event) =>
-      mapStoredEventDocumentToEventDto(event, instanceId),
+      mapStoredEventDocumentToEventDto(event, serverState.instanceId),
     );
   }
 

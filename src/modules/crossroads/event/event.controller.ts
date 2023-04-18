@@ -1,29 +1,32 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { EventService } from './event.service';
 import {
   EventsInputDto,
   EventsOfTimeframeDto,
   GetEventsOfTimeframeDto,
 } from './dto/Event.dto';
+import { crossroadsEventBasePath } from '@/config/apiPaths';
 
-@Controller({ path: 'crossroads/event', version: '1' })
+@Controller({ path: crossroadsEventBasePath, version: '1' })
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get()
   async getAllEvents(
-    @Body() body: GetEventsOfTimeframeDto,
+    @Query() query: GetEventsOfTimeframeDto,
   ): Promise<EventsOfTimeframeDto> {
+    const from = new Date(query.from);
+    const to = query.to ? new Date(query.to) : undefined;
     const events = await this.eventService.getEventsOfTimeframe(
-      body.id,
-      body.from,
-      body.to,
+      query.id,
+      from,
+      to,
     );
 
     return {
       events,
-      from: body.from,
-      to: body.to ?? new Date(),
+      from: from,
+      to: to ?? new Date(),
     };
   }
 

@@ -5,6 +5,7 @@ import {
   ArrayMaxSize,
   IsArray,
   IsDate,
+  IsDateString,
   IsEnum,
   IsObject,
   IsOptional,
@@ -51,7 +52,6 @@ export class EventsDto {
 export class EventsInputDto extends EventsDto {
   /**
    * The location/Identifier of the source Instance.
-   * // TODO when connecting other instances, send them the ID you save them as (or receive one from them), and this is then their "token" to send events to you as well as their identification within this instance.
    *  */
   @IsUUID(4)
     sourceInstanceId: string;
@@ -63,15 +63,15 @@ export class GetEventsOfTimeframeDto extends IdDto {
    *
    * Use this to paginate through events if your are catching up on old ones.
    */
-  @IsDate()
-    from: Date;
+  @IsDateString()
+    from: string;
 
   /**
    * The date until when these events are.
    */
-  @IsDate()
+  @IsDateString()
   @IsOptional()
-    to?: Date;
+    to?: string;
 }
 
 export class EventsOfTimeframeDto extends EventsDto {
