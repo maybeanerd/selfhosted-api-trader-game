@@ -18,8 +18,8 @@ export class EventDto extends IdDto {
   /**
    * The exact date and time this event was created on.
    */
-  @IsDate()
-    createdOn: Date;
+  @IsDateString()
+    createdOn: string;
 
   /** The type of event. */
   @IsEnum(EventType)

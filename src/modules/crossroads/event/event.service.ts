@@ -17,7 +17,7 @@ function mapStoredEventDocumentToEventDto(
     id: storedEvent.id,
     type: storedEvent.type,
     payload: storedEvent.payload,
-    createdOn: storedEvent.createdOn,
+    createdOn: storedEvent.createdOn.toISOString(),
     sourceInstanceId: storedEvent.remoteInstanceId ?? instanceId, // if it's a local event, the source is this instance
   };
 }
@@ -43,7 +43,7 @@ export class EventService {
         if (filteredEvents.length === 0) {
           return true;
         }
-        
+
         const body: EventsInputDto = {
           sourceInstanceId: serverState.instanceId,
           events: filteredEvents,
@@ -110,6 +110,7 @@ export class EventService {
     const createdEvents = await this.eventModel.insertMany(
       eventsInput.events.map((e) => ({
         id: e.id,
+        type: e.type,
         createdOn: e.createdOn,
         payload: e.payload,
         remoteInstanceId: e.sourceInstanceId,
