@@ -25,8 +25,7 @@ export class EventService {
   constructor(
     @InjectModel(StoredEvent.name)
     private eventModel: Model<StoredEvent>,
-    private readonly treatyService: TreatyService,
-    // private readonly httpService: HttpService,
+    private readonly treatyService: TreatyService, // private readonly httpService: HttpService,
   ) {}
 
   async getEventsOfTimeframe(
@@ -58,10 +57,14 @@ export class EventService {
     // TODO already post to other instances from here, or via cronjob?
   }
 
-  async addEvents(eventsInput: EventsInputDto) {
+  async addEvents(eventsInput: EventsInputDto): Promise<boolean> {
     const sourceInstanceId = eventsInput.sourceInstanceId;
-    console.log(sourceInstanceId);
-    // TODO validate the source instance ID
+    const treatyIsValid = await this.treatyService.hasActiveTreaty(
+      sourceInstanceId,
+    );
+    if (!treatyIsValid) {
+      return false;
+    }
 
     const receivedOn = new Date();
 
@@ -72,5 +75,7 @@ export class EventService {
     // TODO post to other instances
 
     // TODO actually do something with these events, like add/remove/update trades
+
+    return true;
   }
 }
