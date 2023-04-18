@@ -13,6 +13,7 @@ import {
 import { StoredEvent, StoredEventSchema } from './event/schemas/Event.schema';
 import { EventController } from './event/event.controller';
 import { EventService } from './event/event.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EventService } from './event/event.service';
       { name: ServerState.name, schema: ServerStateSchema },
       { name: StoredEvent.name, schema: StoredEventSchema },
     ]),
+    HttpModule,
   ],
 
   controllers: [TreatyController, EventController],

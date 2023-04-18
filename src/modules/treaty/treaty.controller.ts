@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { TreatyService } from './treaty.service';
 import { TreatyDto, TreatyOfferDto, UpdateTreatyDto } from './dto/Treaty.dto';
-import { TreatyStatus } from './schemas/Treaty.schema';
 import { IdDto } from '@/dto/Id.dto';
 
 @Controller({ path: 'treaty', version: '1' })
@@ -24,14 +23,11 @@ export class TreatyController {
 
   @Post()
   async proposeTreaty(@Body() body: TreatyOfferDto): Promise<TreatyDto> {
-    // TODO
-    console.log(body);
-
-    return {
-      instanceId: 'test',
-      url: 'test',
-      status: TreatyStatus.Requested,
-    };
+    const treaty = await this.treatyService.offerTreaty(body.url);
+    if (treaty === null) {
+      throw new HttpException('Treaty not created.', HttpStatus.BAD_REQUEST);
+    }
+    return treaty;
   }
 
   @Put()
