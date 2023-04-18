@@ -6,6 +6,8 @@ import { Model } from 'mongoose';
 import { EventDto, EventsInputDto } from './dto/Event.dto';
 // import { HttpService } from '@nestjs/axios';
 import { TreatyService } from '@/modules/treaty/treaty.service';
+import { crossroadsEventPath } from '@/config/apiPaths';
+import { HttpService } from '@nestjs/axios';
 
 function mapStoredEventDocumentToEventDto(
   storedEvent: StoredEventDocument,
@@ -25,8 +27,32 @@ export class EventService {
   constructor(
     @InjectModel(StoredEvent.name)
     private eventModel: Model<StoredEvent>,
-    private readonly treatyService: TreatyService, // private readonly httpService: HttpService,
+    private readonly treatyService: TreatyService,
+    private readonly httpService: HttpService,
   ) {}
+
+  async postEventsToTreatiedInstances(events: Array<EventDto>): Promise<void> {
+    const serverState = await this.treatyService.ensureServerId();
+    const treaties = await this.treatyService.getAllTreaties();
+    await Promise.all(
+      treaties.map(async (treaty) => {
+        const body: EventsInputDto = {
+          sourceInstanceId: serverState.instanceId,
+          events,
+        };
+
+        const url = treaty.url + crossroadsEventPath;
+        try {
+          await this.httpService.post(url, body).toPromise();
+        } catch {
+          // TODO maybe add retry logic later on, or track treaties that failed to post
+          console.log('Failed to post events to treaty', treaty);
+          return false;
+        }
+        return true;
+      }),
+    );
+  }
 
   async getEventsOfTimeframe(
     sourceInstanceId: string,
@@ -48,13 +74,18 @@ export class EventService {
   /** For internal use to add events that we want to share. */
   async createEvent(event: Omit<Event, 'id'>) {
     const createdOn = new Date();
-    await this.eventModel.create({
+    const createdEvent = await this.eventModel.create({
       type: event.type,
       payload: event.payload,
       createdOn,
       receivedOn: createdOn,
     });
-    // TODO already post to other instances from here, or via cronjob?
+
+    const serverState = await this.treatyService.ensureServerId();
+
+    await this.postEventsToTreatiedInstances([
+      mapStoredEventDocumentToEventDto(createdEvent, serverState.instanceId),
+    ]);
   }
 
   async addEvents(eventsInput: EventsInputDto): Promise<boolean> {
@@ -68,13 +99,25 @@ export class EventService {
 
     const receivedOn = new Date();
 
-    await this.eventModel.insertMany(
-      eventsInput.events.map((e) => ({ ...e, receivedOn })),
+    const createdEvents = await this.eventModel.insertMany(
+      eventsInput.events.map((e) => ({
+        id: e.id,
+        createdOn: e.createdOn,
+        payload: e.payload,
+        remoteInstanceId: e.sourceInstanceId,
+        receivedOn,
+      })),
     );
 
-    // TODO post to other instances
+    const serverState = await this.treatyService.ensureServerId();
 
     // TODO actually do something with these events, like add/remove/update trades
+
+    await this.postEventsToTreatiedInstances(
+      createdEvents.map((createdEvent) =>
+        mapStoredEventDocumentToEventDto(createdEvent, serverState.instanceId),
+      ),
+    );
 
     return true;
   }
