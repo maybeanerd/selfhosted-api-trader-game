@@ -36,9 +36,17 @@ export class EventService {
     const treaties = await this.treatyService.getAllTreaties();
     await Promise.all(
       treaties.map(async (treaty) => {
+        // Do not send events that originated from that instance
+        const filteredEvents = events.filter(
+          (event) => event.sourceInstanceId !== treaty.instanceId,
+        );
+        if (filteredEvents.length === 0) {
+          return true;
+        }
+        
         const body: EventsInputDto = {
           sourceInstanceId: serverState.instanceId,
-          events,
+          events: filteredEvents,
         };
 
         const url = treaty.url + crossroadsEventPath;
