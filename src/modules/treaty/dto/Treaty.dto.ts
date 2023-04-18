@@ -5,7 +5,7 @@ export class TreatyOfferDto {
   /**
    * The URL this instance can be reached at.
    */
-  @IsUrl()
+  @IsUrl({ require_protocol: true })
     url: string;
 }
 
@@ -19,7 +19,7 @@ export class ProposeTreatyDto {
   /**
    * The URL this instance can be reached at.
    */
-  @IsUrl()
+  @IsUrl({ require_protocol: true })
     url: string;
 }
 
@@ -39,7 +39,7 @@ export class UpdateTreatyDto {
    * The URL this instance can be reached at.
    */
   @IsOptional()
-  @IsUrl()
+  @IsUrl({ require_protocol: true })
     url?: string;
 
   /** The status of the treaty. */

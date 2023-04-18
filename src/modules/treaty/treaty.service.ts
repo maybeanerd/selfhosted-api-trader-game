@@ -3,7 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { StoredTreaty, TreatyStatus } from './schemas/Treaty.schema';
 import { ServerState } from './schemas/ServerState.schema';
-import { TreatyDto } from './dto/Treaty.dto';
+import { ProposeTreatyDto, TreatyDto } from './dto/Treaty.dto';
+import { HttpService } from '@nestjs/axios';
+import { crossroadsTreatyPath } from '@/config/apiPaths';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
@@ -20,6 +22,7 @@ export class TreatyService {
     private treatyModel: Model<StoredTreaty>,
     @InjectModel(ServerState.name)
     private serverStateModel: Model<ServerState>,
+    private readonly httpService: HttpService,
   ) {
     this.ensureServerId();
   }
@@ -44,9 +47,8 @@ export class TreatyService {
     instanceBaseUrl: string,
   ): Promise<TreatyDto> {
     const serverState = await this.ensureServerId();
-
     const createdTreaty = await this.treatyModel.create({
-      sourceInstanceId,
+      instanceId: sourceInstanceId,
       instanceBaseUrl: instanceBaseUrl,
       status: TreatyStatus.Requested,
     });
@@ -58,7 +60,40 @@ export class TreatyService {
     };
   }
 
-  // TODO add offerTreaty
+  async offerTreaty(instanceBaseUrl: string): Promise<TreatyDto | null> {
+    const serverState = await this.ensureServerId();
+
+    const body: ProposeTreatyDto = {
+      url: 'http://test.com', // TODO get own URL
+      instanceId: serverState.instanceId,
+    };
+
+    const url = instanceBaseUrl + crossroadsTreatyPath;
+    let offeredTreaty: TreatyDto | undefined;
+    try {
+      offeredTreaty = (
+        await this.httpService.post<TreatyDto>(url, body).toPromise()
+      )?.data;
+    } catch {
+      return null;
+    }
+
+    if (offeredTreaty === undefined) {
+      return null;
+    }
+
+    const createdTreaty = await this.treatyModel.create({
+      instanceId: offeredTreaty.instanceId,
+      instanceBaseUrl: instanceBaseUrl,
+      status: offeredTreaty.status,
+    });
+
+    return {
+      instanceId: createdTreaty.instanceId,
+      url: createdTreaty.instanceBaseUrl,
+      status: createdTreaty.status,
+    };
+  }
 
   async updateTreaty(
     sourceInstanceId: string,
