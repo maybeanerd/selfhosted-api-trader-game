@@ -28,9 +28,9 @@ export class TreatyService {
   }
 
   async ensureServerId() {
-    const treatyBasis = await this.serverStateModel.findOne().exec();
-    if (treatyBasis !== null) {
-      return treatyBasis;
+    const serverState = await this.serverStateModel.findOne().exec();
+    if (serverState !== null) {
+      return serverState;
     }
     const newlyCreatedTreatyBasis = this.serverStateModel.create({});
     return newlyCreatedTreatyBasis;
