@@ -42,6 +42,19 @@ services:
     entrypoint:
       ['bash', '-c', "mongosh --host database:27017 --eval 'rs.initiate()'"]
 
+  proxy:
+    image: caddy:2
+    restart: always
+    networks:
+      - internal
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
 #  authserver:
 #    image: oryd/kratos:v0.11
 #    restart: always
@@ -50,6 +63,8 @@ services:
 
 volumes:
   db-data:
+  caddy_data:
+  caddy_config:
 
 networks:
   internal:
