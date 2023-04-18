@@ -42,6 +42,12 @@ export class TreatyService {
     return treaties.map(mapTreatyDocumentToTreatyDto);
   }
 
+  async hasActiveTreaty(instanceId: string): Promise<boolean> {
+    const treaty = await this.treatyModel.findOne({ instanceId });
+
+    return treaty !== null && treaty.status === TreatyStatus.Signed;
+  }
+
   async createTreaty(
     sourceInstanceId: string,
     instanceBaseUrl: string,

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { EventService } from './event.service';
 import {
   EventsInputDto,
@@ -32,6 +40,9 @@ export class EventController {
 
   @Post()
   async receiveEvents(@Body() body: EventsInputDto): Promise<void> {
-    await this.eventService.addEvents(body);
+    const addedEvents = await this.eventService.addEvents(body);
+    if (!addedEvents) {
+      throw new HttpException('Invalid Treaty.', HttpStatus.FORBIDDEN);
+    }
   }
 }
