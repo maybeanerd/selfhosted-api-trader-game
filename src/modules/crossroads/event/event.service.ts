@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { StoredEvent, StoredEventDocument } from './schemas/Event.schema';
-import { Event } from './types';
+import {
+  Event,
+  EventType,
+  TradeOfferAcceptedEventPayload,
+  TradeOfferCreatedEventPayload,
+  TradeOfferRemovedEventPayload,
+} from './types';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { EventDto, EventsInputDto } from './dto/Event.dto';
@@ -8,6 +14,7 @@ import { EventDto, EventsInputDto } from './dto/Event.dto';
 import { TreatyService } from '@/modules/treaty/treaty.service';
 import { crossroadsEventPath } from '@/config/apiPaths';
 import { HttpService } from '@nestjs/axios';
+import { TradeService } from '@/modules/trade/trade.service';
 
 function mapStoredEventDocumentToEventDto(
   storedEvent: StoredEventDocument,
@@ -29,6 +36,7 @@ export class EventService {
     private eventModel: Model<StoredEvent>,
     private readonly treatyService: TreatyService,
     private readonly httpService: HttpService,
+    private readonly tradeService: TradeService,
   ) {}
 
   async postEventsToTreatiedInstances(events: Array<EventDto>): Promise<void> {
@@ -36,6 +44,7 @@ export class EventService {
     const treaties = await this.treatyService.getAllTreaties();
     await Promise.all(
       treaties.map(async (treaty) => {
+        console.log('Posting events to treaty', treaty, events);
         // Do not send events that originated from that instance
         const filteredEvents = events.filter(
           (event) => event.sourceInstanceId !== treaty.instanceId,
@@ -120,7 +129,7 @@ export class EventService {
 
     const serverState = await this.treatyService.ensureServerId();
 
-    // TODO actually do something with these events, like add/remove/update trades
+    await this.handleEvents(createdEvents);
 
     await this.postEventsToTreatiedInstances(
       createdEvents.map((createdEvent) =>
@@ -129,5 +138,33 @@ export class EventService {
     );
 
     return true;
+  }
+
+  async handleEvents(events: Array<StoredEventDocument>) {
+    await Promise.all(
+      events.map(async (event) => {
+        console.log('Handling event', event);
+
+        if (event.type === EventType.TradeOfferRemoved) {
+          const payload = event.payload as TradeOfferRemovedEventPayload;
+          await this.tradeService.removeTradeOffer(payload.id);
+          return;
+        }
+
+        if (event.type === EventType.TradeOfferCreated) {
+          const payload = event.payload as TradeOfferCreatedEventPayload;
+          await this.tradeService.receiveTradeOffer(payload);
+          return;
+        }
+
+        if (event.type === EventType.TradeOfferAccepted) {
+          const payload = event.payload as TradeOfferAcceptedEventPayload;
+          await this.tradeService.acceptTradeOffer(payload.id);
+          return;
+        }
+
+        console.error('Unhandled event type', event);
+      }),
+    );
   }
 }

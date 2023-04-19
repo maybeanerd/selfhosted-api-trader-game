@@ -1,31 +1,25 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TreatyController } from './treaty/crossroads.treaty.controller';
-import { TreatyService } from '@/modules/treaty/treaty.service';
-import {
-  StoredTreaty,
-  StoredTreatySchema,
-} from '@/modules/treaty/schemas/Treaty.schema';
-import {
-  ServerState,
-  ServerStateSchema,
-} from '@/modules/treaty/schemas/ServerState.schema';
 import { StoredEvent, StoredEventSchema } from './event/schemas/Event.schema';
 import { EventController } from './event/event.controller';
 import { EventService } from './event/event.service';
 import { HttpModule } from '@nestjs/axios';
+import { TradeModule } from '@/modules/trade/trade.module';
+import { TreatyModule } from '@/modules/treaty/treaty.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: StoredTreaty.name, schema: StoredTreatySchema },
-      { name: ServerState.name, schema: ServerStateSchema },
       { name: StoredEvent.name, schema: StoredEventSchema },
     ]),
     HttpModule,
+
+    TreatyModule,
+    TradeModule,
   ],
 
   controllers: [TreatyController, EventController],
-  providers: [TreatyService, EventService],
+  providers: [EventService],
 })
 export class CrossroadsModule {}

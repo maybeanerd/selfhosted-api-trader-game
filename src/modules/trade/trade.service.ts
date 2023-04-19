@@ -35,7 +35,6 @@ export class TradeService {
     return trades.map(mapTradeDocumentToTradeOfferDto);
   }
 
-  // TODO once we get remote ones, we probably want a second function for that, e.g. trackTradeOffer or something
   async createTradeOffer(
     offeredTrade: {
       requestedResources: Array<{ type: ResourceType; amount: number }>;
@@ -62,8 +61,23 @@ export class TradeService {
     return mapTradeDocumentToTradeOfferDto(trade);
   }
 
-  async removeTradeOffer(id: string): Promise<TradeOfferDto | null> {
+  async receiveTradeOffer(receivedTrade: {
+    id: string;
+    creatorId: string;
+    requestedResources: Array<{ type: ResourceType; amount: number }>;
+    offeredResources: Array<{ type: ResourceType; amount: number }>;
+  }): Promise<void> {
+    const trade = new this.tradeModel(receivedTrade);
+    await trade.save();
+  }
+
+  async removeTradeOffer(
+    id: string,
+    requestingUserId?: string,
+  ): Promise<TradeOfferDto | null> {
     return transaction(this.connection, async (session) => {
+      // TODO check if requestingUserId is creatorId
+      console.log(requestingUserId);
       const removedTradeOffer = await this.tradeModel
         .findOneAndDelete({ id })
         .session(session)
@@ -89,10 +103,13 @@ export class TradeService {
     });
   }
 
-  async acceptTradeOffer(id: string): Promise<TradeOfferDto | null> {
+  async acceptTradeOffer(
+    tradeOfferId: string,
+    acceptantId?: string,
+  ): Promise<TradeOfferDto | null> {
     return transaction(this.connection, async (session) => {
       const removedTradeOffer = await this.tradeModel
-        .findOneAndDelete({ id })
+        .findOneAndDelete({ id: tradeOfferId })
         .session(session)
         .exec();
 
@@ -110,10 +127,14 @@ export class TradeService {
         throw new Error('Missing resources to complete the trade.');
       }
 
-      await this.resourceService.addAmountsOfResources(
-        removedTradeOffer.offeredResources,
-        session,
-      );
+      if (acceptantId) {
+        // TODO use id to assign resources to the acceptant
+        await this.resourceService.addAmountsOfResources(
+          removedTradeOffer.offeredResources,
+          session,
+        );
+      }
+
       // TODO give resources that have been received to the originally offering player as well
 
       return mapTradeDocumentToTradeOfferDto(removedTradeOffer);
