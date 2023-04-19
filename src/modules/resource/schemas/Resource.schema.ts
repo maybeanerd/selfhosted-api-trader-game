@@ -4,11 +4,17 @@ import { ResourceType } from '../types';
 
 @Schema()
 export class Resource {
+  @Prop({
+    required: true,
+    index: true,
+  })
+    ownerId: string;
+
   @Prop({ required: true })
     amount: number;
 
   @Prop({ required: true })
-    accumulationPerTick: number;
+    upgradeLevel: number;
 
   @Prop({ required: true, type: String, enum: ResourceType, index: true })
     type: ResourceType;
