@@ -1,4 +1,12 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Put,
+} from '@nestjs/common';
 import { ResourceService } from '@/modules/resource/resource.service';
 import { ResourceTypeDto } from './dto/ResourceType.dto';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
@@ -20,5 +28,24 @@ export class ResourceController {
   getStatisticOfAllResources(): Promise<Array<ResourceStatisticDto>> {
     const userId = randomUUID(); // TODO get the user id from the request
     return this.resourceService.getStatisticOfAllResources(userId);
+  }
+
+  @Put()
+  async upgradeResource(
+    @Body() body: ResourceTypeDto,
+  ): Promise<ResourceStatisticDto> {
+    const userId = randomUUID(); // TODO get the user id from the request
+    try {
+      const updatedResource = await this.resourceService.upgradeResource(
+        userId,
+        body.type,
+      );
+      return updatedResource;
+    } catch (e) {
+      throw new HttpException(
+        'Failed to upgrade resource: ' + e,
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 }

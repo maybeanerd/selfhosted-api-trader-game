@@ -218,4 +218,49 @@ export class ResourceService {
       passedTransactionSession,
     );
   }
+
+  async upgradeResource(ownerId: string, type: ResourceType) {
+    return transaction(this.connection, async (session) => {
+      const resource = await this.resourceModel
+        .findOne({ type, ownerId })
+        .session(session)
+        .exec();
+
+      if (resource === null) {
+        throw new Error('You dont have access to this resource yet.');
+      }
+
+      // TODO make this logic more sophisticated
+      const upgradeCost = resource.upgradeLevel * 25;
+
+      // TODO make this logic more sophisticated
+      const upgradeTypeNeeded =
+        type === ResourceType.WOOD ? ResourceType.STONE : ResourceType.WOOD;
+
+      const updatedResource = await this.resourceModel
+        .findOneAndUpdate(
+          {
+            type: upgradeTypeNeeded,
+            ownerId,
+            amount: {
+              $gte: upgradeCost,
+            },
+          },
+          { $inc: { amount: -upgradeCost } },
+        )
+        .session(session)
+        .exec();
+
+      if (updatedResource === null) {
+        throw new Error(
+          'Not enough resources to upgrade. Needed: ' + upgradeCost,
+        );
+      }
+
+      resource.upgradeLevel += 1;
+      await resource.save({ session });
+
+      return mapResourceDocumentToResourceStatisticDto(resource);
+    });
+  }
 }
