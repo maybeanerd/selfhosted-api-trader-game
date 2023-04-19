@@ -16,5 +16,6 @@ import { HttpModule } from '@nestjs/axios';
   ],
   controllers: [TreatyController],
   providers: [TreatyService],
+  exports: [TreatyService],
 })
 export class TreatyModule {}
