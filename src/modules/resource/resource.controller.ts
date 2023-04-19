@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   HttpException,
@@ -30,15 +29,15 @@ export class ResourceController {
     return this.resourceService.getStatisticOfAllResources(userId);
   }
 
-  @Put()
+  @Put(':type')
   async upgradeResource(
-    @Body() body: ResourceTypeDto,
+    @Param() params: ResourceTypeDto,
   ): Promise<ResourceStatisticDto> {
     const userId = randomUUID(); // TODO get the user id from the request
     try {
       const updatedResource = await this.resourceService.upgradeResource(
         userId,
-        body.type,
+        params.type,
       );
       return updatedResource;
     } catch (e) {
