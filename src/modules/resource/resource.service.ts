@@ -4,19 +4,28 @@ import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Resource, ResourceDocument } from './schemas/Resource.schema';
-import { ClientSession, Connection, Model } from 'mongoose';
+import { ClientSession, Connection, FilterQuery, Model } from 'mongoose';
 import { transaction } from '@/util/mongoDbTransaction';
+import { randomUUID } from 'crypto';
 
 function mapResourceDocumentToResourceStatisticDto(
   resourceDocument: ResourceDocument,
 ): ResourceStatisticDto {
   const resource = resourceDocument.toObject();
   return {
+    ownerId: resource.ownerId,
     type: resource.type,
     amount: resource.amount,
-    accumulationPerTick: resource.accumulationPerTick,
+    upgradeLevel: resource.upgradeLevel,
   };
 }
+
+// TODO make this logic more sophisticated
+function getResourceAccumulationPerTick(upgradeLevel: number) {
+  return upgradeLevel * 2;
+}
+
+const userIdForTestingResourceGeneration = randomUUID();
 
 @Injectable()
 export class ResourceService {
@@ -35,40 +44,66 @@ export class ResourceService {
     // TODO this could probably be a dedicated function that uses mongoose directly, to limit the amount of requests we send
     await Promise.all(
       resources.map((resource) =>
-        this.addAmountOfResource(resource.type, resource.accumulationPerTick),
+        this.addAmountOfResource(
+          resource.type,
+          getResourceAccumulationPerTick(resource.upgradeLevel),
+          resource.ownerId,
+        ),
       ),
     );
 
     console.log(resources);
 
     // TODO remove this temporary solution to creating some initial resource growth
-    const stone = await this.getStatisticOfResource(ResourceType.STONE);
-    if (stone.accumulationPerTick === 0) {
-      await this.addAmountOfResource(ResourceType.STONE, 0);
+    const stone = await this.getStatisticOfResource(
+      ResourceType.STONE,
+      userIdForTestingResourceGeneration,
+    );
+    if (stone.upgradeLevel === 0) {
+      await this.addAmountOfResource(
+        ResourceType.STONE,
+        0,
+        userIdForTestingResourceGeneration,
+      );
     }
-    const wood = await this.getStatisticOfResource(ResourceType.WOOD);
-    if (wood.accumulationPerTick === 0) {
-      await this.addAmountOfResource(ResourceType.WOOD, 0);
+    const wood = await this.getStatisticOfResource(
+      ResourceType.WOOD,
+      userIdForTestingResourceGeneration,
+    );
+    if (wood.upgradeLevel === 0) {
+      await this.addAmountOfResource(
+        ResourceType.WOOD,
+        0,
+        userIdForTestingResourceGeneration,
+      );
     }
-
     console.timeEnd('resource-cron');
   }
 
-  async getStatisticOfAllResources(): Promise<Array<ResourceStatisticDto>> {
-    const resources = await this.resourceModel.find();
+  async getStatisticOfAllResources(
+    ownerId?: string,
+  ): Promise<Array<ResourceStatisticDto>> {
+    const query: FilterQuery<Resource> = {};
+    if (ownerId) {
+      query.ownerId = ownerId;
+    }
+
+    const resources = await this.resourceModel.find(query);
 
     return resources.map(mapResourceDocumentToResourceStatisticDto);
   }
 
   async getStatisticOfResource(
     type: ResourceType,
+    ownerId: string,
   ): Promise<ResourceStatisticDto> {
-    const resource = await this.resourceModel.findOne({ type });
+    const resource = await this.resourceModel.findOne({ type, ownerId });
     if (resource === null) {
       return {
+        ownerId,
         type,
         amount: 0,
-        accumulationPerTick: 0,
+        upgradeLevel: 0,
       };
     }
     return mapResourceDocumentToResourceStatisticDto(resource);
@@ -77,16 +112,18 @@ export class ResourceService {
   async addAmountOfResource(
     type: ResourceType,
     amount: number,
+    ownerId: string,
   ): Promise<number> {
     const incrementedEntry = await this.resourceModel.findOneAndUpdate(
-      { type },
+      { type, ownerId },
       { $inc: { amount } },
     );
     if (incrementedEntry === null) {
       const createdEntry = await this.resourceModel.create({
+        ownerId,
         type,
         amount,
-        accumulationPerTick: 2,
+        upgradeLevel: 1,
       });
       return createdEntry.amount;
     }
@@ -96,9 +133,11 @@ export class ResourceService {
   async takeAmountOfResource(
     type: ResourceType,
     amount: number,
+    ownerId: string,
   ): Promise<number> {
     const decrementedEntry = await this.resourceModel.findOneAndUpdate(
       {
+        ownerId,
         type,
         amount: {
           $gte: amount,
@@ -114,6 +153,7 @@ export class ResourceService {
 
   async addAmountsOfResources(
     resources: Array<{ type: ResourceType; amount: number }>,
+    ownerId: string,
     passedTransactionSession?: ClientSession,
   ): Promise<boolean> {
     return transaction(
@@ -122,7 +162,7 @@ export class ResourceService {
         await Promise.all(
           resources.map(async ({ type, amount }) => {
             const updatedResource = await this.resourceModel
-              .findOneAndUpdate({ type }, { $inc: { amount } })
+              .findOneAndUpdate({ type, ownerId }, { $inc: { amount } })
               .session(session)
               .exec();
 
@@ -147,6 +187,7 @@ export class ResourceService {
 
   async takeAmountsOfResources(
     resources: Array<{ type: ResourceType; amount: number }>,
+    ownerId: string,
     passedTransactionSession?: ClientSession,
   ): Promise<boolean> {
     return transaction(
@@ -157,7 +198,8 @@ export class ResourceService {
             this.resourceModel
               .findOneAndUpdate(
                 {
-                  type: type,
+                  type,
+                  ownerId,
                   amount: {
                     $gte: amount,
                   },

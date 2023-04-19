@@ -3,7 +3,7 @@ import { ResourceType } from '@/modules/resource/types';
 import { ResourceService } from '@/modules/resource/resource.service';
 import { Trade, TradeDocument } from './schemas/Trade.schema';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { Connection, FilterQuery, Model } from 'mongoose';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { transaction } from '@/util/mongoDbTransaction';
 
@@ -45,6 +45,7 @@ export class TradeService {
     const couldReserveAllResources =
       await this.resourceService.takeAmountsOfResources(
         offeredTrade.offeredResources,
+        creatorId,
       );
 
     if (!couldReserveAllResources) {
@@ -76,10 +77,13 @@ export class TradeService {
     requestingUserId?: string,
   ): Promise<TradeOfferDto | null> {
     return transaction(this.connection, async (session) => {
-      // TODO check if requestingUserId is creatorId
-      console.log(requestingUserId);
+      const query: FilterQuery<Trade> = { id };
+      if (requestingUserId) {
+        query.creatorId = requestingUserId;
+      }
+
       const removedTradeOffer = await this.tradeModel
-        .findOneAndDelete({ id })
+        .findOneAndDelete(query)
         .session(session)
         .exec();
 
@@ -87,17 +91,20 @@ export class TradeService {
         return null;
       }
 
-      const resourcesToReturn = removedTradeOffer.offeredResources.map(
-        (resource) => ({
-          type: resource.type,
-          amount: Math.floor(resource.amount * 0.8),
-        }),
-      );
+      if (requestingUserId) {
+        const resourcesToReturn = removedTradeOffer.offeredResources.map(
+          (resource) => ({
+            type: resource.type,
+            amount: Math.floor(resource.amount * 0.8),
+          }),
+        );
 
-      await this.resourceService.addAmountsOfResources(
-        resourcesToReturn,
-        session,
-      );
+        await this.resourceService.addAmountsOfResources(
+          resourcesToReturn,
+          requestingUserId,
+          session,
+        );
+      }
 
       return mapTradeDocumentToTradeOfferDto(removedTradeOffer);
     });
@@ -117,20 +124,20 @@ export class TradeService {
         return null;
       }
 
-      const resourcesToPay = removedTradeOffer.requestedResources;
-
-      const wasAbleToPay = await this.resourceService.takeAmountsOfResources(
-        resourcesToPay,
-        session,
-      );
-      if (!wasAbleToPay) {
-        throw new Error('Missing resources to complete the trade.');
-      }
-
       if (acceptantId) {
-        // TODO use id to assign resources to the acceptant
+        const resourcesToPay = removedTradeOffer.requestedResources;
+        const wasAbleToPay = await this.resourceService.takeAmountsOfResources(
+          resourcesToPay,
+          acceptantId,
+          session,
+        );
+        if (!wasAbleToPay) {
+          throw new Error('Missing resources to complete the trade.');
+        }
+
         await this.resourceService.addAmountsOfResources(
           removedTradeOffer.offeredResources,
+          acceptantId,
           session,
         );
       }
