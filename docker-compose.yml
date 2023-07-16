@@ -20,7 +20,7 @@ services:
 
   frontend:
     build: ./backend
-    image: ${IMAGE_NAME}frontend
+    image: ${IMAGE_NAME_FRONTEND}
     depends_on:
       - backend
     networks:

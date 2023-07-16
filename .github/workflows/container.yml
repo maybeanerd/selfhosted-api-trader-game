@@ -8,7 +8,8 @@ jobs:
   build_container:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: ghcr.io/t0tproduction/selfhosted-api-trader-game-main-pr
+      IMAGE_NAME: ghcr.io/t0tproduction/selfhosted-api-trader-game/backend-pr
+      IMAGE_NAME_FRONTEND: ghcr.io/t0tproduction/selfhosted-api-trader-game/frontend-pr
 
     steps:
       - name: Checkout
