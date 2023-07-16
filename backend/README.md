@@ -1,8 +1,4 @@
-# Self Hosted Api Trader Game
-<div>
-<img src="https://user-images.githubusercontent.com/18548570/230724270-427203bb-e61b-4a0e-bae5-7bacafc9c7fb.png" width="200" alt="Logo"/>
-<img src="https://user-images.githubusercontent.com/18548570/230724447-a24e0b38-5a28-4d06-bd14-c1124c5d3867.png" width="200" alt="Logo 2"/>
-</div>
+# Self Hosted Api Trader Game Backend
 
 ## Description
 
