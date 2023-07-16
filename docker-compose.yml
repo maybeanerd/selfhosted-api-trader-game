@@ -18,6 +18,19 @@ services:
       - INSTANCE_NAME=${INSTANCE_NAME}
       - DATABASE_HOST=database
 
+  frontend:
+    build: ./backend
+    image: ${IMAGE_NAME}frontend
+    depends_on:
+      - backend
+    networks:
+      - internal
+    ports:
+      - 80:3000
+    environment:
+      - INSTANCE_NAME=${INSTANCE_NAME}
+      - DATABASE_HOST=database
+
   database:
     image: mongo:6
     command: --replSet rs0 # create a replica set to allow for things like transactions
@@ -42,18 +55,18 @@ services:
     entrypoint:
       ['bash', '-c', "mongosh --host database:27017 --eval 'rs.initiate()'"]
 
-  proxy:
-    image: caddy:2
-    restart: always
-    networks:
-      - internal
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
+  # proxy:
+  #   image: caddy:2
+  #   restart: always
+  #   networks:
+  #     - internal
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
+  #     - caddy_data:/data
+  #     - caddy_config:/config
 
 #  authserver:
 #    image: oryd/kratos:v0.11
