@@ -10,16 +10,17 @@ services:
     image: ${IMAGE_NAME}
     depends_on:
       - database
+      - db-init
     networks:
       - internal
     ports:
-      - 3000:3000
+      - 8080:8080
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
       - DATABASE_HOST=database
 
   frontend:
-    build: ./backend
+    build: ./frontend
     image: ${IMAGE_NAME_FRONTEND}
     depends_on:
       - backend
