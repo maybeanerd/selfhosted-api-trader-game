@@ -41,7 +41,7 @@
     "naive-ui": "2.34.4",
     "nuxt": "3.6.3",
     "prettier": "3.0.0",
-    "typescript": "5.1.3",
+    "typescript": "5.1.6",
     "vfonts": "0.0.3"
   }
 }
