@@ -1,0 +1,11 @@
+.git
+.env
+
+dist
+node_modules
+coverage
+.nuxt
+.output
+
+docker-compose.yml
+Dockerfile
