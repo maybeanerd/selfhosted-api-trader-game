@@ -1,7 +1,19 @@
 {
   "name": "selfhosted-api-trader-game-frontend",
-  "private": true,
+  "version": "0.0.1",
+  "description": "A WIP example client for the game.",
+  "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@8.6.3",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/T0TProduction/selfhosted-api-trader-game.git"
+  },
+  "bugs": {
+    "url": "https://github.com/T0TProduction/selfhosted-api-trader-game/issues"
+  },
+  "homepage": "https://github.com/T0TProduction/selfhosted-api-trader-game#readme",
+  
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
