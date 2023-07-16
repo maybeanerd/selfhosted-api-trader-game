@@ -13,4 +13,4 @@ COPY . .
 RUN pnpm run build
 
 # Start service
-CMD ["pnpm", "run", "start:prod"]
+CMD ["pnpm", "run", "start"]
