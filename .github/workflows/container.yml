@@ -13,7 +13,5 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Enter backend directory
-        run: cd ./backend
       - name: Build containers
         run: docker compose build

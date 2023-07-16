@@ -5,8 +5,8 @@ version: '3.9'
 name: ${INSTANCE_NAME:-self-hosted-api-trader-game}
 
 services:
-  gameserver:
-    build: .
+  backend:
+    build: ./backend
     image: ${IMAGE_NAME}
     depends_on:
       - database

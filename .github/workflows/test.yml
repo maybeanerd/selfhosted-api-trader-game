@@ -15,7 +15,6 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-        project: [backend, frontend]
 
     steps:
       - uses: actions/checkout@v3
@@ -25,14 +24,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name : Install pnpm
         run: npm install -g pnpm
-      - name : Enter Project Directory (${{ matrix.project }})
-        run: cd ./${{ matrix.project }}
       - name: Install dependencies
         run: pnpm i
-      - name: lint
-        run: pnpm run lint
-      - name: build
-        run: pnpm run build
+      - name: lint all workspaces
+        run: pnpm run -r lint 
+      - name: build all workspaces
+        run: pnpm run -r build
       #- name: unit test (with coverage)
       #  run: pnpm run test:cov  
       #- name: e2e test
