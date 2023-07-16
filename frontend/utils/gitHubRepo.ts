@@ -1,9 +1,5 @@
-export const latestBuildsUrl = new URL(
-  'https://app.netlify.com/sites/diluzio/deploys',
-);
-
 export const gitHubProjectUrl = new URL(
-  'https://github.com/T0TProduction/diluz.io',
+  'https://github.com/T0TProduction/selfhosted-api-trader-game',
 );
 
 export function getLinkToCommit (commitHash: string) {

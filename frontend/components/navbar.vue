@@ -1,8 +1,8 @@
 <template>
   <NDrawer v-model:show="isOpen" placement="left">
-    <NDrawerContent title="The Di Luzios" closable>
+    <NDrawerContent title="Menu" closable>
       <div class="h-full flex flex-col justify-between">
-        <NMenu v-model:value="selectedProfile" :options="menuOptions" />
+        <NMenu :options="menuOptions" />
         <div>
           <NDivider />
           <div class="text-center text-xs">
@@ -11,9 +11,7 @@
               {{ commitHash }}
             </CustomLink><br>
             built on
-            <CustomLink :url="latestBuildsUrl">
-              {{ buildDate.toLocaleDateString('de-DE') }}
-            </CustomLink>
+            {{ buildDate.toLocaleDateString('de-DE') }}
           </div>
         </div>
       </div>
@@ -33,55 +31,32 @@ import {
 import { Airplane } from '@vicons/ionicons5';
 import { RouterLink } from '~/.nuxt/vue-router';
 import { useMenu } from '~/composables/useMenu';
-import { upperCaseFirstLetter } from '~/utils/string';
-import { profiles } from '~/server/profiles';
-import { defaultProfile } from '~/constants/defaultProfile';
-import { getLinkToCommit, latestBuildsUrl } from '~/utils/gitHubRepo';
+import { getLinkToCommit } from '~/utils/gitHubRepo';
 
 // TODO change this to render the image of a profile
 function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
 
-const menuOptions = profiles.map((profile) => {
-  const name = profile.person.name.first.toLowerCase();
-
-  const menuOption: MenuOption = {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            path: `/${name}`,
-          },
+const menuOptions:Array<MenuOption> = [{
+  label: () =>
+    h(
+      RouterLink,
+      {
+        to: {
+          path: '/nowhere',
         },
-        upperCaseFirstLetter(name),
-      ),
-    key: name,
-    icon: renderIcon(Airplane),
-  };
-
-  return menuOption;
-});
-
-const route = useRoute();
-
-function getCurrentProfile () {
-  return (
-    menuOptions
-      .find(option => route.path.endsWith(option.key?.toString() ?? ''))
-      ?.key?.toString() ?? defaultProfile
-  );
-}
-
-const selectedProfile = ref<string | null>(getCurrentProfile());
+      },
+      'Nowhere',
+    ),
+  key: 'nowhere',
+  icon: renderIcon(Airplane),
+}];
 
 const router = useRouter();
 const { isOpen } = useMenu();
 
 router.afterEach(() => {
-  selectedProfile.value = getCurrentProfile();
-
   // Close navbar when any navigation occurs
   isOpen.value = false;
 });
