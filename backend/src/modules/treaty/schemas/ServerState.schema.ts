@@ -8,6 +8,7 @@ export class ServerState extends Model {
   @Column({
     allowNull: false,
     unique: true,
+    primaryKey: true,
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
