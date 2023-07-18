@@ -1,22 +1,15 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { randomUUID } from 'crypto';
-import { HydratedDocument } from 'mongoose';
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
 
-@Schema()
-export class ServerState {
+@Table
+export class ServerState extends Model {
   /**
    * The Id we created for this instance.
    */
-  @Prop({
-    required: true,
+  @Column({
+    allowNull: false,
     unique: true,
-    default: function generateUUID() {
-      return randomUUID();
-    },
-    index: true,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
   })
     instanceId: string;
 }
-
-export type ServerStateDocument = HydratedDocument<ServerState>;
-export const ServerStateSchema = SchemaFactory.createForClass(ServerState);
