@@ -1,24 +1,20 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
 import { ResourceType } from '../types';
 
-@Schema()
-export class Resource {
-  @Prop({
-    required: true,
-    index: true,
-  })
+@Table
+export class Resource extends Model {
+  @Column({ allowNull: false, type: DataType.UUID  })
     ownerId: string;
 
-  @Prop({ required: true })
+  @Column({ allowNull: false })
     amount: number;
 
-  @Prop({ required: true })
+  @Column({ allowNull: false  })
     upgradeLevel: number;
 
-  @Prop({ required: true, type: String, enum: ResourceType, index: true })
+  @Column({
+    allowNull: false,
+    type: DataType.ENUM(...Object.values(ResourceType)),
+  })
     type: ResourceType;
 }
-
-export type ResourceDocument = HydratedDocument<Resource>;
-export const ResourceSchema = SchemaFactory.createForClass(Resource);
