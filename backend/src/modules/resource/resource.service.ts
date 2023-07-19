@@ -5,8 +5,7 @@ import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { randomUUID } from 'crypto';
 import { Resource } from '@/modules/resource/schemas/Resource.schema';
 import { InjectModel } from '@nestjs/sequelize';
-import { FindOptions } from 'sequelize';
-import { Op } from 'sequelize';
+import { FindOptions, Transaction, Op, Sequelize } from 'sequelize';
 
 function mapResourceDocumentToResourceStatisticDto(
   resource: Resource,
@@ -31,6 +30,7 @@ export class ResourceService {
   constructor(
     @InjectModel(Resource)
     private resourceModel: typeof Resource,
+    private sequelize: Sequelize,
   ) {}
 
   @Cron(CronExpression.EVERY_5_SECONDS)
@@ -157,77 +157,81 @@ export class ResourceService {
   async addAmountsOfResources(
     resources: Array<{ type: ResourceType; amount: number }>,
     ownerId: string,
-    passedTransactionSession?: ClientSession,
+    passedTransaction?: Transaction,
   ): Promise<boolean> {
-    return transaction(
-      this.connection,
-      async (session) => {
-        await Promise.all(
-          resources.map(async ({ type, amount }) => {
-            const updatedResource = await this.resourceModel
-              .findOneAndUpdate({ type, ownerId }, { $inc: { amount } })
-              .session(session)
-              .exec();
+    return this.sequelize.transaction(async (newTransaction) => {
+      const transaction = passedTransaction ?? newTransaction;
+      await Promise.all(
+        resources.map(async ({ type, amount }) => {
+          const resourceToBeUpdated = await this.resourceModel.findOne({
+            where: { type, ownerId },
+            transaction: transaction,
+          });
 
-            if (updatedResource === null) {
-              await this.resourceModel.create(
-                {
-                  type,
-                  amount,
-                  accumulationPerTick: 0,
-                },
-                { session },
-              );
-            }
-          }),
-        );
+          if (resourceToBeUpdated === null) {
+            await this.resourceModel.create(
+              {
+                type,
+                amount,
+                accumulationPerTick: 0,
+              },
+              { transaction },
+            );
+          } else {
+            resourceToBeUpdated.amount += amount;
+            await resourceToBeUpdated.save({ transaction });
+          }
+        }),
+      );
 
-        return true;
-      },
-      passedTransactionSession,
-    );
+      return true;
+    });
   }
 
   async takeAmountsOfResources(
     resources: Array<{ type: ResourceType; amount: number }>,
     ownerId: string,
-    passedTransactionSession?: ClientSession,
+    passedTransaction?: Transaction,
   ): Promise<boolean> {
-    return transaction(
-      this.connection,
-      async (session) => {
-        const tookResources = await Promise.all(
-          resources.map(({ type, amount }) =>
-            this.resourceModel
-              .findOneAndUpdate(
-                {
-                  type,
-                  ownerId,
-                  amount: {
-                    $gte: amount,
-                  },
+    return this.sequelize.transaction(async (newTransaction) => {
+      const transaction = passedTransaction ?? newTransaction;
+
+      try {
+        await Promise.all(
+          resources.map(async ({ type, amount }) => {
+            const resourceToReduce = await this.resourceModel.findOne({
+              where: {
+                type,
+                ownerId,
+                amount: {
+                  [Op.gte]: amount,
                 },
-                { $inc: { amount: -amount } },
-              )
-              .session(session)
-              .exec(),
-          ),
+              },
+              transaction,
+            });
+
+            if (resourceToReduce === null) {
+              throw Error('Not enough resources to take.');
+            } else {
+              resourceToReduce.amount -= amount;
+              await resourceToReduce.save({ transaction });
+              return resourceToReduce;
+            }
+          }),
         );
-
-        const failedToTakeAllResources = tookResources.includes(null);
-
-        return !failedToTakeAllResources;
-      },
-      passedTransactionSession,
-    );
+        return true;
+      } catch {
+        return false;
+      }
+    });
   }
 
   async upgradeResource(ownerId: string, type: ResourceType) {
-    return transaction(this.connection, async (session) => {
-      const resource = await this.resourceModel
-        .findOne({ type, ownerId })
-        .session(session)
-        .exec();
+    return this.sequelize.transaction(async (transaction) => {
+      const resource = await this.resourceModel.findOne({
+        where: { type, ownerId },
+        transaction,
+      });
 
       if (resource === null) {
         throw new Error('You dont have access to this resource yet.');
@@ -240,28 +244,27 @@ export class ResourceService {
       const upgradeTypeNeeded =
         type === ResourceType.WOOD ? ResourceType.STONE : ResourceType.WOOD;
 
-      const updatedResource = await this.resourceModel
-        .findOneAndUpdate(
-          {
-            type: upgradeTypeNeeded,
-            ownerId,
-            amount: {
-              $gte: upgradeCost,
-            },
+      const updatedResource = await this.resourceModel.findOne({
+        where: {
+          type: upgradeTypeNeeded,
+          ownerId,
+          amount: {
+            [Op.gte]: upgradeCost,
           },
-          { $inc: { amount: -upgradeCost } },
-        )
-        .session(session)
-        .exec();
-
+        },
+        transaction,
+      });
       if (updatedResource === null) {
         throw new Error(
           'Not enough resources to upgrade. Needed: ' + upgradeCost,
         );
+      } else {
+        updatedResource.amount -= upgradeCost;
+        await updatedResource.save({ transaction });
       }
 
       resource.upgradeLevel += 1;
-      await resource.save({ session });
+      await resource.save({ transaction });
 
       return mapResourceDocumentToResourceStatisticDto(resource);
     });
