@@ -244,7 +244,7 @@ export class ResourceService {
       const upgradeTypeNeeded =
         type === ResourceType.WOOD ? ResourceType.STONE : ResourceType.WOOD;
 
-      const updatedResource = await this.resourceModel.findOne({
+      const resourceToUpdate = await this.resourceModel.findOne({
         where: {
           type: upgradeTypeNeeded,
           ownerId,
@@ -254,13 +254,13 @@ export class ResourceService {
         },
         transaction,
       });
-      if (updatedResource === null) {
+      if (resourceToUpdate === null) {
         throw new Error(
           'Not enough resources to upgrade. Needed: ' + upgradeCost,
         );
       } else {
-        updatedResource.amount -= upgradeCost;
-        await updatedResource.save({ transaction });
+        resourceToUpdate.amount -= upgradeCost;
+        await resourceToUpdate.save({ transaction });
       }
 
       resource.upgradeLevel += 1;
