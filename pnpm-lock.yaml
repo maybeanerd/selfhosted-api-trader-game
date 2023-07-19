@@ -55,8 +55,8 @@ importers:
         specifier: 6.10.2
         version: 6.10.2
       '@nestjs/cli':
-        specifier: 10.1.9
-        version: 10.1.9
+        specifier: 10.1.10
+        version: 10.1.10
       '@nestjs/schematics':
         specifier: 10.0.1
         version: 10.0.1(chokidar@3.5.3)(typescript@5.1.6)
@@ -2652,8 +2652,8 @@ packages:
       rxjs: 7.8.1
     dev: false
 
-  /@nestjs/cli@10.1.9:
-    resolution: {integrity: sha512-kD+QZUPZ5T9dCfp5pjYXQ+tulLiszARQiXuTi56ZvsKg0MVW3jrF90zfMD5thU5XyfmUYFCpB1kpCMXiOYhLcg==}
+  /@nestjs/cli@10.1.10:
+    resolution: {integrity: sha512-5adPl6m2X0uOrK4IPUbzBJUqZ//UKsKi9c7yAR3uCu+moSDMieG/YeKt+zGLnF2gaCdHdgeWWoxI0nfMVE5uCA==}
     engines: {node: '>= 16'}
     hasBin: true
     peerDependencies:
