@@ -7,7 +7,7 @@ export type ResourceWithAmount = {
 };
 
 @Table
-export class Resource extends Model {
+export class Trade extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,

@@ -6,12 +6,13 @@ import { TreatyModule } from '@/modules/treaty/treaty.module';
 import { CrossroadsModule } from '@/modules/crossroads/crossroads.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { dbConfig } from '@/config/dbConfig';
+import { schemas } from '@/modules/schemas';
 
 @Module({
   imports: [
     // Cron module
     ScheduleModule.forRoot(),
-    
+
     // Database module
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -20,7 +21,7 @@ import { dbConfig } from '@/config/dbConfig';
       username: 'root',
       password: 'root',
       database: 'nest',
-      models: [],
+      models: schemas,
     }),
 
     // Modules for clients
