@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@fastify/static": "6.10.2",
-    "@nestjs/cli": "10.1.9",
+    "@nestjs/cli": "10.1.10",
     "@nestjs/schematics": "10.0.1",
     "@nestjs/testing": "10.1.0",
     "@types/cron": "2.0.1",
