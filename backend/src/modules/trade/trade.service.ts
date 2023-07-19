@@ -4,6 +4,7 @@ import { ResourceService } from '@/modules/resource/resource.service';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { Trade } from '@/modules/trade/schemas/Trade.schema';
 import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize, WhereOptions } from 'sequelize';
 
 function mapTradeDocumentToTradeOfferDto(trade: Trade): TradeOfferDto {
   return {
@@ -21,10 +22,11 @@ export class TradeService {
     private readonly resourceService: ResourceService,
     @InjectModel(Trade)
     private tradeModel: typeof Trade,
+    private sequelize: Sequelize,
   ) {}
 
   async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {
-    const trades = await this.tradeModel.find();
+    const trades = await this.tradeModel.findAll();
 
     return trades.map(mapTradeDocumentToTradeOfferDto);
   }
@@ -70,23 +72,23 @@ export class TradeService {
     id: string,
     requestingUserId?: string,
   ): Promise<TradeOfferDto | null> {
-    return transaction(this.connection, async (session) => {
-      const query: FilterQuery<Trade> = { id };
+    return this.sequelize.transaction(async (transaction) => {
+      const query: WhereOptions<Trade> = { id };
       if (requestingUserId) {
         query.creatorId = requestingUserId;
       }
 
-      const removedTradeOffer = await this.tradeModel
-        .findOneAndDelete(query)
-        .session(session)
-        .exec();
+      const tradeOfferToRemove = await this.tradeModel.findOne({
+        where: query,
+        transaction,
+      });
 
-      if (removedTradeOffer === null) {
+      if (tradeOfferToRemove === null) {
         return null;
       }
 
       if (requestingUserId) {
-        const resourcesToReturn = removedTradeOffer.offeredResources.map(
+        const resourcesToReturn = tradeOfferToRemove.offeredResources.map(
           (resource) => ({
             type: resource.type,
             amount: Math.floor(resource.amount * 0.8),
@@ -96,11 +98,12 @@ export class TradeService {
         await this.resourceService.addAmountsOfResources(
           resourcesToReturn,
           requestingUserId,
-          session,
+          transaction,
         );
       }
+      await tradeOfferToRemove.destroy({ transaction });
 
-      return mapTradeDocumentToTradeOfferDto(removedTradeOffer);
+      return mapTradeDocumentToTradeOfferDto(tradeOfferToRemove);
     });
   }
 
@@ -108,37 +111,39 @@ export class TradeService {
     tradeOfferId: string,
     acceptantId?: string,
   ): Promise<TradeOfferDto | null> {
-    return transaction(this.connection, async (session) => {
-      const removedTradeOffer = await this.tradeModel
-        .findOneAndDelete({ id: tradeOfferId })
-        .session(session)
-        .exec();
+    return this.sequelize.transaction(async (transaction) => {
+      const tradeOfferToRemove = await this.tradeModel.findOne({
+        where: { id: tradeOfferId },
+        transaction,
+      });
 
-      if (removedTradeOffer === null) {
+      if (tradeOfferToRemove === null) {
         return null;
       }
 
       if (acceptantId) {
-        const resourcesToPay = removedTradeOffer.requestedResources;
+        const resourcesToPay = tradeOfferToRemove.requestedResources;
         const wasAbleToPay = await this.resourceService.takeAmountsOfResources(
           resourcesToPay,
           acceptantId,
-          session,
+          transaction,
         );
         if (!wasAbleToPay) {
           throw new Error('Missing resources to complete the trade.');
         }
 
         await this.resourceService.addAmountsOfResources(
-          removedTradeOffer.offeredResources,
+          tradeOfferToRemove.offeredResources,
           acceptantId,
-          session,
+          transaction,
         );
       }
 
+      await tradeOfferToRemove.destroy({ transaction });
+
       // TODO give resources that have been received to the originally offering player as well
 
-      return mapTradeDocumentToTradeOfferDto(removedTradeOffer);
+      return mapTradeDocumentToTradeOfferDto(tradeOfferToRemove);
     });
   }
 }
