@@ -27,7 +27,7 @@ export class TreatyService {
   }
 
   async ensureServerId() {
-    const serverState = await this.serverStateModel.findOne().exec();
+    const serverState = await this.serverStateModel.findOne();
     if (serverState !== null) {
       return serverState;
     }
@@ -36,13 +36,13 @@ export class TreatyService {
   }
 
   async getAllTreaties(): Promise<Array<TreatyDto>> {
-    const treaties = await this.treatyModel.find();
+    const treaties = await this.treatyModel.findAll();
 
     return treaties.map(mapTreatyDocumentToTreatyDto);
   }
 
   async hasActiveTreaty(instanceId: string): Promise<boolean> {
-    const treaty = await this.treatyModel.findOne({ instanceId });
+    const treaty = await this.treatyModel.findOne({ where: { instanceId } });
 
     return treaty !== null && treaty.status === TreatyStatus.Signed;
   }
@@ -106,9 +106,9 @@ export class TreatyService {
   ): Promise<TreatyDto | null> {
     const serverState = await this.ensureServerId();
 
-    const existingTreaty = await this.treatyModel
-      .findOne({ instanceId: sourceInstanceId })
-      .exec();
+    const existingTreaty = await this.treatyModel.findOne({
+      where: { instanceId: sourceInstanceId },
+    });
 
     if (existingTreaty === null) {
       return null;
@@ -130,10 +130,10 @@ export class TreatyService {
   }
 
   async removeTreaty(sourceInstanceId: string): Promise<boolean> {
-    const removedTreaty = await this.treatyModel
-      .deleteOne({ instanceId: sourceInstanceId })
-      .exec();
+    const removedTreaties = await this.treatyModel.destroy({
+      where: { instanceId: sourceInstanceId },
+    });
 
-    return removedTreaty.deletedCount > 0;
+    return removedTreaties > 0;
   }
 }
