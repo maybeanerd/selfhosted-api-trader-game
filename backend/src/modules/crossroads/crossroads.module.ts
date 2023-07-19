@@ -1,18 +1,16 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { TreatyController } from './treaty/crossroads.treaty.controller';
-import { StoredEvent, StoredEventSchema } from './event/schemas/Event.schema';
 import { EventController } from './event/event.controller';
 import { EventService } from './event/event.service';
 import { HttpModule } from '@nestjs/axios';
 import { TradeModule } from '@/modules/trade/trade.module';
 import { TreatyModule } from '@/modules/treaty/treaty.module';
+import { StoredEvent } from '@/modules/crossroads/event/schemas/Event.schema';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: StoredEvent.name, schema: StoredEventSchema },
-    ]),
+    SequelizeModule.forFeature([StoredEvent]),
     HttpModule,
 
     TreatyModule,

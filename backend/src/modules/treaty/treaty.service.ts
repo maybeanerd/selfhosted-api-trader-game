@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { StoredTreaty, TreatyStatus } from './schemas/Treaty.schema';
 import { ServerState } from './schemas/ServerState.schema';
 import { ProposeTreatyDto, TreatyDto } from './dto/Treaty.dto';
 import { HttpService } from '@nestjs/axios';
 import { crossroadsTreatyPath } from '@/config/apiPaths';
+import { InjectModel } from '@nestjs/sequelize';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
@@ -18,10 +17,10 @@ function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
 @Injectable()
 export class TreatyService {
   constructor(
-    @InjectModel(StoredTreaty.name)
-    private treatyModel: Model<StoredTreaty>,
-    @InjectModel(ServerState.name)
-    private serverStateModel: Model<ServerState>,
+    @InjectModel(ServerState)
+    private serverStateModel: typeof ServerState,
+    @InjectModel(StoredTreaty)
+    private treatyModel: typeof StoredTreaty,
     private readonly httpService: HttpService,
   ) {
     this.ensureServerId();

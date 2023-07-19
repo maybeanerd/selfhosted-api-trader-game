@@ -1,16 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ResourceType } from '@/modules/resource/types';
 import { ResourceService } from '@/modules/resource/resource.service';
-import { Trade, TradeDocument } from './schemas/Trade.schema';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, FilterQuery, Model } from 'mongoose';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
-import { transaction } from '@/util/mongoDbTransaction';
+import { Trade } from '@/modules/trade/schemas/Trade.schema';
+import { InjectModel } from '@nestjs/sequelize';
 
-function mapTradeDocumentToTradeOfferDto(
-  tradeDocument: TradeDocument,
-): TradeOfferDto {
-  const trade = tradeDocument.toObject();
+function mapTradeDocumentToTradeOfferDto(trade: Trade): TradeOfferDto {
   return {
     id: trade.id,
     offeredResources: trade.offeredResources,
@@ -24,9 +19,8 @@ function mapTradeDocumentToTradeOfferDto(
 export class TradeService {
   constructor(
     private readonly resourceService: ResourceService,
-    @InjectModel(Trade.name)
-    private tradeModel: Model<Trade>,
-    @InjectConnection() private readonly connection: Connection,
+    @InjectModel(Trade)
+    private tradeModel: typeof Trade,
   ) {}
 
   async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {

@@ -2,16 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Resource, ResourceDocument } from './schemas/Resource.schema';
-import { ClientSession, Connection, FilterQuery, Model } from 'mongoose';
-import { transaction } from '@/util/mongoDbTransaction';
 import { randomUUID } from 'crypto';
+import { Resource } from '@/modules/resource/schemas/Resource.schema';
+import { InjectModel } from '@nestjs/sequelize';
+import { FindOptions } from 'sequelize';
+import { Op } from 'sequelize';
 
 function mapResourceDocumentToResourceStatisticDto(
-  resourceDocument: ResourceDocument,
+  resource: Resource,
 ): ResourceStatisticDto {
-  const resource = resourceDocument.toObject();
   return {
     ownerId: resource.ownerId,
     type: resource.type,
@@ -30,9 +29,8 @@ const userIdForTestingResourceGeneration = randomUUID();
 @Injectable()
 export class ResourceService {
   constructor(
-    @InjectModel(Resource.name)
-    private resourceModel: Model<Resource>,
-    @InjectConnection() private readonly connection: Connection,
+    @InjectModel(Resource)
+    private resourceModel: typeof Resource,
   ) {}
 
   @Cron(CronExpression.EVERY_5_SECONDS)
@@ -83,12 +81,12 @@ export class ResourceService {
   async getStatisticOfAllResources(
     ownerId?: string,
   ): Promise<Array<ResourceStatisticDto>> {
-    const query: FilterQuery<Resource> = {};
+    const query: FindOptions<Resource>['where'] = {};
     if (ownerId) {
       query.ownerId = ownerId;
     }
 
-    const resources = await this.resourceModel.find(query);
+    const resources = await this.resourceModel.findAll({ where: query });
 
     return resources.map(mapResourceDocumentToResourceStatisticDto);
   }
@@ -97,7 +95,9 @@ export class ResourceService {
     type: ResourceType,
     ownerId: string,
   ): Promise<ResourceStatisticDto> {
-    const resource = await this.resourceModel.findOne({ type, ownerId });
+    const resource = await this.resourceModel.findOne({
+      where: { type, ownerId },
+    });
     if (resource === null) {
       return {
         ownerId,
@@ -114,11 +114,11 @@ export class ResourceService {
     amount: number,
     ownerId: string,
   ): Promise<number> {
-    const incrementedEntry = await this.resourceModel.findOneAndUpdate(
-      { type, ownerId },
-      { $inc: { amount } },
-    );
-    if (incrementedEntry === null) {
+    const entryToIncrement = await this.resourceModel.findOne({
+      where: { type, ownerId },
+    });
+
+    if (entryToIncrement === null) {
       const createdEntry = await this.resourceModel.create({
         ownerId,
         type,
@@ -127,7 +127,9 @@ export class ResourceService {
       });
       return createdEntry.amount;
     }
-    return incrementedEntry.amount;
+    entryToIncrement.amount += amount;
+    await entryToIncrement.save();
+    return entryToIncrement.amount;
   }
 
   async takeAmountOfResource(
@@ -135,19 +137,20 @@ export class ResourceService {
     amount: number,
     ownerId: string,
   ): Promise<number> {
-    const decrementedEntry = await this.resourceModel.findOneAndUpdate(
-      {
+    const decrementedEntry = await this.resourceModel.findOne({
+      where: {
         ownerId,
         type,
         amount: {
-          $gte: amount,
+          [Op.gte]: amount,
         },
       },
-      { $inc: { amount: -amount } },
-    );
+    });
     if (decrementedEntry === null) {
       return 0;
     }
+    decrementedEntry.amount -= amount;
+    await decrementedEntry.save();
     return amount;
   }
 

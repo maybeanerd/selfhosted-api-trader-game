@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { StoredEvent, StoredEventDocument } from './schemas/Event.schema';
+import { StoredEvent } from './schemas/Event.schema';
 import {
   Event,
   EventType,
@@ -7,17 +7,17 @@ import {
   TradeOfferCreatedEventPayload,
   TradeOfferRemovedEventPayload,
 } from './types';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { EventDto, EventsInputDto } from './dto/Event.dto';
 // import { HttpService } from '@nestjs/axios';
 import { TreatyService } from '@/modules/treaty/treaty.service';
 import { crossroadsEventPath } from '@/config/apiPaths';
 import { HttpService } from '@nestjs/axios';
 import { TradeService } from '@/modules/trade/trade.service';
+import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 
 function mapStoredEventDocumentToEventDto(
-  storedEvent: StoredEventDocument,
+  storedEvent: StoredEvent,
   instanceId: string,
 ): EventDto {
   return {
@@ -32,8 +32,8 @@ function mapStoredEventDocumentToEventDto(
 @Injectable()
 export class EventService {
   constructor(
-    @InjectModel(StoredEvent.name)
-    private eventModel: Model<StoredEvent>,
+    @InjectModel(StoredEvent)
+    private eventModel: typeof StoredEvent,
     private readonly treatyService: TreatyService,
     private readonly httpService: HttpService,
     private readonly tradeService: TradeService,
@@ -76,9 +76,11 @@ export class EventService {
     from: Date,
     to?: Date,
   ): Promise<Array<EventDto>> {
-    const events = await this.eventModel.find({
-      receivedOn: { $gte: from, $lte: to },
-      remoteInstanceId: { $ne: sourceInstanceId },
+    const events = await this.eventModel.findAll({
+      where: {
+        receivedOn: { [Op.gte]: from, [Op.lte]: to },
+        remoteInstanceId: { [Op.ne]: sourceInstanceId },
+      },
     });
 
     const serverState = await this.treatyService.ensureServerId();
@@ -116,7 +118,7 @@ export class EventService {
 
     const receivedOn = new Date();
 
-    const createdEvents = await this.eventModel.insertMany(
+    const createdEvents = await this.eventModel.bulkCreate(
       eventsInput.events.map((e) => ({
         id: e.id,
         type: e.type,
@@ -140,7 +142,7 @@ export class EventService {
     return true;
   }
 
-  async handleEvents(events: Array<StoredEventDocument>) {
+  async handleEvents(events: Array<StoredEvent>) {
     await Promise.all(
       events.map(async (event) => {
         console.log('Handling event', event);
