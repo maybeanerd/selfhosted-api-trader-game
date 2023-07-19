@@ -15,7 +15,7 @@ export class StoredTreaty extends Model {
     allowNull: false,
     unique: true,
     primaryKey: true,
-    type: DataType.UUID,
+    type: DataType.UUIDV4,
     defaultValue: DataType.UUIDV4,
   })
     instanceId: string;

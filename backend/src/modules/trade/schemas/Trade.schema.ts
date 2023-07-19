@@ -11,12 +11,12 @@ export class Trade extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.UUID,
+    type: DataType.UUIDV4,
     defaultValue: DataType.UUIDV4,
   })
     id: string;
 
-  @Column({ allowNull: false, type: DataType.UUID })
+  @Column({ allowNull: false, type: DataType.UUIDV4 })
     creatorId: string;
 
   @Column({ allowNull: false, type: DataType.ARRAY(DataType.JSONB) })
@@ -28,6 +28,6 @@ export class Trade extends Model {
   /**
    * The Id of a connected remote instance if the trade comes from a remote one.
    */
-  @Column({ allowNull: true, type: DataType.UUID })
+  @Column({ allowNull: true, type: DataType.UUIDV4 })
     remoteInstanceId?: string;
 }

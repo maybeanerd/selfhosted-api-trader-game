@@ -1,26 +1,23 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { randomUUID } from 'crypto';
-import { HydratedDocument } from 'mongoose';
-import { EventPayload, EventType } from '../types';
+import { EventPayload, EventType } from '@/modules/crossroads/event/types';
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
 
-@Schema()
-export class StoredEvent {
-  @Prop({
-    required: true,
+@Table
+export class StoredEvent extends Model {
+  @Column({
+    allowNull: false,
     unique: true,
-    default: function generateUUID() {
-      return randomUUID();
-    },
-    index: true,
+    primaryKey: true,
+    type: DataType.UUIDV4,
+    defaultValue: DataType.UUIDV4,
   })
     id: string;
 
   /**
-   * The creation date of the event.
+   * The date this event was created on.
    */
-  @Prop({
-    required: true,
-    index: true,
+  @Column({
+    allowNull: false,
+    type: DataType.DATE,
   })
     createdOn: Date;
 
@@ -30,30 +27,31 @@ export class StoredEvent {
    * Maybe in the future this can be used to determine lag between instances or similar things.
    *
    */
-  @Prop({
-    required: true,
-    index: true,
-    default: function generateDate() {
-      return new Date();
-    },
+  @Column({
+    allowNull: false,
+    type: DataType.DATE,
+    defaultValue: DataType.NOW,
   })
     receivedOn: Date;
-
-  @Prop({ required: true, type: String, enum: EventType, index: true })
-    type: EventType;
-
-  @Prop({ required: true, type: Object })
-    payload: EventPayload;
 
   /**
    * The Id of a connected remote instance if the trade comes from a remote one.
    */
-  @Prop({
-    required: false,
-    index: true,
+  @Column({
+    allowNull: true,
+    type: DataType.UUIDV4,
   })
     remoteInstanceId?: string;
-}
 
-export type StoredEventDocument = HydratedDocument<StoredEvent>;
-export const StoredEventSchema = SchemaFactory.createForClass(StoredEvent);
+  @Column({
+    allowNull: false,
+    type: DataType.ENUM(...Object.values(EventType)),
+  })
+    type: EventType;
+
+  @Column({
+    allowNull: false,
+    type: DataType.JSONB,
+  })
+    payload: EventPayload;
+}
