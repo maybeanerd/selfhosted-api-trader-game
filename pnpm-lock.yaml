@@ -18,8 +18,8 @@ importers:
         specifier: 10.1.0
         version: 10.1.0(@nestjs/common@10.1.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/mongoose':
-        specifier: 10.0.0
-        version: 10.0.0(@nestjs/common@10.1.0)(@nestjs/core@10.1.0)(mongoose@7.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+        specifier: 10.0.1
+        version: 10.0.1(@nestjs/common@10.1.0)(@nestjs/core@10.1.0)(mongoose@7.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/platform-fastify':
         specifier: 10.1.0
         version: 10.1.0(@fastify/static@6.10.2)(@nestjs/common@10.1.0)(@nestjs/core@10.1.0)
@@ -158,7 +158,7 @@ importers:
         version: 0.12.0
       '@vite-pwa/nuxt':
         specifier: 0.1.0
-        version: 0.1.0(@nuxt/kit@3.6.3)(vite-plugin-pwa@0.16.4)
+        version: 0.1.0(@nuxt/kit@3.6.5)(vite-plugin-pwa@0.16.4)
       autoprefixer:
         specifier: 10.4.14
         version: 10.4.14(postcss@8.4.26)
@@ -2763,8 +2763,8 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@nestjs/mongoose@10.0.0(@nestjs/common@10.1.0)(@nestjs/core@10.1.0)(mongoose@7.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1):
-    resolution: {integrity: sha512-Wqinhuess5AKGUTs5gtJxs+naXv1BBxADTBw8h6hPAdCkPL/knoIpo0cSxBNJ4COwRqpy4QWGilzPiPR0sJgJA==}
+  /@nestjs/mongoose@10.0.1(@nestjs/common@10.1.0)(@nestjs/core@10.1.0)(mongoose@7.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1):
+    resolution: {integrity: sha512-woUViG28WKf/kRiv6NFXu4Oc0DvAPeX4+fT4coDVt2OqndnfJZTXwkkys23uVsBpKSIflRyjPvmcVBHQvcunZw==}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
       '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -2983,8 +2983,8 @@ packages:
       nuxt: ^3.6.1
       vite: '*'
     dependencies:
-      '@nuxt/kit': 3.6.3(rollup@2.79.1)
-      '@nuxt/schema': 3.6.3(rollup@2.79.1)
+      '@nuxt/kit': 3.6.5(rollup@2.79.1)
+      '@nuxt/schema': 3.6.5(rollup@2.79.1)
       execa: 7.1.1
       nuxt: 3.6.5(@types/node@20.4.2)(eslint@8.45.0)(rollup@2.79.1)(typescript@5.1.6)
       vite: 4.4.4(@types/node@20.4.2)
@@ -3019,7 +3019,7 @@ packages:
     dependencies:
       '@nuxt/devtools-kit': 0.6.7(nuxt@3.6.5)(rollup@2.79.1)(vite@4.4.4)
       '@nuxt/devtools-wizard': 0.6.7
-      '@nuxt/kit': 3.6.3(rollup@2.79.1)
+      '@nuxt/kit': 3.6.5(rollup@2.79.1)
       birpc: 0.2.12
       boxen: 7.1.1
       consola: 3.2.3
@@ -4335,13 +4335,13 @@ packages:
     resolution: {integrity: sha512-Iy1EUVRpX0WWxeu1VIReR1zsZLMc4fqpt223czR+Rpnrwu7pt46nbnC2ycO7ItI/uqDLJxnbcMC7FujKs9IfFA==}
     dev: true
 
-  /@vite-pwa/nuxt@0.1.0(@nuxt/kit@3.6.3)(vite-plugin-pwa@0.16.4):
+  /@vite-pwa/nuxt@0.1.0(@nuxt/kit@3.6.5)(vite-plugin-pwa@0.16.4):
     resolution: {integrity: sha512-w6wm/0Y9yIqo6UTj9LeQUMR+xuRTf2sRdUTffu03SbRyWBzF7SnQcTqTRkXQy+NK+XafZuIDDLC12VkhValg4g==}
     peerDependencies:
       '@nuxt/kit': ^3.5.3
       vite-plugin-pwa: '>=0.16.3 <1'
     dependencies:
-      '@nuxt/kit': 3.6.3(rollup@2.79.1)
+      '@nuxt/kit': 3.6.5(rollup@2.79.1)
       vite-plugin-pwa: 0.16.4(vite@4.4.4)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
