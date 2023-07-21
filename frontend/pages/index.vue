@@ -1,12 +1,12 @@
 <template>
   <div>
     <NH1>First request:</NH1>
-    <div>
+    <ClientOnly>
       Pending: {{ resources.pending }}<br>
       Status: {{ resources.status }}<br>
       Data: {{ resources.data }}<br>
       Error: {{ resources.error }}
-    </div>
+    </ClientOnly>
   </div>
 </template>
 
