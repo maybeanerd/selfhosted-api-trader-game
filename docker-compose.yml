@@ -32,7 +32,7 @@ services:
       - DATABASE_HOST=database
 
   database:
-    image: postgres:13.11
+    image: postgres:15.3
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
