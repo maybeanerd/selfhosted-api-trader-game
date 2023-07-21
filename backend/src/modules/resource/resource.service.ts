@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
-import { randomUUID } from 'crypto';
 import { Resource } from '@/modules/resource/schemas/Resource.schema';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions, Transaction, Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
+import { userIdForTestingResourceGeneration } from '@/modules/resource/utils/testUser';
 
 function mapResourceDocumentToResourceStatisticDto(
   resource: Resource,
@@ -24,7 +24,6 @@ function getResourceAccumulationPerTick(upgradeLevel: number) {
   return upgradeLevel * 2;
 }
 
-const userIdForTestingResourceGeneration = randomUUID();
 
 @Injectable()
 export class ResourceService {

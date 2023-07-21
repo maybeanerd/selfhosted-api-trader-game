@@ -9,7 +9,7 @@ import {
 import { ResourceService } from '@/modules/resource/resource.service';
 import { ResourceTypeDto } from './dto/ResourceType.dto';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
-import { randomUUID } from 'crypto';
+import { userIdForTestingResourceGeneration } from '@/modules/resource/utils/testUser';
 
 @Controller({ path: 'resource', version: '1' })
 export class ResourceController {
@@ -19,24 +19,26 @@ export class ResourceController {
   async getStatisticOfResource(
     @Param() params: ResourceTypeDto,
   ): Promise<ResourceStatisticDto> {
-    const userId = randomUUID(); // TODO get the user id from the request
-    return this.resourceService.getStatisticOfResource(params.type, userId);
+    return this.resourceService.getStatisticOfResource(
+      params.type,
+      userIdForTestingResourceGeneration,
+    );
   }
 
   @Get()
   getStatisticOfAllResources(): Promise<Array<ResourceStatisticDto>> {
-    const userId = randomUUID(); // TODO get the user id from the request
-    return this.resourceService.getStatisticOfAllResources(userId);
+    return this.resourceService.getStatisticOfAllResources(
+      userIdForTestingResourceGeneration,
+    );
   }
 
   @Put(':type')
   async upgradeResource(
     @Param() params: ResourceTypeDto,
   ): Promise<ResourceStatisticDto> {
-    const userId = randomUUID(); // TODO get the user id from the request
     try {
       const updatedResource = await this.resourceService.upgradeResource(
-        userId,
+        userIdForTestingResourceGeneration,
         params.type,
       );
       return updatedResource;

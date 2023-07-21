@@ -3,7 +3,7 @@
     :theme="darkTheme"
     :locale="enUS"
     :date-locale="dateDeDE"
-    class="h-screen"
+    class="h-screen dark:bg-gray-900 dark:text-gray-200 bg-gray-200 text-gray-900"
   >
     <Navbar />
     <NBackTop :right="20" />
