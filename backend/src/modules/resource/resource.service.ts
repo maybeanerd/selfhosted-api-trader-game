@@ -5,7 +5,8 @@ import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { randomUUID } from 'crypto';
 import { Resource } from '@/modules/resource/schemas/Resource.schema';
 import { InjectModel } from '@nestjs/sequelize';
-import { FindOptions, Transaction, Op, Sequelize } from 'sequelize';
+import { FindOptions, Transaction, Op } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 
 function mapResourceDocumentToResourceStatisticDto(
   resource: Resource,

@@ -4,7 +4,8 @@ import { ResourceService } from '@/modules/resource/resource.service';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { Trade } from '@/modules/trade/schemas/Trade.schema';
 import { InjectModel } from '@nestjs/sequelize';
-import { Sequelize, WhereOptions } from 'sequelize';
+import { WhereOptions } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 
 function mapTradeDocumentToTradeOfferDto(trade: Trade): TradeOfferDto {
   return {
