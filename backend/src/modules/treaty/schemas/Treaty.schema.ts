@@ -1,5 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
 
 export enum TreatyStatus {
   Requested = 'requested',
@@ -7,45 +6,48 @@ export enum TreatyStatus {
   Signed = 'signed',
 }
 
-@Schema()
-export class StoredTreaty {
-  @Prop({
-    required: true,
+@Table
+export class StoredTreaty extends Model {
+  /**
+   * The Id of the instance this treaty was made with.
+   */
+  @Column({
+    allowNull: false,
     unique: true,
-    index: true,
+    primaryKey: true,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
   })
     instanceId: string;
 
   /**
    * The URL this instance can be reached at.
-   */
-  @Prop({
-    required: true,
+   * */
+
+  @Column({
+    allowNull: false,
     unique: true,
-    index: true,
+    type: DataType.STRING,
   })
     instanceBaseUrl: string;
 
   /**
-   * The date this treaty was created on.
+   * The state of the treaty. A treaty is a request at first, and then either gets accepted or denied by the other instance.
    */
-  @Prop({
-    required: true,
-    default: function generateDate() {
-      return new Date();
-    },
-  })
-    createdOn: Date;
-
-  /** The state of the treaty. A treaty is a request at first, and then either gets accepted or denied by the other instance. */
-  @Prop({
-    required: true,
-    type: String,
-    enum: TreatyStatus,
-    index: true,
+  @Column({
+    allowNull: false,
+    type: DataType.ENUM(...Object.values(TreatyStatus)),
+    defaultValue: TreatyStatus.Requested,
   })
     status: TreatyStatus;
-}
 
-export type StoredTreatyDocument = HydratedDocument<StoredTreaty>;
-export const StoredTreatySchema = SchemaFactory.createForClass(StoredTreaty);
+  /**
+   * The date this treaty was created on.
+   */
+  @Column({
+    allowNull: false,
+    type: DataType.DATE,
+    defaultValue: DataType.NOW,
+  })
+    createdOn: Date;
+}

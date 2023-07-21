@@ -10,7 +10,6 @@ services:
     image: ${IMAGE_NAME}
     depends_on:
       - database
-      - db-init
     networks:
       - internal
     ports:
@@ -33,28 +32,18 @@ services:
       - DATABASE_HOST=database
 
   database:
-    image: mongo:6
-    command: --replSet rs0 # create a replica set to allow for things like transactions
+    image: postgres:13.11
     environment:
-      MONGO_INITDB_DATABASE: nest
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: nest
     restart: always
     networks:
       - internal
     ports:
-      - 27017:27017
+      - 5432:5432
     volumes:
-      - db-data:/data/db
-
-  # Initilize the replica set once the database is up
-  db-init:
-    image: mongo:6
-    depends_on:
-      - database
-    networks:
-      - internal
-    restart: 'no'
-    entrypoint:
-      ['bash', '-c', "mongosh --host database:27017 --eval 'rs.initiate()'"]
+      - db-data:/var/lib/postgresql/data
 
   # proxy:
   #   image: caddy:2

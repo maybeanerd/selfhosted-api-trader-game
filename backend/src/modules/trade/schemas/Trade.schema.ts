@@ -1,52 +1,33 @@
 import { ResourceType } from '@/modules/resource/types';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { randomUUID } from 'crypto';
-import { HydratedDocument } from 'mongoose';
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
 
-@Schema()
-class ResourceWithAmount {
-  @Prop({ required: true })
-    amount: number;
+export type ResourceWithAmount = {
+  amount: number;
+  type: ResourceType;
+};
 
-  @Prop({ required: true, type: String, enum: ResourceType })
-    type: ResourceType;
-}
-const ResourceWithAmountSchema =
-  SchemaFactory.createForClass(ResourceWithAmount);
-
-@Schema()
-export class Trade {
-  @Prop({
-    required: true,
-    unique: true,
-    default: function generateUUID() {
-      return randomUUID();
-    },
-    index: true,
+@Table
+export class Trade extends Model {
+  @Column({
+    allowNull: false,
+    primaryKey: true,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
   })
     id: string;
 
-  @Prop({
-    required: true,
-    index: true,
-  })
+  @Column({ allowNull: false, type: DataType.UUID })
     creatorId: string;
 
-  @Prop({ required: true, type: [ResourceWithAmountSchema], _id: false })
+  @Column({ allowNull: false, type: DataType.ARRAY(DataType.JSONB) })
     offeredResources: Array<ResourceWithAmount>;
 
-  @Prop({ required: true, type: [ResourceWithAmountSchema], _id: false })
+  @Column({ allowNull: false, type: DataType.ARRAY(DataType.JSONB) })
     requestedResources: Array<ResourceWithAmount>;
 
   /**
    * The Id of a connected remote instance if the trade comes from a remote one.
    */
-  @Prop({
-    required: false,
-    index: true,
-  })
+  @Column({ allowNull: true, type: DataType.UUID })
     remoteInstanceId?: string;
 }
-
-export type TradeDocument = HydratedDocument<Trade>;
-export const TradeSchema = SchemaFactory.createForClass(Trade);
