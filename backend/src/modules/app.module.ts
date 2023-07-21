@@ -6,7 +6,6 @@ import { TreatyModule } from '@/modules/treaty/treaty.module';
 import { CrossroadsModule } from '@/modules/crossroads/crossroads.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { dbConfig } from '@/config/dbConfig';
-import { schemas } from '@/modules/schemas';
 
 @Module({
   imports: [
@@ -21,7 +20,9 @@ import { schemas } from '@/modules/schemas';
       username: 'root',
       password: 'root',
       database: 'nest',
-      models: schemas,
+      // models: schemas,
+      autoLoadModels: true, // TODO replace this with real migrations at some point
+      synchronize: true,
     }),
 
     // Modules for clients

@@ -36,13 +36,14 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
+      POSTGRES_DB: nest
     restart: always
     networks:
       - internal
     ports:
-      - 27017:27017
+      - 5432:5432
     volumes:
-      - db-data:/data/db
+      - db-data:/var/lib/postgresql/data
 
   # proxy:
   #   image: caddy:2

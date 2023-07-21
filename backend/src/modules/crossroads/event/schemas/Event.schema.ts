@@ -7,7 +7,7 @@ export class StoredEvent extends Model {
     allowNull: false,
     unique: true,
     primaryKey: true,
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
     id: string;
@@ -39,7 +39,7 @@ export class StoredEvent extends Model {
    */
   @Column({
     allowNull: true,
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
   })
     remoteInstanceId?: string;
 

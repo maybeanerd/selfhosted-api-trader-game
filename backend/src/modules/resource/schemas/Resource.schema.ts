@@ -8,12 +8,12 @@ export class Resource extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
     id: string;
 
-  @Column({ allowNull: false, type: DataType.UUIDV4, unique: uniqueKey })
+  @Column({ allowNull: false, type: DataType.UUID, unique: uniqueKey })
     ownerId: string;
 
   @Column({ allowNull: false })
