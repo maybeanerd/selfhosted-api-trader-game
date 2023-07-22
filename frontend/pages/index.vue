@@ -2,10 +2,7 @@
   <div>
     <NH1>First request:</NH1>
     <ClientOnly>
-      Pending: {{ resources.pending }}<br>
-      Status: {{ resources.status }}<br>
-      Data: {{ resources.data }}<br>
-      Error: {{ resources.error }}
+      <ShowAllResources />
     </ClientOnly>
   </div>
 </template>
@@ -16,8 +13,4 @@ import { useHeader } from '~/composables/useHeader';
 
 const { title } = useHeader();
 title.value = 'empty page';
-
-const resources = await useFetch<Array<unknown>>(
-  'http://localhost:8080/v1/resource',
-);
 </script>
