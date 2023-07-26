@@ -11,9 +11,12 @@ import {
 import { initializeApp } from '@/appInitialization';
 
 async function bootstrap() {
+  const fastifyAdapter = new FastifyAdapter();
+  fastifyAdapter.enableCors({});
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    fastifyAdapter,
   );
 
   initializeApp(app);

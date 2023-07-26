@@ -1,9 +1,7 @@
 <template>
   <div>
     <NH1>First request:</NH1>
-    <ClientOnly>
-      <ShowAllResources />
-    </ClientOnly>
+    <ShowAllResources />
   </div>
 </template>
 
