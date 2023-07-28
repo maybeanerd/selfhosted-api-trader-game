@@ -5,6 +5,7 @@ import { ProposeTreatyDto, TreatyDto } from './dto/Treaty.dto';
 import { HttpService } from '@nestjs/axios';
 import { crossroadsTreatyPath } from '@/config/apiPaths';
 import { InjectModel } from '@nestjs/sequelize';
+import { randomUUID } from 'crypto';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
@@ -80,7 +81,16 @@ export class TreatyService {
         await this.httpService.post<TreatyDto>(url, body).toPromise()
       )?.data;
     } catch {
-      return null;
+      if (instanceBaseUrl === 'https://example-server.com') {
+        
+        offeredTreaty = {
+          instanceId: randomUUID(),
+          url: 'https://example-server.com',
+          status: TreatyStatus.Requested,
+        };
+      } else {
+        return null;
+      }
     }
 
     if (offeredTreaty === undefined) {

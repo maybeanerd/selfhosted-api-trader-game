@@ -2,6 +2,7 @@
   <div>
     <NH1>Available Treaties:</NH1>
     <ShowAllTreaties />
+    <AddTreaty />
   </div>
 </template>
 
