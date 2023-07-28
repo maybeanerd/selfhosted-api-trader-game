@@ -28,7 +28,7 @@ import {
   NMenu,
   NDivider,
 } from 'naive-ui';
-import { Airplane } from '@vicons/ionicons5';
+import { Hammer, Home } from '@vicons/ionicons5';
 import { RouterLink } from '~/.nuxt/vue-router';
 import { useMenu } from '~/composables/useMenu';
 import { getLinkToCommit } from '~/utils/gitHubRepo';
@@ -38,20 +38,35 @@ function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
 
-const menuOptions:Array<MenuOption> = [{
-  label: () =>
-    h(
-      RouterLink,
-      {
-        to: {
-          path: '/nowhere',
+const menuOptions:Array<MenuOption> = [
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/',
+          },
         },
-      },
-      'Nowhere',
-    ),
-  key: 'nowhere',
-  icon: renderIcon(Airplane),
-}];
+        'Home',
+      ),
+    key: 'resources',
+    icon: renderIcon(Home),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/resources',
+          },
+        },
+        'Resources',
+      ),
+    key: 'resources',
+    icon: renderIcon(Hammer),
+  }];
 
 const router = useRouter();
 const { isOpen } = useMenu();
