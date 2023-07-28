@@ -28,7 +28,7 @@ import {
   NMenu,
   NDivider,
 } from 'naive-ui';
-import { Hammer, Home } from '@vicons/ionicons5';
+import { Hammer, Home, Link } from '@vicons/ionicons5';
 import { RouterLink } from '~/.nuxt/vue-router';
 import { useMenu } from '~/composables/useMenu';
 import { getLinkToCommit } from '~/utils/gitHubRepo';
@@ -66,7 +66,22 @@ const menuOptions:Array<MenuOption> = [
       ),
     key: 'resources',
     icon: renderIcon(Hammer),
-  }];
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/treaties',
+          },
+        },
+        'Treaties',
+      ),
+    key: 'treaties',
+    icon: renderIcon(Link),
+  },
+];
 
 const router = useRouter();
 const { isOpen } = useMenu();
