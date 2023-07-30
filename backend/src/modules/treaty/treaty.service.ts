@@ -77,20 +77,19 @@ export class TreatyService {
     const url = instanceBaseUrl + crossroadsTreatyPath;
     let offeredTreaty: TreatyDto | undefined;
     try {
-      offeredTreaty = (
-        await this.httpService.post<TreatyDto>(url, body).toPromise()
-      )?.data;
-    } catch {
       if (instanceBaseUrl === 'https://example-server.com') {
-        
         offeredTreaty = {
           instanceId: randomUUID(),
           url: 'https://example-server.com',
           status: TreatyStatus.Requested,
         };
       } else {
-        return null;
+        offeredTreaty = (
+          await this.httpService.post<TreatyDto>(url, body).toPromise()
+        )?.data;
       }
+    } catch {
+      return null;
     }
 
     if (offeredTreaty === undefined) {
