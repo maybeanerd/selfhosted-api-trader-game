@@ -42,8 +42,8 @@ importers:
         specifier: 16.3.1
         version: 16.3.1
       pg:
-        specifier: 8.11.1
-        version: 8.11.1
+        specifier: 8.11.2
+        version: 8.11.2
       pg-hstore:
         specifier: 2.3.4
         version: 2.3.4
@@ -55,7 +55,7 @@ importers:
         version: 7.8.1
       sequelize:
         specifier: 6.32.1
-        version: 6.32.1(pg-hstore@2.3.4)(pg@8.11.1)
+        version: 6.32.1(pg-hstore@2.3.4)(pg@8.11.2)
       sequelize-typescript:
         specifier: 2.1.5
         version: 2.1.5(@types/node@20.4.5)(@types/validator@13.7.17)(reflect-metadata@0.1.13)(sequelize@6.32.1)
@@ -2840,7 +2840,7 @@ packages:
       '@nestjs/core': 10.1.3(@nestjs/common@10.1.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       reflect-metadata: 0.1.13
       rxjs: 7.8.1
-      sequelize: 6.32.1(pg-hstore@2.3.4)(pg@8.11.1)
+      sequelize: 6.32.1(pg-hstore@2.3.4)(pg@8.11.2)
       sequelize-typescript: 2.1.5(@types/node@20.4.5)(@types/validator@13.7.17)(reflect-metadata@0.1.13)(sequelize@6.32.1)
       uuid: 9.0.0
     dev: false
@@ -3428,7 +3428,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dependencies:
       cross-spawn: 7.0.3
-      fast-glob: 3.3.0
+      fast-glob: 3.3.1
       is-glob: 4.0.3
       open: 9.1.0
       picocolors: 1.0.0
@@ -7336,17 +7336,6 @@ packages:
       - supports-color
     dev: true
 
-  /fast-glob@3.3.0:
-    resolution: {integrity: sha512-ChDuvbOypPuNjO8yIDf36x7BlZX1smcUMTTcyoIjycexOxd6DFsKsg21qVBzEmr3G7fUKIRy2/psii+CIUt7FA==}
-    engines: {node: '>=8.6.0'}
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      '@nodelib/fs.walk': 1.2.8
-      glob-parent: 5.1.2
-      merge2: 1.4.1
-      micromatch: 4.0.5
-    dev: true
-
   /fast-glob@3.3.1:
     resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==}
     engines: {node: '>=8.6.0'}
@@ -10942,6 +10931,10 @@ packages:
     resolution: {integrity: sha512-w6ZzNu6oMmIzEAYVw+RLK0+nqHPt8K3ZnknKi+g48Ak2pr3dtljJW3o+D/n2zzCG07Zoe9VOX3aiKpj+BN0pjg==}
     dev: false
 
+  /pg-connection-string@2.6.2:
+    resolution: {integrity: sha512-ch6OwaeaPYcova4kKZ15sbJ2hKb/VP48ZD2gE7i1J+L4MspCtBMAx8nMgz7bksc7IojCIIWuEhHibSMFH8m8oA==}
+    dev: false
+
   /pg-hstore@2.3.4:
     resolution: {integrity: sha512-N3SGs/Rf+xA1M2/n0JBiXFDVMzdekwLZLAO0g7mpDY9ouX+fDI7jS6kTq3JujmYbtNSJ53TJ0q4G98KVZSM4EA==}
     engines: {node: '>= 0.8.x'}
@@ -10954,12 +10947,12 @@ packages:
     engines: {node: '>=4.0.0'}
     dev: false
 
-  /pg-pool@3.6.1(pg@8.11.1):
+  /pg-pool@3.6.1(pg@8.11.2):
     resolution: {integrity: sha512-jizsIzhkIitxCGfPRzJn1ZdcosIt3pz9Sh3V01fm1vZnbnCMgmGl5wvGGdNN2EL9Rmb0EcFoCkixH4Pu+sP9Og==}
     peerDependencies:
       pg: '>=8.0'
     dependencies:
-      pg: 8.11.1
+      pg: 8.11.2
     dev: false
 
   /pg-protocol@1.6.0:
@@ -10977,8 +10970,8 @@ packages:
       postgres-interval: 1.2.0
     dev: false
 
-  /pg@8.11.1:
-    resolution: {integrity: sha512-utdq2obft07MxaDg0zBJI+l/M3mBRfIpEN3iSemsz0G5F2/VXx+XzqF4oxrbIZXQxt2AZzIUzyVg/YM6xOP/WQ==}
+  /pg@8.11.2:
+    resolution: {integrity: sha512-l4rmVeV8qTIrrPrIR3kZQqBgSN93331s9i6wiUiLOSk0Q7PmUxZD/m1rQI622l3NfqBby9Ar5PABfS/SulfieQ==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       pg-native: '>=3.0.1'
@@ -10988,8 +10981,8 @@ packages:
     dependencies:
       buffer-writer: 2.0.0
       packet-reader: 1.0.0
-      pg-connection-string: 2.6.1
-      pg-pool: 3.6.1(pg@8.11.1)
+      pg-connection-string: 2.6.2
+      pg-pool: 3.6.1(pg@8.11.2)
       pg-protocol: 1.6.0
       pg-types: 2.2.0
       pgpass: 1.0.5
@@ -12298,10 +12291,10 @@ packages:
       '@types/validator': 13.7.17
       glob: 7.2.0
       reflect-metadata: 0.1.13
-      sequelize: 6.32.1(pg-hstore@2.3.4)(pg@8.11.1)
+      sequelize: 6.32.1(pg-hstore@2.3.4)(pg@8.11.2)
     dev: false
 
-  /sequelize@6.32.1(pg-hstore@2.3.4)(pg@8.11.1):
+  /sequelize@6.32.1(pg-hstore@2.3.4)(pg@8.11.2):
     resolution: {integrity: sha512-3Iv0jruv57Y0YvcxQW7BE56O7DC1BojcfIrqh6my+IQwde+9u/YnuYHzK+8kmZLhLvaziRT1eWu38nh9yVwn/g==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -12342,7 +12335,7 @@ packages:
       lodash: 4.17.21
       moment: 2.29.4
       moment-timezone: 0.5.43
-      pg: 8.11.1
+      pg: 8.11.2
       pg-connection-string: 2.6.1
       pg-hstore: 2.3.4
       retry-as-promised: 7.0.4
