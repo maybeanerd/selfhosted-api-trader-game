@@ -40,7 +40,7 @@
     "git-commit-info": "2.0.2",
     "naive-ui": "2.34.4",
     "nuxt": "3.6.5",
-    "prettier": "3.0.0",
+    "prettier": "3.0.1",
     "typescript": "5.1.6",
     "vfonts": "0.0.3"
   }
