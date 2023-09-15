@@ -50,7 +50,7 @@
     "sequelize-typescript": "2.1.5"
   },
   "devDependencies": {
-    "@fastify/static": "6.11.0",
+    "@fastify/static": "6.11.1",
     "@nestjs/cli": "10.1.17",
     "@nestjs/schematics": "10.0.2",
     "@nestjs/testing": "10.2.4",
