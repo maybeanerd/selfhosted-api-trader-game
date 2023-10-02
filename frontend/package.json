@@ -38,7 +38,7 @@
     "autoprefixer": "10.4.16",
     "eslint": "8.50.0",
     "git-commit-info": "2.0.2",
-    "naive-ui": "2.34.4",
+    "naive-ui": "2.35.0",
     "nuxt": "3.7.4",
     "prettier": "3.0.3",
     "typescript": "5.2.2",
