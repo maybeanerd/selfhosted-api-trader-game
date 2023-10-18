@@ -29,5 +29,5 @@ export class Trade extends Model {
    * The Id of a connected remote instance if the trade comes from a remote one.
    */
   @Column({ allowNull: true, type: DataType.UUID })
-    remoteInstanceId?: string;
+    remoteInstanceId: string | null;
 }

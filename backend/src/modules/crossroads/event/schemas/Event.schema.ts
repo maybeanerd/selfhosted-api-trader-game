@@ -41,7 +41,7 @@ export class StoredEvent extends Model {
     allowNull: true,
     type: DataType.UUID,
   })
-    remoteInstanceId?: string;
+    remoteInstanceId: string | null;
 
   @Column({
     allowNull: false,

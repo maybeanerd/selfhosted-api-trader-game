@@ -4,7 +4,7 @@ import { ResourceService } from '@/modules/resource/resource.service';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { Trade } from '@/modules/trade/schemas/Trade.schema';
 import { InjectModel } from '@nestjs/sequelize';
-import { WhereOptions } from 'sequelize';
+import { WhereOptions, CreationAttributes } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
 function mapTradeDocumentToTradeOfferDto(trade: Trade): TradeOfferDto {
@@ -13,7 +13,7 @@ function mapTradeDocumentToTradeOfferDto(trade: Trade): TradeOfferDto {
     offeredResources: trade.offeredResources,
     requestedResources: trade.requestedResources,
     creatorId: trade.creatorId,
-    isLocal: trade.remoteInstanceId === undefined,
+    isLocal: trade.remoteInstanceId === null,
   };
 }
 
@@ -59,13 +59,20 @@ export class TradeService {
     return mapTradeDocumentToTradeOfferDto(trade);
   }
 
-  async receiveTradeOffer(receivedTrade: {
-    id: string;
-    creatorId: string;
-    requestedResources: Array<{ type: ResourceType; amount: number }>;
-    offeredResources: Array<{ type: ResourceType; amount: number }>;
-  }): Promise<void> {
-    const trade = new this.tradeModel(receivedTrade);
+  async receiveTradeOffer(
+    receivedTrade: {
+      id: string;
+      creatorId: string;
+      requestedResources: Array<{ type: ResourceType; amount: number }>;
+      offeredResources: Array<{ type: ResourceType; amount: number }>;
+    },
+    remoteInstanceId: string | null
+  ): Promise<void> {
+    const tradeOfferToCreate:CreationAttributes<Trade> = {
+      ...receivedTrade,
+      remoteInstanceId,
+    };
+    const trade = new this.tradeModel(tradeOfferToCreate);
     await trade.save();
   }
 

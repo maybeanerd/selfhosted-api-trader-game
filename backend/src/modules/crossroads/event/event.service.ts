@@ -155,7 +155,7 @@ export class EventService {
 
         if (event.type === EventType.TradeOfferCreated) {
           const payload = event.payload as TradeOfferCreatedEventPayload;
-          await this.tradeService.receiveTradeOffer(payload);
+          await this.tradeService.receiveTradeOffer(payload, event.remoteInstanceId);
           return;
         }
 
