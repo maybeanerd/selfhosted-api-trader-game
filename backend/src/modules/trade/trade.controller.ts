@@ -12,7 +12,7 @@ import { TradeService } from '@/modules/trade/trade.service';
 import { TradeOfferInputDto } from './dto/TradeOfferInput.dto';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { IdDto } from '@/dto/Id.dto';
-import { randomUUID } from 'crypto';
+import { userIdForTestingResourceGeneration } from '@/modules/resource/utils/testUser';
 
 @Controller({ path: 'trade', version: '1' })
 export class TradeController {
@@ -25,7 +25,7 @@ export class TradeController {
 
   @Post()
   async offerTrade(@Body() body: TradeOfferInputDto): Promise<TradeOfferDto> {
-    const userId = randomUUID(); // TODO get the user id from the request
+    const userId = userIdForTestingResourceGeneration; // TODO get the user id from the request
 
     const createdTrade = await this.tradeService.createTradeOffer(
       {
@@ -42,7 +42,7 @@ export class TradeController {
   @Put()
   async acceptTradeOffer(@Body() body: IdDto): Promise<TradeOfferDto> {
     let acceptedTradeOffer: TradeOfferDto | null;
-    const userId = randomUUID(); // TODO get the user id from the request
+    const userId = userIdForTestingResourceGeneration; // TODO get the user id from the request
     try {
       acceptedTradeOffer = await this.tradeService.acceptTradeOffer(
         body.id,
@@ -62,7 +62,7 @@ export class TradeController {
 
   @Delete()
   async removeTradeOffer(@Body() body: IdDto): Promise<TradeOfferDto> {
-    const userId = randomUUID(); // TODO get the user id from the request
+    const userId = userIdForTestingResourceGeneration; // TODO get the user id from the request
 
     const removedTrade = await this.tradeService.removeTradeOffer(
       body.id,
