@@ -65,11 +65,13 @@ export class TreatyService {
     };
   }
 
+  ownURL = 'http://7.22.217.133:8080'; // TODO get own URL
+
   async offerTreaty(instanceBaseUrl: string): Promise<TreatyDto | null> {
     const serverState = await this.ensureServerId();
 
     const body: ProposeTreatyDto = {
-      url: 'http://test.com', // TODO get own URL
+      url: this.ownURL,
       instanceId: serverState.instanceId,
     };
 
@@ -120,6 +122,19 @@ export class TreatyService {
     if (update.status) {
       existingTreaty.status = update.status;
     }
+
+    const url = existingTreaty.instanceBaseUrl + crossroadsTreatyPath;
+    const body: TreatyDto = {
+      status: existingTreaty.status,
+      url: this.ownURL,
+      instanceId: serverState.instanceId,
+    };
+    try {
+      await this.httpService.put<TreatyDto>(url, body).toPromise();
+    } catch {
+      return null;
+    }
+
     await existingTreaty.save();
 
     return {
