@@ -66,7 +66,7 @@ export class TradeService {
       requestedResources: Array<{ type: ResourceType; amount: number }>;
       offeredResources: Array<{ type: ResourceType; amount: number }>;
     },
-    remoteInstanceId: string | null
+    remoteInstanceId: string | null,
   ): Promise<void> {
     const tradeOfferToCreate:CreationAttributes<Trade> = {
       ...receivedTrade,
