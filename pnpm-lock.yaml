@@ -85,8 +85,8 @@ importers:
         specifier: 20.8.7
         version: 20.8.7
       '@types/sequelize':
-        specifier: 4.28.16
-        version: 4.28.16
+        specifier: 4.28.17
+        version: 4.28.17
       '@types/supertest':
         specifier: 2.0.14
         version: 2.0.14
@@ -4338,10 +4338,6 @@ packages:
       '@types/lodash': 4.14.199
     dev: true
 
-  /@types/lodash@4.14.195:
-    resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
-    dev: true
-
   /@types/lodash@4.14.199:
     resolution: {integrity: sha512-Vrjz5N5Ia4SEzWWgIVwnHNEnb1UE1XMkvY5DGXrAeOGE9imk0hgTHh5GyDjLDJi9OTCn9oo9dXH1uToK1VRfrg==}
     dev: true
@@ -4403,12 +4399,12 @@ packages:
       '@types/node': 20.8.7
     dev: true
 
-  /@types/sequelize@4.28.16:
-    resolution: {integrity: sha512-LGJqCeLc+r8kEqlF1jC8SAtxx2YnFTLIjnYP3C5y5zOlxUYkAH7Oe84MWg+JPOmrYe30WB4455zONWXTCpQJRw==}
+  /@types/sequelize@4.28.17:
+    resolution: {integrity: sha512-n3ZChokiKFIK85oThbQiSOeQOpRMle7BkUJqxBQLC6EJ0B6S4+LQN5XEqDFwwXsUkISftu6PaYOWXoL7tu+E5A==}
     dependencies:
       '@types/bluebird': 3.5.38
       '@types/continuation-local-storage': 3.2.4
-      '@types/lodash': 4.14.195
+      '@types/lodash': 4.14.199
       '@types/validator': 13.7.17
     dev: true
 
