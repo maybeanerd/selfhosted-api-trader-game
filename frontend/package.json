@@ -27,7 +27,7 @@
   "devDependencies": {
     "@css-render/vue3-ssr": "0.15.12",
     "@nuxt/devtools": "latest",
-    "@nuxt/image": "1.0.0-rc.3",
+    "@nuxt/image": "1.0.0",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/i18n": "8.0.0-rc.5",
     "@nuxtjs/tailwindcss": "6.8.0",
