@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
-  "packageManager": "pnpm@8.9.2",
+  "packageManager": "pnpm@8.10.0",
   "private": true,
   "license": "",
   "repository": {
