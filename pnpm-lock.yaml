@@ -169,8 +169,8 @@ importers:
         specifier: 0.12.0
         version: 0.12.0
       '@vite-pwa/nuxt':
-        specifier: 0.2.2
-        version: 0.2.2(@nuxt/kit@3.8.0)(vite-plugin-pwa@0.16.5)
+        specifier: 0.2.3
+        version: 0.2.3(@nuxt/kit@3.8.0)(vite-plugin-pwa@0.16.5)
       autoprefixer:
         specifier: 10.4.16
         version: 10.4.16(postcss@8.4.31)
@@ -4628,8 +4628,8 @@ packages:
     resolution: {integrity: sha512-Iy1EUVRpX0WWxeu1VIReR1zsZLMc4fqpt223czR+Rpnrwu7pt46nbnC2ycO7ItI/uqDLJxnbcMC7FujKs9IfFA==}
     dev: true
 
-  /@vite-pwa/nuxt@0.2.2(@nuxt/kit@3.8.0)(vite-plugin-pwa@0.16.5):
-    resolution: {integrity: sha512-meVWzwL8juN2ozqD+cyuPCdiHFbr4BQUjLN0m522prUNcBz4GCnw8BmMROP4C1hVLGINv1DTjR6QQMyksndfYA==}
+  /@vite-pwa/nuxt@0.2.3(@nuxt/kit@3.8.0)(vite-plugin-pwa@0.16.5):
+    resolution: {integrity: sha512-dAf7crzDth3/hXQ/JAcO0vh9alFl6gUZ3Sw2so1wL4W4VZOMYIA8D3sMo5AH8zV+loUlkqsb6kutmz8IKdpjmQ==}
     peerDependencies:
       '@nuxt/kit': ^3.6.2
       vite-plugin-pwa: '>=0.16.5 <1'
