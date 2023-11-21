@@ -85,8 +85,8 @@ importers:
         specifier: 20.9.3
         version: 20.9.3
       '@types/sequelize':
-        specifier: 4.28.18
-        version: 4.28.18
+        specifier: 4.28.19
+        version: 4.28.19
       '@types/supertest':
         specifier: 2.0.16
         version: 2.0.16
@@ -4456,8 +4456,8 @@ packages:
       '@types/node': 20.9.3
     dev: true
 
-  /@types/sequelize@4.28.18:
-    resolution: {integrity: sha512-p9RRutrfuWn5wvzY51+pY8uD4XxhyVvSVTTwdUNJ8j5TUhn19ZRz/pIC8MqSFlv9FRGe5g/vbzeykE4pzVQ2bw==}
+  /@types/sequelize@4.28.19:
+    resolution: {integrity: sha512-GTPL/0gRWyx44+w6HeJ1WHMWik3Bx+8njr7i2LVnRC24R+ocb4EOiJaVtrLEwu55llFRZ5hoYjyRUjrhvESrng==}
     dependencies:
       '@types/bluebird': 3.5.38
       '@types/continuation-local-storage': 3.2.4
