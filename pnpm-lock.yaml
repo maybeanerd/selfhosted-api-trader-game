@@ -169,8 +169,8 @@ importers:
         specifier: 0.12.0
         version: 0.12.0
       '@vite-pwa/nuxt':
-        specifier: 0.3.3
-        version: 0.3.3(rollup@2.79.1)(vite@4.4.9)(workbox-build@7.0.0)(workbox-window@7.0.0)
+        specifier: 0.3.4
+        version: 0.3.4(rollup@2.79.1)(vite@4.4.9)(workbox-build@7.0.0)(workbox-window@7.0.0)
       autoprefixer:
         specifier: 10.4.16
         version: 10.4.16(postcss@8.4.31)
@@ -4601,8 +4601,8 @@ packages:
     resolution: {integrity: sha512-Iy1EUVRpX0WWxeu1VIReR1zsZLMc4fqpt223czR+Rpnrwu7pt46nbnC2ycO7ItI/uqDLJxnbcMC7FujKs9IfFA==}
     dev: true
 
-  /@vite-pwa/nuxt@0.3.3(rollup@2.79.1)(vite@4.4.9)(workbox-build@7.0.0)(workbox-window@7.0.0):
-    resolution: {integrity: sha512-lmX7KYeSUZDjfpZjgiR1K+9PF4q/nSzY5P6WmdgiL1JamBWeooRdAFt+35Y9DV5zij4amtEVvxmDOWZilN3f0Q==}
+  /@vite-pwa/nuxt@0.3.4(rollup@2.79.1)(vite@4.4.9)(workbox-build@7.0.0)(workbox-window@7.0.0):
+    resolution: {integrity: sha512-yM5MlFn6SFfkorhqkNamFpHApP8so7TujbWwFyW+f8JC3yRAsIVNeBs8PA+zy2jQWfS7ouc9/5meuCU8Td30Hg==}
     dependencies:
       '@nuxt/kit': 3.8.2(rollup@2.79.1)
       pathe: 1.1.1
