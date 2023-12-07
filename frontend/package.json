@@ -29,7 +29,7 @@
     "@nuxt/devtools": "latest",
     "@nuxt/image": "1.1.0",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
-    "@nuxtjs/i18n": "8.0.0-rc.7",
+    "@nuxtjs/i18n": "8.0.0-rc.8",
     "@nuxtjs/tailwindcss": "6.10.1",
     "@types/node": "20.10.4",
     "@typescript-eslint/parser": "6.13.2",
