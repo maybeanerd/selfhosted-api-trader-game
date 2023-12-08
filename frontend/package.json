@@ -34,7 +34,7 @@
     "@types/node": "20.10.4",
     "@typescript-eslint/parser": "6.13.2",
     "@vicons/ionicons5": "0.12.0",
-    "@vite-pwa/nuxt": "0.3.4",
+    "@vite-pwa/nuxt": "0.3.5",
     "autoprefixer": "10.4.16",
     "eslint": "8.55.0",
     "git-commit-info": "2.0.2",
