@@ -173,7 +173,7 @@ importers:
         version: 0.4.0(rollup@3.29.2)(vite@4.4.9)(workbox-build@7.0.0)(workbox-window@7.0.0)
       autoprefixer:
         specifier: 10.4.16
-        version: 10.4.16(postcss@8.4.31)
+        version: 10.4.16(postcss@8.4.33)
       eslint:
         specifier: 8.56.0
         version: 8.56.0
@@ -181,8 +181,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       naive-ui:
-        specifier: 2.37.1
-        version: 2.37.1(vue@3.3.4)
+        specifier: 2.37.3
+        version: 2.37.3(vue@3.3.4)
       nuxt:
         specifier: 3.7.4
         version: 3.7.4(@types/node@20.10.7)(eslint@8.56.0)(rollup@3.29.2)(typescript@5.3.3)
@@ -10437,8 +10437,8 @@ packages:
       thenify-all: 1.6.0
     dev: true
 
-  /naive-ui@2.37.1(vue@3.3.4):
-    resolution: {integrity: sha512-msW9HvQCJ4Td91k6YNqagZ44zbKJPXriWNWEicGxPj0MZrh7qm3po34m5AgGYa3sDlxRkQy0Nd1wlxRapikaww==}
+  /naive-ui@2.37.3(vue@3.3.4):
+    resolution: {integrity: sha512-aUkHFXVIluSi8Me+npbcsdv1NYhVMj5t9YaruoCESlqmfqspj+R2QHEVXkTtUI1kQwVrABMCtAGq/wountqjZA==}
     peerDependencies:
       vue: ^3.0.0
     dependencies:
