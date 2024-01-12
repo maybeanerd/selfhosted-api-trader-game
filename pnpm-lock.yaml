@@ -58,7 +58,7 @@ importers:
         version: 6.35.2(pg-hstore@2.3.4)(pg@8.11.3)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@20.10.8)(@types/validator@13.7.17)(reflect-metadata@0.2.1)(sequelize@6.35.2)
+        version: 2.1.6(@types/node@20.10.8)(@types/validator@13.11.8)(reflect-metadata@0.2.1)(sequelize@6.35.2)
     devDependencies:
       '@fastify/static':
         specifier: 6.12.0
@@ -110,13 +110,13 @@ importers:
         version: 9.1.0(eslint@8.56.0)
       eslint-plugin-prettier:
         specifier: 5.1.3
-        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.1.1)
+        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.2.0)
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@20.10.8)(ts-node@10.9.2)
       prettier:
-        specifier: 3.1.1
-        version: 3.1.1
+        specifier: 3.2.0
+        version: 3.2.0
       source-map-support:
         specifier: 0.5.21
         version: 0.5.21
@@ -187,8 +187,8 @@ importers:
         specifier: 3.7.4
         version: 3.7.4(@types/node@20.10.8)(eslint@8.56.0)(rollup@3.29.2)(typescript@5.3.3)
       prettier:
-        specifier: 3.1.1
-        version: 3.1.1
+        specifier: 3.2.0
+        version: 3.2.0
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -3052,7 +3052,7 @@ packages:
       reflect-metadata: 0.2.1
       rxjs: 7.8.1
       sequelize: 6.35.2(pg-hstore@2.3.4)(pg@8.11.3)
-      sequelize-typescript: 2.1.6(@types/node@20.10.8)(@types/validator@13.7.17)(reflect-metadata@0.2.1)(sequelize@6.35.2)
+      sequelize-typescript: 2.1.6(@types/node@20.10.8)(@types/validator@13.11.8)(reflect-metadata@0.2.1)(sequelize@6.35.2)
       uuid: 9.0.0
     dev: false
 
@@ -7288,7 +7288,7 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.1.1):
+  /eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.2.0):
     resolution: {integrity: sha512-C9GCVAs4Eq7ZC/XFQHITLiHJxQngdtraXaM+LoUFoFp/lHNl2Zn8f3WQbe9HvTBBQ9YnKFB0/2Ajdqwo5D1EAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -7304,7 +7304,7 @@ packages:
     dependencies:
       eslint: 8.56.0
       eslint-config-prettier: 9.1.0(eslint@8.56.0)
-      prettier: 3.1.1
+      prettier: 3.2.0
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.8
     dev: true
@@ -11908,8 +11908,8 @@ packages:
       fast-diff: 1.3.0
     dev: true
 
-  /prettier@3.1.1:
-    resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
+  /prettier@3.2.0:
+    resolution: {integrity: sha512-/vBUecTGaPlRVwyZVROVC58bYIScqaoEJzZmzQXXrZOzqn0TwWz0EnOozOlFO/YAImRnb7XsKpTCd3m1SjS2Ww==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -12554,7 +12554,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: false
 
-  /sequelize-typescript@2.1.6(@types/node@20.10.8)(@types/validator@13.7.17)(reflect-metadata@0.2.1)(sequelize@6.35.2):
+  /sequelize-typescript@2.1.6(@types/node@20.10.8)(@types/validator@13.11.8)(reflect-metadata@0.2.1)(sequelize@6.35.2):
     resolution: {integrity: sha512-Vc2N++3en346RsbGjL3h7tgAl2Y7V+2liYTAOZ8XL0KTw3ahFHsyAUzOwct51n+g70I1TOUDgs06Oh6+XGcFkQ==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -12564,7 +12564,7 @@ packages:
       sequelize: '>=6.20.1'
     dependencies:
       '@types/node': 20.10.8
-      '@types/validator': 13.7.17
+      '@types/validator': 13.11.8
       glob: 7.2.0
       reflect-metadata: 0.2.1
       sequelize: 6.35.2(pg-hstore@2.3.4)(pg@8.11.3)
