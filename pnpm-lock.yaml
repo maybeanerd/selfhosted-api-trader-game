@@ -157,8 +157,8 @@ importers:
         specifier: 8.0.1
         version: 8.0.1(rollup@3.29.2)(vue@3.3.4)
       '@nuxtjs/tailwindcss':
-        specifier: 6.11.2
-        version: 6.11.2(rollup@3.29.2)
+        specifier: 6.11.3
+        version: 6.11.3(rollup@3.29.2)
       '@types/node':
         specifier: 20.11.16
         version: 20.11.16
@@ -3844,8 +3844,8 @@ packages:
     transitivePeerDependencies:
       - encoding
 
-  /@nuxtjs/tailwindcss@6.11.2(rollup@3.29.2):
-    resolution: {integrity: sha512-06e8t9ia6Ru/RPMATuhGwi16rMYeZPseXiI4QmRDk/IkvluU60GxhLZOjdUIa+U7DVCECgDsRNEo/rD8/1sMKQ==}
+  /@nuxtjs/tailwindcss@6.11.3(rollup@3.29.2):
+    resolution: {integrity: sha512-l2iww/zOiHMuNERo6XB9MTJ8MEcq3NHFW/TPWmwPLGdOobV9zYUZ75otqi+mTK+/vgzQTtNXpIe2V0DLuTeb4A==}
     dependencies:
       '@nuxt/kit': 3.9.3(rollup@3.29.2)
       autoprefixer: 10.4.17(postcss@8.4.33)
