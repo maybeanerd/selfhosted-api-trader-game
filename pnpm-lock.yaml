@@ -39,8 +39,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dotenv:
-        specifier: 16.4.2
-        version: 16.4.2
+        specifier: 16.4.3
+        version: 16.4.3
       pg:
         specifier: 8.11.3
         version: 8.11.3
@@ -3621,7 +3621,7 @@ packages:
       create-require: 1.1.1
       defu: 6.1.4
       destr: 2.0.2
-      dotenv: 16.4.2
+      dotenv: 16.4.3
       fs-extra: 11.1.1
       git-url-parse: 13.1.0
       is-docker: 3.0.0
@@ -5755,7 +5755,7 @@ packages:
     dependencies:
       chokidar: 3.6.0
       defu: 6.1.4
-      dotenv: 16.4.2
+      dotenv: 16.4.3
       giget: 1.2.1
       jiti: 1.21.0
       mlly: 1.5.0
@@ -5771,7 +5771,7 @@ packages:
     dependencies:
       chokidar: 3.6.0
       defu: 6.1.4
-      dotenv: 16.4.2
+      dotenv: 16.4.3
       giget: 1.2.1
       jiti: 1.21.0
       mlly: 1.5.0
@@ -6752,8 +6752,8 @@ packages:
       type-fest: 3.13.1
     dev: true
 
-  /dotenv@16.4.2:
-    resolution: {integrity: sha512-rZSSFxke7d9nYQ5NeMIwp5PP+f8wXgKNljpOb7KtH6SKW1cEqcXAz9VSJYVLKe7Jhup/gUYOkaeSVyK8GJ+nBg==}
+  /dotenv@16.4.3:
+    resolution: {integrity: sha512-II98GFrje5psQTSve0E7bnwMFybNLqT8Vu8JIFWRjsE3khyNUm/loZupuy5DVzG2IXf/ysxvrixYOQnM6mjD3A==}
     engines: {node: '>=12'}
 
   /dottie@2.0.6:
