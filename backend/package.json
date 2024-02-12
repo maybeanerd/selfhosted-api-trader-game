@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@8.15.1",
@@ -41,7 +41,7 @@
     "axios": "1.6.7",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
-    "dotenv": "16.4.2",
+    "dotenv": "16.4.3",
     "pg": "8.11.3",
     "pg-hstore": "2.3.4",
     "reflect-metadata": "0.2.1",
