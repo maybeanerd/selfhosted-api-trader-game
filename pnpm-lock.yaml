@@ -181,8 +181,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       naive-ui:
-        specifier: 2.37.3
-        version: 2.37.3(vue@3.3.4)
+        specifier: 2.38.0
+        version: 2.38.0(vue@3.3.4)
       nuxt:
         specifier: 3.7.4
         version: 3.7.4(@types/node@20.11.19)(eslint@8.56.0)(rollup@3.29.2)(typescript@5.3.3)
@@ -10433,8 +10433,8 @@ packages:
       thenify-all: 1.6.0
     dev: true
 
-  /naive-ui@2.37.3(vue@3.3.4):
-    resolution: {integrity: sha512-aUkHFXVIluSi8Me+npbcsdv1NYhVMj5t9YaruoCESlqmfqspj+R2QHEVXkTtUI1kQwVrABMCtAGq/wountqjZA==}
+  /naive-ui@2.38.0(vue@3.3.4):
+    resolution: {integrity: sha512-Sa1hPUSTaOBvFy5hBcdQ6ajGVqt59QHN4p6wcsC5stVo6JjQPnbRTUvWtNG3gAsLhCvHQBm9NXeJG5Ne1OFQ4Q==}
     peerDependencies:
       vue: ^3.0.0
     dependencies:
