@@ -1,5 +1,5 @@
 export const gitHubProjectUrl = new URL(
-  'https://github.com/T0TProduction/selfhosted-api-trader-game',
+  'https://github.com/maybeanerd/selfhosted-api-trader-game',
 );
 
 export function getLinkToCommit (commitHash: string) {
