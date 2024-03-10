@@ -1,18 +1,49 @@
-name: Build container
-on: 
-  pull_request: 
-    branches: 
-      - '**'
-
+name: build & push docker container
+on:
+  push:
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
 jobs:
-  build_container:
+  docker:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ghcr.io/maybeanerd/selfhosted-api-trader-game/backend-pr
-      IMAGE_NAME_FRONTEND: ghcr.io/maybeanerd/selfhosted-api-trader-game/frontend-pr
-
+    strategy:
+      matrix:
+        context: 
+          - frontend
+          - backend
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build containers
-        run: docker compose build
+      - name: Docker meta
+        id: metal
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}-${{ matrix.context }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ matrix.context }}
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.metal.outputs.tags }}
+          labels: ${{ steps.metal.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
