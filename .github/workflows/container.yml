@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        - context: frontend
-        - context: backend
+        context: 
+          - frontend
+          - backend
     permissions:
       contents: read
       packages: write
