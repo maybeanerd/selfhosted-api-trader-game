@@ -1,6 +1,3 @@
-## Moved to selfhosted git repo
-This repository has been moved to https://code.cluster.diluz.io/maybeanerd/selfhosted-api-trader-game
-
 # Self Hosted Api Trader Game
 <div>
 <img src="https://user-images.githubusercontent.com/18548570/230724270-427203bb-e61b-4a0e-bae5-7bacafc9c7fb.png" width="200" alt="Logo"/>
