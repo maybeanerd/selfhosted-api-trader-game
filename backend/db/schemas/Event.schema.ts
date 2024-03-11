@@ -7,7 +7,7 @@ const storedEventType = pgEnum(
 );
 
 export const storedEvent = pgTable('storedEvent', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   /**
    * The date this event was created on.
    */

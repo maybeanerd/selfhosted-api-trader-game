@@ -12,19 +12,19 @@ import { TreatyService } from '@/modules/treaty/treaty.service';
 import { crossroadsEventPath } from '@/config/apiPaths';
 import { HttpService } from '@nestjs/axios';
 import { TradeService } from '@/modules/trade/trade.service';
-import { StoredEvent } from 'db/schema';
+import { StoredEvent, storedEvent } from 'db/schema';
 import { drizz } from 'db';
 
 function mapStoredEventDocumentToEventDto(
-  storedEvent: StoredEvent,
+  event: StoredEvent,
   instanceId: string,
 ): EventDto {
   return {
-    id: storedEvent.id,
-    type: storedEvent.type,
-    payload: storedEvent.payload,
-    createdOn: storedEvent.createdOn.toISOString(),
-    sourceInstanceId: storedEvent.remoteInstanceId ?? instanceId, // if it's a local event, the source is this instance
+    id: event.id,
+    type: event.type,
+    payload: event.payload,
+    createdOn: event.createdOn.toISOString(),
+    sourceInstanceId: event.remoteInstanceId ?? instanceId, // if it's a local event, the source is this instance
   };
 }
 
@@ -92,7 +92,7 @@ export class EventService {
   /** For internal use to add events that we want to share. */
   async createEvent(event: Omit<Event, 'id'>) {
     const createdOn = new Date();
-    const createdEvent = await this.eventModel.create({
+    const createdEvent = await drizz.insert(storedEvent).values({
       type: event.type,
       payload: event.payload,
       createdOn,
