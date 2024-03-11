@@ -4,7 +4,6 @@ import { TradeModule } from '@/modules/trade/trade.module';
 import { ResourceModule } from '@/modules/resource/resource.module';
 import { TreatyModule } from '@/modules/treaty/treaty.module';
 import { CrossroadsModule } from '@/modules/crossroads/crossroads.module';
-import { dbConfig } from '@/config/dbConfig';
 
 @Module({
   imports: [
