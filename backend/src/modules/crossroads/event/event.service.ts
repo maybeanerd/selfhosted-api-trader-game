@@ -74,11 +74,10 @@ export class EventService {
     to: Date = new Date(),
   ): Promise<Array<EventDto>> {
     const events = await drizz.query.storedEvent.findMany({
-      where: (event, { gte, lte, ne, and }) =>
+      where: (event, { ne, and, between }) =>
         and(
           ne(event.remoteInstanceId, sourceInstanceId),
-          gte(event.receivedOn, from),
-          lte(event.receivedOn, to),
+          between(event.receivedOn, from, to),
         ),
     });
 
@@ -125,16 +124,19 @@ export class EventService {
 
     const receivedOn = new Date();
 
-    const createdEvents = await this.eventModel.bulkCreate(
-      eventsInput.events.map((e) => ({
-        id: e.id,
-        type: e.type,
-        createdOn: e.createdOn,
-        payload: e.payload,
-        remoteInstanceId: e.sourceInstanceId,
-        receivedOn,
-      })),
-    );
+    const createdEvents = await drizz
+      .insert(storedEvent)
+      .values(
+        eventsInput.events.map((event) => ({
+          id: event.id,
+          type: event.type,
+          createdOn: new Date(event.createdOn),
+          payload: event.payload,
+          remoteInstanceId: event.sourceInstanceId,
+          receivedOn,
+        })),
+      )
+      .returning();
 
     const serverState = await this.treatyService.ensureServerId();
 
