@@ -92,12 +92,21 @@ export class EventService {
   /** For internal use to add events that we want to share. */
   async createEvent(event: Omit<Event, 'id'>) {
     const createdOn = new Date();
-    const createdEvent = await drizz.insert(storedEvent).values({
-      type: event.type,
-      payload: event.payload,
-      createdOn,
-      receivedOn: createdOn,
-    });
+    const createdEvents = await drizz
+      .insert(storedEvent)
+      .values({
+        type: event.type,
+        payload: event.payload,
+        createdOn,
+        receivedOn: createdOn,
+      })
+      .returning();
+
+    const createdEvent = createdEvents.at(0);
+    if (!createdEvent) {
+      // TODO refine error handling here
+      throw new Error('Failed to insert.');
+    }
 
     const serverState = await this.treatyService.ensureServerId();
 
