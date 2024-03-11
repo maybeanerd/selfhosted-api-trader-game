@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { StoredEvent } from './schemas/Event.schema';
+import { StoredEvent } from '../../../../db/schemas/Event.schema';
 import {
   Event,
   EventType,
@@ -109,9 +109,8 @@ export class EventService {
 
   async addEvents(eventsInput: EventsInputDto): Promise<boolean> {
     const sourceInstanceId = eventsInput.sourceInstanceId;
-    const treatyIsValid = await this.treatyService.hasActiveTreaty(
-      sourceInstanceId,
-    );
+    const treatyIsValid =
+      await this.treatyService.hasActiveTreaty(sourceInstanceId);
     if (!treatyIsValid) {
       return false;
     }
@@ -155,7 +154,10 @@ export class EventService {
 
         if (event.type === EventType.TradeOfferCreated) {
           const payload = event.payload as TradeOfferCreatedEventPayload;
-          await this.tradeService.receiveTradeOffer(payload, event.remoteInstanceId);
+          await this.tradeService.receiveTradeOffer(
+            payload,
+            event.remoteInstanceId,
+          );
           return;
         }
 
