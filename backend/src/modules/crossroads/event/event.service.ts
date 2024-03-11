@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { StoredEvent } from '../../../../db/schemas/Event.schema';
 import {
   Event,
   EventType,
@@ -13,8 +12,8 @@ import { TreatyService } from '@/modules/treaty/treaty.service';
 import { crossroadsEventPath } from '@/config/apiPaths';
 import { HttpService } from '@nestjs/axios';
 import { TradeService } from '@/modules/trade/trade.service';
-import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
+import { StoredEvent } from 'db/schema';
+import { drizz } from 'db';
 
 function mapStoredEventDocumentToEventDto(
   storedEvent: StoredEvent,
@@ -32,8 +31,6 @@ function mapStoredEventDocumentToEventDto(
 @Injectable()
 export class EventService {
   constructor(
-    @InjectModel(StoredEvent)
-    private eventModel: typeof StoredEvent,
     private readonly treatyService: TreatyService,
     private readonly httpService: HttpService,
     private readonly tradeService: TradeService,
@@ -74,13 +71,15 @@ export class EventService {
   async getEventsOfTimeframe(
     sourceInstanceId: string,
     from: Date,
-    to?: Date,
+    to: Date = new Date(),
   ): Promise<Array<EventDto>> {
-    const events = await this.eventModel.findAll({
-      where: {
-        receivedOn: { [Op.gte]: from, [Op.lte]: to },
-        remoteInstanceId: { [Op.ne]: sourceInstanceId },
-      },
+    const events = await drizz.query.storedEvent.findMany({
+      where: (event, { gte, lte, ne, and }) =>
+        and(
+          ne(event.remoteInstanceId, sourceInstanceId),
+          gte(event.receivedOn, from),
+          lte(event.receivedOn, to),
+        ),
     });
 
     const serverState = await this.treatyService.ensureServerId();
