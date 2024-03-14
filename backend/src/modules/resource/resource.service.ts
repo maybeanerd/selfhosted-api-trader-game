@@ -2,20 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
-import { Resource } from '@/modules/resource/schemas/Resource.schema';
-import { InjectModel } from '@nestjs/sequelize';
-import { FindOptions, Transaction, Op } from 'sequelize';
-import { Sequelize } from 'sequelize-typescript';
+import { Resource, resource } from 'db/schema';
 import { userIdForTestingResourceGeneration } from '@/modules/resource/utils/testUser';
 
 function mapResourceDocumentToResourceStatisticDto(
-  resource: Resource,
+  res: Resource,
 ): ResourceStatisticDto {
   return {
-    ownerId: resource.ownerId,
-    type: resource.type,
-    amount: resource.amount,
-    upgradeLevel: resource.upgradeLevel,
+    ownerId: res.ownerId,
+    type: res.type,
+    amount: res.amount,
+    upgradeLevel: res.upgradeLevel,
   };
 }
 
@@ -24,15 +21,8 @@ function getResourceAccumulationPerTick(upgradeLevel: number) {
   return upgradeLevel * 2;
 }
 
-
 @Injectable()
 export class ResourceService {
-  constructor(
-    @InjectModel(Resource)
-    private resourceModel: typeof Resource,
-    private sequelize: Sequelize,
-  ) {}
-
   @Cron(CronExpression.EVERY_5_SECONDS)
   async handleCron() {
     console.log('Cron is running...');
@@ -41,11 +31,11 @@ export class ResourceService {
     const resources = await this.getStatisticOfAllResources();
     // TODO this could probably be a dedicated function that uses mongoose directly, to limit the amount of requests we send
     await Promise.all(
-      resources.map((resource) =>
+      resources.map((res) =>
         this.addAmountOfResource(
-          resource.type,
-          getResourceAccumulationPerTick(resource.upgradeLevel),
-          resource.ownerId,
+          res.type,
+          getResourceAccumulationPerTick(res.upgradeLevel),
+          res.ownerId,
         ),
       ),
     );
@@ -85,8 +75,8 @@ export class ResourceService {
     if (ownerId) {
       query.ownerId = ownerId;
     }
-
-    const resources = await this.resourceModel.findAll({ where: query });
+    const resources = resource.query;
+    // const resources = await this.resourceModel.findAll({ where: query });
 
     return resources.map(mapResourceDocumentToResourceStatisticDto);
   }
