@@ -1,5 +1,6 @@
 import { pgTable, uuid, pgEnum, text, timestamp } from 'drizzle-orm/pg-core';
 
+// TODO declare this somewhere else
 export enum TreatyStatus {
   Requested = 'requested',
   Denied = 'denied',
