@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { StoredTreaty, TreatyStatus } from './schemas/Treaty.schema';
-import { ServerState } from './schemas/ServerState.schema';
+import { StoredTreaty, TreatyStatus } from '../../../db/schemas/Treaty.schema';
+import { ServerState } from '../../../db/schemas/ServerState.schema';
 import { ProposeTreatyDto, TreatyDto } from './dto/Treaty.dto';
 import { HttpService } from '@nestjs/axios';
 import { crossroadsTreatyPath } from '@/config/apiPaths';
