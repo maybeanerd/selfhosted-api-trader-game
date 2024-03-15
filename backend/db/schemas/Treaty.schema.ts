@@ -1,11 +1,6 @@
+import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { pgTable, uuid, pgEnum, text, timestamp } from 'drizzle-orm/pg-core';
 
-// TODO declare this somewhere else
-export enum TreatyStatus {
-  Requested = 'requested',
-  Denied = 'denied',
-  Signed = 'signed',
-}
 const treatyStatus = pgEnum(
   'treatyStatus',
   Object.values(TreatyStatus) as [string, ...Array<string>],
@@ -15,7 +10,7 @@ export const storedTreaty = pgTable('storedTreaty', {
   /**
    * The Id of the instance this treaty was made with.
    */
-  id: uuid('id').defaultRandom().primaryKey(),
+  instanceId: uuid('instanceId').defaultRandom().primaryKey(),
   /**
    * The URL this instance can be reached at.
    * */
