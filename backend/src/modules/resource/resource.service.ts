@@ -4,15 +4,17 @@ import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { Resource, resource } from 'db/schema';
 import { userIdForTestingResourceGeneration } from '@/modules/resource/utils/testUser';
+import { drizz } from 'db';
+import { and, eq } from 'drizzle-orm';
 
 function mapResourceDocumentToResourceStatisticDto(
-  res: Resource,
+  resource: Resource,
 ): ResourceStatisticDto {
   return {
-    ownerId: res.ownerId,
-    type: res.type,
-    amount: res.amount,
-    upgradeLevel: res.upgradeLevel,
+    ownerId: resource.ownerId,
+    type: resource.type,
+    amount: resource.amount,
+    upgradeLevel: resource.upgradeLevel,
   };
 }
 
@@ -71,12 +73,9 @@ export class ResourceService {
   async getStatisticOfAllResources(
     ownerId?: string,
   ): Promise<Array<ResourceStatisticDto>> {
-    const query: FindOptions<Resource>['where'] = {};
-    if (ownerId) {
-      query.ownerId = ownerId;
-    }
-    const resources = resource.query;
-    // const resources = await this.resourceModel.findAll({ where: query });
+    const resources = await drizz.query.resource.findMany({
+      where: (r) => eq(r.ownerId, ownerId ?? r.ownerId),
+    });
 
     return resources.map(mapResourceDocumentToResourceStatisticDto);
   }
@@ -85,10 +84,11 @@ export class ResourceService {
     type: ResourceType,
     ownerId: string,
   ): Promise<ResourceStatisticDto> {
-    const resource = await this.resourceModel.findOne({
-      where: { type, ownerId },
+    const res = await drizz.query.resource.findFirst({
+      where: (r) => and(eq(r.type, type), eq(r.ownerId, ownerId)),
     });
-    if (resource === null) {
+
+    if (res === undefined) {
       return {
         ownerId,
         type,
@@ -96,7 +96,7 @@ export class ResourceService {
         upgradeLevel: 0,
       };
     }
-    return mapResourceDocumentToResourceStatisticDto(resource);
+    return mapResourceDocumentToResourceStatisticDto(res);
   }
 
   async addAmountOfResource(
@@ -104,22 +104,33 @@ export class ResourceService {
     amount: number,
     ownerId: string,
   ): Promise<number> {
-    const entryToIncrement = await this.resourceModel.findOne({
-      where: { type, ownerId },
-    });
-
-    if (entryToIncrement === null) {
-      const createdEntry = await this.resourceModel.create({
-        ownerId,
-        type,
-        amount,
-        upgradeLevel: 1,
+    return drizz.transaction(async (tx) => {
+      const existingResource = await tx.query.resource.findFirst({
+        where: (r) => and(eq(r.type, type), eq(r.ownerId, ownerId)),
       });
-      return createdEntry.amount;
-    }
-    entryToIncrement.amount += amount;
-    await entryToIncrement.save();
-    return entryToIncrement.amount;
+
+      if (existingResource === undefined) {
+        await tx.insert(resource).values({
+          ownerId,
+          type,
+          amount,
+          upgradeLevel: 1,
+        });
+        return amount;
+      }
+
+      const updatedResources = await tx
+        .update(resource)
+        .set({ amount: existingResource.amount + amount })
+        .where(and(eq(resource.type, type), eq(resource.ownerId, ownerId)))
+        .returning({ amount: resource.amount });
+
+      const updatedResource = updatedResources.at(0);
+      if (updatedResource === undefined) {
+        throw new Error('Failed updating resource amount.');
+      }
+      return updatedResource.amount;
+    });
   }
 
   async takeAmountOfResource(
