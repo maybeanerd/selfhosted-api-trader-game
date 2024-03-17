@@ -22,7 +22,7 @@ export const storedTreaty = pgTable('storedTreaty', {
   /**
    * The date this treaty was created on.
    */
-  createdOn: timestamp('createdOn').notNull(),
+  createdOn: timestamp('createdOn').defaultNow().notNull(),
 });
 
 export type StoredTreaty = typeof storedTreaty.$inferSelect;
