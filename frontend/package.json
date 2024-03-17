@@ -13,7 +13,6 @@
     "url": "https://github.com/maybeanerd/selfhosted-api-trader-game/issues"
   },
   "homepage": "https://github.com/maybeanerd/selfhosted-api-trader-game#readme",
-  
   "scripts": {
     "build": "nuxt build",
     "start": "nuxt start",
@@ -22,26 +21,25 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint --ext \".ts,.vue\" .",
-    "lint:fix": "pnpm lint --fix"
+    "lint:fix": "pnpm lint --fix",
+    "nuxt:upgrade": "nuxi upgrade --force"
   },
   "devDependencies": {
-    "@css-render/vue3-ssr": "0.15.12",
     "@nuxt/devtools": "latest",
     "@nuxt/image": "1.4.0",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/i18n": "8.2.0",
-    "@nuxtjs/tailwindcss": "6.11.4",
     "@types/node": "20.11.30",
     "@typescript-eslint/parser": "7.3.1",
-    "@vicons/ionicons5": "0.12.0",
     "@vite-pwa/nuxt": "0.6.0",
     "autoprefixer": "10.4.18",
     "eslint": "8.57.0",
     "git-commit-info": "2.0.2",
-    "naive-ui": "2.38.1",
-    "nuxt": "3.7.4",
+    "nuxt": "3.11.0",
     "prettier": "3.2.5",
-    "typescript": "5.4.2",
-    "vfonts": "0.0.3"
+    "typescript": "5.4.2"
+  },
+  "dependencies": {
+    "@nuxt/ui": "2.14.2"
   }
 }
