@@ -14,3 +14,4 @@ export {
   StoredTreaty,
   NewStoredTreaty,
 } from 'db/schemas/Treaty.schema';
+export { trade, Trade, NewTrade } from 'db/schemas/Trade.schema';
