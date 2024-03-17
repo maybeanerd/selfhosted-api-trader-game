@@ -37,7 +37,7 @@ export class EventService {
   ) {}
 
   async postEventsToTreatiedInstances(events: Array<EventDto>): Promise<void> {
-    const serverState = await this.treatyService.ensureServerId();
+    const serverId = await this.treatyService.ensureServerId();
     const treaties = await this.treatyService.getAllTreaties();
     await Promise.all(
       treaties.map(async (treaty) => {
@@ -51,7 +51,7 @@ export class EventService {
         }
 
         const body: EventsInputDto = {
-          sourceInstanceId: serverState.instanceId,
+          sourceInstanceId: serverId,
           events: filteredEvents,
         };
 
@@ -81,10 +81,10 @@ export class EventService {
         ),
     });
 
-    const serverState = await this.treatyService.ensureServerId();
+    const serverId = await this.treatyService.ensureServerId();
 
     return events.map((event) =>
-      mapStoredEventDocumentToEventDto(event, serverState.instanceId),
+      mapStoredEventDocumentToEventDto(event, serverId),
     );
   }
 
@@ -107,10 +107,10 @@ export class EventService {
       throw new Error('Failed to insert.');
     }
 
-    const serverState = await this.treatyService.ensureServerId();
+    const serverId = await this.treatyService.ensureServerId();
 
     await this.postEventsToTreatiedInstances([
-      mapStoredEventDocumentToEventDto(createdEvent, serverState.instanceId),
+      mapStoredEventDocumentToEventDto(createdEvent, serverId),
     ]);
   }
 
@@ -138,13 +138,13 @@ export class EventService {
       )
       .returning();
 
-    const serverState = await this.treatyService.ensureServerId();
+    const serverId = await this.treatyService.ensureServerId();
 
     await this.handleEvents(createdEvents);
 
     await this.postEventsToTreatiedInstances(
       createdEvents.map((createdEvent) =>
-        mapStoredEventDocumentToEventDto(createdEvent, serverState.instanceId),
+        mapStoredEventDocumentToEventDto(createdEvent, serverId),
       ),
     );
 
