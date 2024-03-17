@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { StoredEvent } from './schemas/Event.schema';
 import {
   Event,
   EventType,
@@ -13,34 +12,32 @@ import { TreatyService } from '@/modules/treaty/treaty.service';
 import { crossroadsEventPath } from '@/config/apiPaths';
 import { HttpService } from '@nestjs/axios';
 import { TradeService } from '@/modules/trade/trade.service';
-import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
+import { StoredEvent, storedEvent } from 'db/schema';
+import { drizz } from 'db';
 
 function mapStoredEventDocumentToEventDto(
-  storedEvent: StoredEvent,
+  event: StoredEvent,
   instanceId: string,
 ): EventDto {
   return {
-    id: storedEvent.id,
-    type: storedEvent.type,
-    payload: storedEvent.payload,
-    createdOn: storedEvent.createdOn.toISOString(),
-    sourceInstanceId: storedEvent.remoteInstanceId ?? instanceId, // if it's a local event, the source is this instance
+    id: event.id,
+    type: event.type,
+    payload: event.payload,
+    createdOn: event.createdOn.toISOString(),
+    sourceInstanceId: event.remoteInstanceId ?? instanceId, // if it's a local event, the source is this instance
   };
 }
 
 @Injectable()
 export class EventService {
   constructor(
-    @InjectModel(StoredEvent)
-    private eventModel: typeof StoredEvent,
     private readonly treatyService: TreatyService,
     private readonly httpService: HttpService,
     private readonly tradeService: TradeService,
   ) {}
 
   async postEventsToTreatiedInstances(events: Array<EventDto>): Promise<void> {
-    const serverState = await this.treatyService.ensureServerId();
+    const serverId = await this.treatyService.ensureServerId();
     const treaties = await this.treatyService.getAllTreaties();
     await Promise.all(
       treaties.map(async (treaty) => {
@@ -54,7 +51,7 @@ export class EventService {
         }
 
         const body: EventsInputDto = {
-          sourceInstanceId: serverState.instanceId,
+          sourceInstanceId: serverId,
           events: filteredEvents,
         };
 
@@ -74,68 +71,80 @@ export class EventService {
   async getEventsOfTimeframe(
     sourceInstanceId: string,
     from: Date,
-    to?: Date,
+    to: Date = new Date(),
   ): Promise<Array<EventDto>> {
-    const events = await this.eventModel.findAll({
-      where: {
-        receivedOn: { [Op.gte]: from, [Op.lte]: to },
-        remoteInstanceId: { [Op.ne]: sourceInstanceId },
-      },
+    const events = await drizz.query.storedEvent.findMany({
+      where: (event, { ne, and, between }) =>
+        and(
+          ne(event.remoteInstanceId, sourceInstanceId),
+          between(event.receivedOn, from, to),
+        ),
     });
 
-    const serverState = await this.treatyService.ensureServerId();
+    const serverId = await this.treatyService.ensureServerId();
 
     return events.map((event) =>
-      mapStoredEventDocumentToEventDto(event, serverState.instanceId),
+      mapStoredEventDocumentToEventDto(event, serverId),
     );
   }
 
   /** For internal use to add events that we want to share. */
   async createEvent(event: Omit<Event, 'id'>) {
     const createdOn = new Date();
-    const createdEvent = await this.eventModel.create({
-      type: event.type,
-      payload: event.payload,
-      createdOn,
-      receivedOn: createdOn,
-    });
+    const createdEvents = await drizz
+      .insert(storedEvent)
+      .values({
+        type: event.type,
+        payload: event.payload,
+        createdOn,
+        receivedOn: createdOn,
+      })
+      .returning();
 
-    const serverState = await this.treatyService.ensureServerId();
+    const createdEvent = createdEvents.at(0);
+    if (!createdEvent) {
+      // TODO refine error handling here
+      throw new Error('Failed to insert.');
+    }
+
+    const serverId = await this.treatyService.ensureServerId();
 
     await this.postEventsToTreatiedInstances([
-      mapStoredEventDocumentToEventDto(createdEvent, serverState.instanceId),
+      mapStoredEventDocumentToEventDto(createdEvent, serverId),
     ]);
   }
 
   async addEvents(eventsInput: EventsInputDto): Promise<boolean> {
     const sourceInstanceId = eventsInput.sourceInstanceId;
-    const treatyIsValid = await this.treatyService.hasActiveTreaty(
-      sourceInstanceId,
-    );
+    const treatyIsValid =
+      await this.treatyService.hasActiveTreaty(sourceInstanceId);
     if (!treatyIsValid) {
       return false;
     }
 
     const receivedOn = new Date();
 
-    const createdEvents = await this.eventModel.bulkCreate(
-      eventsInput.events.map((e) => ({
-        id: e.id,
-        type: e.type,
-        createdOn: e.createdOn,
-        payload: e.payload,
-        remoteInstanceId: e.sourceInstanceId,
-        receivedOn,
-      })),
-    );
+    const createdEvents = await drizz
+      .insert(storedEvent)
+      .values(
+        eventsInput.events.map((event) => ({
+          id: event.id,
+          type: event.type,
+          createdOn: new Date(event.createdOn),
+          payload: event.payload,
+          remoteInstanceId: event.sourceInstanceId,
+          receivedOn,
+        })),
+      )
+      .returning();
 
-    const serverState = await this.treatyService.ensureServerId();
+    const serverId = await this.treatyService.ensureServerId();
 
     await this.handleEvents(createdEvents);
 
     await this.postEventsToTreatiedInstances(
       createdEvents.map((createdEvent) =>
-        mapStoredEventDocumentToEventDto(createdEvent, serverState.instanceId),
+        mapStoredEventDocumentToEventDto(createdEvent, serverId),
       ),
     );
 
@@ -155,7 +164,10 @@ export class EventService {
 
         if (event.type === EventType.TradeOfferCreated) {
           const payload = event.payload as TradeOfferCreatedEventPayload;
-          await this.tradeService.receiveTradeOffer(payload, event.remoteInstanceId);
+          await this.tradeService.receiveTradeOffer(
+            payload,
+            event.remoteInstanceId,
+          );
           return;
         }
 

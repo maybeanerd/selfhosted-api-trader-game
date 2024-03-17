@@ -1,5 +1,5 @@
+import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { IsEnum, IsOptional, IsUUID, IsUrl } from 'class-validator';
-import { TreatyStatus } from '../schemas/Treaty.schema';
 
 export class TreatyOfferDto {
   /**

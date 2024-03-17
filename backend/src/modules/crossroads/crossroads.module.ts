@@ -5,17 +5,9 @@ import { EventService } from './event/event.service';
 import { HttpModule } from '@nestjs/axios';
 import { TradeModule } from '@/modules/trade/trade.module';
 import { TreatyModule } from '@/modules/treaty/treaty.module';
-import { StoredEvent } from '@/modules/crossroads/event/schemas/Event.schema';
-import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
-  imports: [
-    SequelizeModule.forFeature([StoredEvent]),
-    HttpModule,
-
-    TreatyModule,
-    TradeModule,
-  ],
+  imports: [HttpModule, TreatyModule, TradeModule],
 
   controllers: [TreatyController, EventController],
   providers: [EventService],

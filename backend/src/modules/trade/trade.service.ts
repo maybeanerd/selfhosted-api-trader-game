@@ -2,32 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { ResourceType } from '@/modules/resource/types';
 import { ResourceService } from '@/modules/resource/resource.service';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
-import { Trade } from '@/modules/trade/schemas/Trade.schema';
-import { InjectModel } from '@nestjs/sequelize';
-import { WhereOptions, CreationAttributes } from 'sequelize';
-import { Sequelize } from 'sequelize-typescript';
+import { NewTrade, Trade, trade } from 'db/schema';
+import { drizz } from 'db';
+import { and, eq } from 'drizzle-orm';
 
-function mapTradeDocumentToTradeOfferDto(trade: Trade): TradeOfferDto {
+function mapTradeDocumentToTradeOfferDto(t: Trade): TradeOfferDto {
   return {
-    id: trade.id,
-    offeredResources: trade.offeredResources,
-    requestedResources: trade.requestedResources,
-    creatorId: trade.creatorId,
-    isLocal: trade.remoteInstanceId === null,
+    id: t.id,
+    offeredResources: t.offeredResources,
+    requestedResources: t.requestedResources,
+    creatorId: t.creatorId,
+    isLocal: t.remoteInstanceId === null,
   };
 }
 
 @Injectable()
 export class TradeService {
-  constructor(
-    private readonly resourceService: ResourceService,
-    @InjectModel(Trade)
-    private tradeModel: typeof Trade,
-    private sequelize: Sequelize,
-  ) {}
+  constructor(private readonly resourceService: ResourceService) {}
 
   async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {
-    const trades = await this.tradeModel.findAll();
+    const trades = await drizz.query.trade.findMany();
 
     return trades.map(mapTradeDocumentToTradeOfferDto);
   }
@@ -39,24 +33,32 @@ export class TradeService {
     },
     creatorId: string,
   ): Promise<TradeOfferDto | null> {
-    const couldReserveAllResources =
-      await this.resourceService.takeAmountsOfResources(
-        offeredTrade.offeredResources,
-        creatorId,
-      );
+    return drizz.transaction(async (transaction) => {
+      const couldReserveAllResources =
+        await this.resourceService.takeAmountsOfResources(
+          offeredTrade.offeredResources,
+          creatorId,
+          transaction,
+        );
 
-    if (!couldReserveAllResources) {
-      return null;
-    }
+      if (!couldReserveAllResources) {
+        return null;
+      }
 
-    const trade = new this.tradeModel({
-      ...offeredTrade,
-      creatorId,
+      const newTradeOffer: NewTrade = { ...offeredTrade, creatorId };
+
+      const createdTrades = await transaction
+        .insert(trade)
+        .values(newTradeOffer)
+        .returning();
+      const createdTrade = createdTrades.at(0);
+
+      if (createdTrade === undefined) {
+        throw new Error('Could not create trade');
+      }
+
+      return mapTradeDocumentToTradeOfferDto(createdTrade);
     });
-
-    await trade.save();
-
-    return mapTradeDocumentToTradeOfferDto(trade);
   }
 
   async receiveTradeOffer(
@@ -68,30 +70,28 @@ export class TradeService {
     },
     remoteInstanceId: string | null,
   ): Promise<void> {
-    const tradeOfferToCreate:CreationAttributes<Trade> = {
+    const newTradeOffer: NewTrade = {
       ...receivedTrade,
       remoteInstanceId,
     };
-    const trade = new this.tradeModel(tradeOfferToCreate);
-    await trade.save();
+
+    await drizz.insert(trade).values(newTradeOffer);
   }
 
   async removeTradeOffer(
     id: string,
     requestingUserId?: string,
   ): Promise<TradeOfferDto | null> {
-    return this.sequelize.transaction(async (transaction) => {
-      const query: WhereOptions<Trade> = { id };
-      if (requestingUserId) {
-        query.creatorId = requestingUserId;
-      }
+    return drizz.transaction(async (transaction) => {
+      const query = requestingUserId
+        ? and(eq(trade.id, id), eq(trade.creatorId, requestingUserId))
+        : eq(trade.id, id);
 
-      const tradeOfferToRemove = await this.tradeModel.findOne({
+      const tradeOfferToRemove = await transaction.query.trade.findFirst({
         where: query,
-        transaction,
       });
 
-      if (tradeOfferToRemove === null) {
+      if (tradeOfferToRemove === undefined) {
         return null;
       }
 
@@ -109,7 +109,9 @@ export class TradeService {
           transaction,
         );
       }
-      await tradeOfferToRemove.destroy({ transaction });
+      await transaction
+        .delete(trade)
+        .where(eq(trade.id, tradeOfferToRemove.id));
 
       return mapTradeDocumentToTradeOfferDto(tradeOfferToRemove);
     });
@@ -119,13 +121,12 @@ export class TradeService {
     tradeOfferId: string,
     acceptantId?: string,
   ): Promise<TradeOfferDto | null> {
-    return this.sequelize.transaction(async (transaction) => {
-      const tradeOfferToRemove = await this.tradeModel.findOne({
-        where: { id: tradeOfferId },
-        transaction,
+    return drizz.transaction(async (transaction) => {
+      const tradeOfferToRemove = await transaction.query.trade.findFirst({
+        where: eq(trade.id, tradeOfferId),
       });
 
-      if (tradeOfferToRemove === null) {
+      if (tradeOfferToRemove === undefined) {
         return null;
       }
 
@@ -147,7 +148,9 @@ export class TradeService {
         );
       }
 
-      await tradeOfferToRemove.destroy({ transaction });
+      await transaction
+        .delete(trade)
+        .where(eq(trade.id, tradeOfferToRemove.id));
 
       // TODO give resources that have been received to the originally offering player as well
 

@@ -9,10 +9,13 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { initializeApp } from '@/appInitialization';
+import { initializeDb } from 'db';
 
 async function bootstrap() {
   const fastifyAdapter = new FastifyAdapter();
   fastifyAdapter.enableCors({});
+
+  await initializeDb();
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,

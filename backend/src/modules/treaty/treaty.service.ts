@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { StoredTreaty, TreatyStatus } from './schemas/Treaty.schema';
-import { ServerState } from './schemas/ServerState.schema';
+import { StoredTreaty, serverState, storedTreaty } from 'db/schema';
 import { ProposeTreatyDto, TreatyDto } from './dto/Treaty.dto';
 import { HttpService } from '@nestjs/axios';
 import { crossroadsTreatyPath } from '@/config/apiPaths';
-import { InjectModel } from '@nestjs/sequelize';
+import { drizz } from 'db';
+import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
+import { eq } from 'drizzle-orm';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
@@ -16,50 +17,67 @@ function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
 
 @Injectable()
 export class TreatyService {
-  constructor(
-    @InjectModel(ServerState)
-    private serverStateModel: typeof ServerState,
-    @InjectModel(StoredTreaty)
-    private treatyModel: typeof StoredTreaty,
-    private readonly httpService: HttpService,
-  ) {
+  constructor(private readonly httpService: HttpService) {
     this.ensureServerId();
   }
 
-  async ensureServerId() {
-    const serverState = await this.serverStateModel.findOne();
-    if (serverState !== null) {
-      return serverState;
-    }
-    const newlyCreatedTreatyBasis = this.serverStateModel.create({});
-    return newlyCreatedTreatyBasis;
+  async ensureServerId(): Promise<string> {
+    return drizz.transaction(async (transaction) => {
+      const existingState = await transaction.query.serverState.findFirst();
+      if (existingState !== undefined) {
+        return existingState.instanceId;
+      }
+
+      const newlyCreatedServerStates = await transaction
+        .insert(serverState)
+        .values({})
+        .returning();
+
+      const newlyCreatedServerState = newlyCreatedServerStates.at(0);
+      if (newlyCreatedServerState === undefined) {
+        throw new Error('Failed creating server state');
+      }
+      return newlyCreatedServerState.instanceId;
+    });
   }
 
   async getAllTreaties(): Promise<Array<TreatyDto>> {
-    const treaties = await this.treatyModel.findAll();
+    // TODO pagination
+    const treaties = await drizz.query.storedTreaty.findMany();
 
     return treaties.map(mapTreatyDocumentToTreatyDto);
   }
 
   async hasActiveTreaty(instanceId: string): Promise<boolean> {
-    const treaty = await this.treatyModel.findOne({ where: { instanceId } });
+    const treaty = await drizz.query.storedTreaty.findFirst({
+      where: (t) => eq(t.instanceId, instanceId),
+    });
 
-    return treaty !== null && treaty.status === TreatyStatus.Signed;
+    return treaty !== undefined && treaty.status === TreatyStatus.Signed;
   }
 
   async createTreaty(
     sourceInstanceId: string,
     instanceBaseUrl: string,
+    status = TreatyStatus.Requested,
   ): Promise<TreatyDto> {
-    const serverState = await this.ensureServerId();
-    const createdTreaty = await this.treatyModel.create({
-      instanceId: sourceInstanceId,
-      instanceBaseUrl: instanceBaseUrl,
-      status: TreatyStatus.Requested,
-    });
+    const serverId = await this.ensureServerId();
+    const createdTreaties = await drizz
+      .insert(storedTreaty)
+      .values({
+        instanceId: sourceInstanceId,
+        instanceBaseUrl: instanceBaseUrl,
+        status,
+      })
+      .returning();
+
+    const createdTreaty = createdTreaties.at(0);
+    if (createdTreaty === undefined) {
+      throw new Error('Failed creating treaty');
+    }
 
     return {
-      instanceId: serverState.instanceId,
+      instanceId: serverId,
       url: createdTreaty.instanceBaseUrl,
       status: createdTreaty.status,
     };
@@ -68,11 +86,11 @@ export class TreatyService {
   ownURL = 'http://7.22.217.133:8080'; // TODO get own URL
 
   async offerTreaty(instanceBaseUrl: string): Promise<TreatyDto | null> {
-    const serverState = await this.ensureServerId();
+    const serverId = await this.ensureServerId();
 
     const body: ProposeTreatyDto = {
       url: this.ownURL,
-      instanceId: serverState.instanceId,
+      instanceId: serverId,
     };
 
     const url = instanceBaseUrl + crossroadsTreatyPath;
@@ -89,66 +107,71 @@ export class TreatyService {
       return null;
     }
 
-    const createdTreaty = await this.treatyModel.create({
-      instanceId: offeredTreaty.instanceId,
-      instanceBaseUrl: instanceBaseUrl,
-      status: offeredTreaty.status,
-    });
+    const createdTreaty = await this.createTreaty(
+      offeredTreaty.instanceId,
+      instanceBaseUrl,
+      offeredTreaty.status,
+    );
 
-    return {
-      instanceId: createdTreaty.instanceId,
-      url: createdTreaty.instanceBaseUrl,
-      status: createdTreaty.status,
-    };
+    return createdTreaty;
   }
 
   async updateTreaty(
     sourceInstanceId: string,
     update: { url?: string; status?: TreatyStatus },
   ): Promise<TreatyDto | null> {
-    const serverState = await this.ensureServerId();
+    const serverId = await this.ensureServerId();
 
-    const existingTreaty = await this.treatyModel.findOne({
-      where: { instanceId: sourceInstanceId },
+    return drizz.transaction(async (transaction) => {
+      const existingTreaty = await transaction.query.storedTreaty.findFirst({
+        where: eq(storedTreaty.instanceId, sourceInstanceId),
+      });
+
+      if (existingTreaty === undefined) {
+        return null;
+      }
+
+      if (update.url) {
+        existingTreaty.instanceBaseUrl = update.url;
+      }
+      if (update.status) {
+        existingTreaty.status = update.status;
+      }
+
+      const url = existingTreaty.instanceBaseUrl + crossroadsTreatyPath;
+      const body: TreatyDto = {
+        status: existingTreaty.status,
+        url: this.ownURL,
+        instanceId: serverId,
+      };
+      try {
+        await this.httpService.put<TreatyDto>(url, body).toPromise();
+      } catch {
+        return null;
+      }
+
+      await transaction
+        .update(storedTreaty)
+        .set(existingTreaty)
+        .where(eq(storedTreaty.instanceId, sourceInstanceId));
+
+      return {
+        instanceId: serverId,
+        url: existingTreaty.instanceBaseUrl,
+        status: existingTreaty.status,
+      };
     });
-
-    if (existingTreaty === null) {
-      return null;
-    }
-
-    if (update.url) {
-      existingTreaty.instanceBaseUrl = update.url;
-    }
-    if (update.status) {
-      existingTreaty.status = update.status;
-    }
-
-    const url = existingTreaty.instanceBaseUrl + crossroadsTreatyPath;
-    const body: TreatyDto = {
-      status: existingTreaty.status,
-      url: this.ownURL,
-      instanceId: serverState.instanceId,
-    };
-    try {
-      await this.httpService.put<TreatyDto>(url, body).toPromise();
-    } catch {
-      return null;
-    }
-
-    await existingTreaty.save();
-
-    return {
-      instanceId: serverState.instanceId,
-      url: existingTreaty.instanceBaseUrl,
-      status: existingTreaty.status,
-    };
   }
 
   async removeTreaty(sourceInstanceId: string): Promise<boolean> {
-    const removedTreaties = await this.treatyModel.destroy({
-      where: { instanceId: sourceInstanceId },
-    });
+    const { rowCount: deletedTreaties } = await drizz
+      .delete(storedTreaty)
+      .where(eq(storedTreaty.instanceId, sourceInstanceId));
 
-    return removedTreaties > 0;
+    if (deletedTreaties === null) {
+      return false;
+    }
+
+    return deletedTreaties > 0;
   }
 }
