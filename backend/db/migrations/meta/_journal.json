@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710689918868,
+      "tag": "0000_known_black_cat",
+      "breakpoints": true
+    }
+  ]
+}
