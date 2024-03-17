@@ -1,9 +1,10 @@
 export {
   storedEvent,
+  storedEventType,
   StoredEvent,
   NewStoredEvent as NewStoredEven,
 } from 'db/schemas/Event.schema';
-export { resource, Resource, NewResource } from 'db/schemas/Resource.schema';
+export { resource,resourceType, Resource, NewResource } from 'db/schemas/Resource.schema';
 export {
   serverState,
   ServerState,
@@ -11,6 +12,7 @@ export {
 } from 'db/schemas/ServerState.schema';
 export {
   storedTreaty,
+  treatyStatus,
   StoredTreaty,
   NewStoredTreaty,
 } from 'db/schemas/Treaty.schema';

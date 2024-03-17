@@ -1,5 +1,5 @@
 {
-  "id": "197ee27b-fd87-47bb-b6a3-1edd338de853",
+  "id": "570ccf36-60df-4077-924e-e9d76b66d347",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -204,7 +204,34 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "resourceType": {
+      "name": "resourceType",
+      "values": {
+        "stone": "stone",
+        "wood": "wood",
+        "iron": "iron",
+        "gold": "gold",
+        "diamond": "diamond"
+      }
+    },
+    "storedEventType": {
+      "name": "storedEventType",
+      "values": {
+        "TradeOfferCreated": "TradeOfferCreated",
+        "TradeOfferAccepted": "TradeOfferAccepted",
+        "TradeOfferRemoved": "TradeOfferRemoved"
+      }
+    },
+    "treatyStatus": {
+      "name": "treatyStatus",
+      "values": {
+        "requested": "requested",
+        "denied": "denied",
+        "signed": "signed"
+      }
+    }
+  },
   "schemas": {},
   "_meta": {
     "columns": {},

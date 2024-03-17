@@ -1,7 +1,7 @@
 import { ResourceType } from '@/modules/resource/types';
 import { pgTable, uuid, integer, pgEnum, unique } from 'drizzle-orm/pg-core';
 
-const resourceType = pgEnum(
+export const resourceType = pgEnum(
   'resourceType',
   Object.values(ResourceType) as [string, ...Array<string>],
 );

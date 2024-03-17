@@ -1,3 +1,21 @@
+DO $$ BEGIN
+ CREATE TYPE "resourceType" AS ENUM('stone', 'wood', 'iron', 'gold', 'diamond');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "storedEventType" AS ENUM('TradeOfferCreated', 'TradeOfferAccepted', 'TradeOfferRemoved');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "treatyStatus" AS ENUM('requested', 'denied', 'signed');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "resource" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"ownerId" uuid NOT NULL,

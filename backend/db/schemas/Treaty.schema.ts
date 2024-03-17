@@ -1,7 +1,7 @@
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { pgTable, uuid, pgEnum, text, timestamp } from 'drizzle-orm/pg-core';
 
-const treatyStatus = pgEnum(
+export const treatyStatus = pgEnum(
   'treatyStatus',
   Object.values(TreatyStatus) as [string, ...Array<string>],
 );

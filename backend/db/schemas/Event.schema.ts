@@ -1,7 +1,7 @@
 import { EventPayload, EventType } from '@/modules/crossroads/event/types';
 import { pgEnum, pgTable, uuid, jsonb, timestamp } from 'drizzle-orm/pg-core';
 
-const storedEventType = pgEnum(
+export const storedEventType = pgEnum(
   'storedEventType',
   Object.values(EventType) as [string, ...Array<string>],
 );
