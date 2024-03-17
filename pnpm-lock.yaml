@@ -3294,33 +3294,6 @@ packages:
       - rollup
       - supports-color
 
-  /@nuxt/kit@3.9.3(rollup@3.29.2):
-    resolution: {integrity: sha512-bHGXpTB6E+YJCC1L9tTwrP7txgLZzyuFes/tgy1ZM4dlfrCsGqLK/K4mddROMdC3D81scnH84u7yQsN0JRgoTg==}
-    engines: {node: ^14.18.0 || >=16.10.0}
-    dependencies:
-      '@nuxt/schema': 3.9.3(rollup@3.29.2)
-      c12: 1.10.0
-      consola: 3.2.3
-      defu: 6.1.4
-      globby: 14.0.1
-      hash-sum: 2.0.0
-      ignore: 5.3.1
-      jiti: 1.21.0
-      knitwork: 1.0.0
-      mlly: 1.6.1
-      pathe: 1.1.2
-      pkg-types: 1.0.3
-      scule: 1.3.0
-      semver: 7.6.0
-      ufo: 1.5.1
-      unctx: 2.3.1
-      unimport: 3.7.1(rollup@3.29.2)
-      untyped: 1.4.2
-    transitivePeerDependencies:
-      - rollup
-      - supports-color
-    dev: false
-
   /@nuxt/schema@3.10.3(rollup@3.29.2):
     resolution: {integrity: sha512-a4cYbeskEVBPazgAhvUGkL/j7ho/iPWMK3vCEm6dRMjSqHVEITRosrj0aMfLbRrDpTrMjlRs0ZitxiaUfE/p5Q==}
     engines: {node: ^14.18.0 || >=16.10.0}
@@ -3359,26 +3332,6 @@ packages:
     transitivePeerDependencies:
       - rollup
       - supports-color
-
-  /@nuxt/schema@3.9.3(rollup@3.29.2):
-    resolution: {integrity: sha512-pchkGBYdEJ9TAOoC5DKnLuAaFPjzgn2k0OUTr31QwbtHdTR3Q2Ua/oKsS1g9CPU7KRzSE5Vkf7ECE8zVydqF5A==}
-    engines: {node: ^14.18.0 || >=16.10.0}
-    dependencies:
-      '@nuxt/ui-templates': 1.3.1
-      consola: 3.2.3
-      defu: 6.1.4
-      hookable: 5.5.3
-      pathe: 1.1.2
-      pkg-types: 1.0.3
-      scule: 1.3.0
-      std-env: 3.7.0
-      ufo: 1.5.1
-      unimport: 3.7.1(rollup@3.29.2)
-      untyped: 1.4.2
-    transitivePeerDependencies:
-      - rollup
-      - supports-color
-    dev: false
 
   /@nuxt/telemetry@2.5.3(rollup@3.29.2):
     resolution: {integrity: sha512-Ghv2MgWbJcUM9G5Dy3oQP0cJkUwEgaiuQxEF61FXJdn0a69Q4StZEP/hLF0MWPM9m6EvAwI7orxkJHM7MrmtVg==}
@@ -3616,7 +3569,7 @@ packages:
   /@nuxtjs/tailwindcss@6.11.4(rollup@3.29.2):
     resolution: {integrity: sha512-09cksgZD4seQj054Z/BeiwFg1bzQTol8KPulLDLGnmMTkEi21vj/z+WlXQRpVbN1GS9+oU9tcSsu2ufXCM3DBg==}
     dependencies:
-      '@nuxt/kit': 3.9.3(rollup@3.29.2)
+      '@nuxt/kit': 3.11.0(rollup@3.29.2)
       autoprefixer: 10.4.18(postcss@8.4.33)
       chokidar: 3.6.0
       clear-module: 4.1.2
