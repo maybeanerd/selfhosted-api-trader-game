@@ -40,7 +40,7 @@ importers:
         version: 16.4.5
       drizzle-orm:
         specifier: 0.30.3
-        version: 0.30.3(@types/pg@8.11.2)(pg@8.11.3)
+        version: 0.30.3(@types/pg@8.11.3)(pg@8.11.3)
       drizzle-zod:
         specifier: 0.5.1
         version: 0.5.1(drizzle-orm@0.30.3)(zod@3.22.4)
@@ -79,8 +79,8 @@ importers:
         specifier: 20.11.29
         version: 20.11.29
       '@types/pg':
-        specifier: 8.11.2
-        version: 8.11.2
+        specifier: 8.11.3
+        version: 8.11.3
       '@types/supertest':
         specifier: 6.0.2
         version: 6.0.2
@@ -4570,8 +4570,8 @@ packages:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
     dev: true
 
-  /@types/pg@8.11.2:
-    resolution: {integrity: sha512-G2Mjygf2jFMU/9hCaTYxJrwdObdcnuQde1gndooZSOHsNSaCehAuwc7EIuSA34Do8Jx2yZ19KtvW8P0j4EuUXw==}
+  /@types/pg@8.11.3:
+    resolution: {integrity: sha512-xocw4LvpDcj/Ta7bN52tLZm34mso5SZ0Q8fVC0UtD8s85Itip3YHvBeYZhBmC0OThpdOujHsxXtRbEIRxqXPXg==}
     dependencies:
       '@types/node': 20.11.29
       pg-protocol: 1.6.0
@@ -7086,7 +7086,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.30.3(@types/pg@8.11.2)(pg@8.11.3):
+  /drizzle-orm@0.30.3(@types/pg@8.11.3)(pg@8.11.3):
     resolution: {integrity: sha512-tmIUPy71Ca7BUD5M7Tn9bvXESDWoj66d6lTdKCdf30V26xDFFjbx7DMamhOiWU+H1fflBk5rCdtGyt2SiFPgRg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -7160,7 +7160,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@types/pg': 8.11.2
+      '@types/pg': 8.11.3
       pg: 8.11.3
     dev: false
 
@@ -7170,7 +7170,7 @@ packages:
       drizzle-orm: '>=0.23.13'
       zod: '*'
     dependencies:
-      drizzle-orm: 0.30.3(@types/pg@8.11.2)(pg@8.11.3)
+      drizzle-orm: 0.30.3(@types/pg@8.11.3)(pg@8.11.3)
       zod: 3.22.4
     dev: false
 
