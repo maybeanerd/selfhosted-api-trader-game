@@ -1,31 +1,19 @@
 <template>
-  <div class="flex justify-end border-t-[1px] border-gray-700 p-2">
-    Created with&nbsp;
-    <template
-      v-for="(dependency, index) in notableDependencies"
-      :key="dependency.name"
-    >
-      <CustomLink :url="dependency.url">
-        {{ dependency.name }}
-      </CustomLink>{{ index === notableDependencies.length - 1 ? '.' : ',&nbsp;' }}
-    </template>
+  <div class="text-center text-xs border-t-[1px] border-gray-700 p-2">
+    commit
+    <CustomLink :url="getLinkToCommit(commitHash)">
+      {{ commitHash }}
+    </CustomLink><br>
+    built on
+    {{ buildDate.toLocaleDateString('de-DE') }}
   </div>
 </template>
 
 <script setup lang="ts">
-const notableDependencies = [
-  { name: 'Nuxt', packageName: 'nuxt', url: new URL('https://nuxt.com/') },
-  {
-    name: 'TypeScript',
-    url: new URL('https://www.typescriptlang.org/'),
-  },
-  {
-    name: 'Tailwind CSS',
-    url: new URL('https://tailwindcss.com/'),
-  },
-  {
-    name: 'Naive UI',
-    url: new URL('https://www.naiveui.com/'),
-  },
-];
+import { getLinkToCommit } from '~/utils/gitHubRepo';
+
+const runtimeConfig = useRuntimeConfig();
+
+const { commitHash } = runtimeConfig.public;
+const buildDate = new Date(runtimeConfig.public.buildDate);
 </script>
