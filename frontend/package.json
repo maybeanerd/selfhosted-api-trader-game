@@ -37,9 +37,7 @@
     "git-commit-info": "2.0.2",
     "nuxt": "3.11.1",
     "prettier": "3.2.5",
-    "typescript": "5.4.2"
-  },
-  "dependencies": {
+    "typescript": "5.4.2",
     "@nuxt/ui": "2.14.2"
   }
 }
