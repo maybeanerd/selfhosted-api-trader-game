@@ -39,11 +39,11 @@ importers:
         specifier: 16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: 0.30.4
-        version: 0.30.4(@types/pg@8.11.4)(pg@8.11.3)
+        specifier: 0.30.5
+        version: 0.30.5(@types/pg@8.11.4)(pg@8.11.3)
       drizzle-zod:
         specifier: 0.5.1
-        version: 0.5.1(drizzle-orm@0.30.4)(zod@3.22.4)
+        version: 0.5.1(drizzle-orm@0.30.5)(zod@3.22.4)
       pg:
         specifier: 8.11.3
         version: 8.11.3
@@ -7664,8 +7664,8 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.30.4(@types/pg@8.11.4)(pg@8.11.3):
-    resolution: {integrity: sha512-kWoSMGbrOFkmkAweLTFtHJMpN+nwhx89q0mLELqT2aEU+1szNV8jrnBmJwZ0WGNp7J7yQn/ezEtxBI/qzTSElQ==}
+  /drizzle-orm@0.30.5(@types/pg@8.11.4)(pg@8.11.3):
+    resolution: {integrity: sha512-oImmwGpe1jTWvhPkpsnramZA8m/lE8krTj7Ws7KHSFCMshMXmcZWX2g2Ki793PQOBmwI50KYzWJ9yNKKhWYLyA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -7745,13 +7745,13 @@ packages:
       pg: 8.11.3
     dev: false
 
-  /drizzle-zod@0.5.1(drizzle-orm@0.30.4)(zod@3.22.4):
+  /drizzle-zod@0.5.1(drizzle-orm@0.30.5)(zod@3.22.4):
     resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
     peerDependencies:
       drizzle-orm: '>=0.23.13'
       zod: '*'
     dependencies:
-      drizzle-orm: 0.30.4(@types/pg@8.11.4)(pg@8.11.3)
+      drizzle-orm: 0.30.5(@types/pg@8.11.4)(pg@8.11.3)
       zod: 3.22.4
     dev: false
 
