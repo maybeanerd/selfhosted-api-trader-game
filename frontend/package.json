@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game-frontend",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "description": "A WIP example client for the game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@8.15.6",
@@ -29,7 +29,7 @@
     "@nuxt/image": "1.5.0",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/i18n": "8.3.0",
-    "@types/node": "20.12.3",
+    "@types/node": "20.12.4",
     "@typescript-eslint/parser": "7.5.0",
     "@vite-pwa/nuxt": "0.6.0",
     "autoprefixer": "10.4.19",
