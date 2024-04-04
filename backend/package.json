@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.0.60",
+  "version": "0.0.61",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@8.15.6",
@@ -48,7 +48,7 @@
     "rxjs": "7.8.1"
   },
   "devDependencies": {
-    "@fastify/static": "7.0.2",
+    "@fastify/static": "7.0.3",
     "@nestjs/cli": "10.3.2",
     "@nestjs/schematics": "10.1.1",
     "@nestjs/testing": "10.3.7",
