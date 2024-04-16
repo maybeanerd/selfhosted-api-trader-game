@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.0.71",
+  "version": "0.0.72",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@8.15.7",
@@ -35,7 +35,7 @@
     "@nestjs/common": "10.3.7",
     "@nestjs/core": "10.3.7",
     "@nestjs/platform-fastify": "10.3.7",
-    "@nestjs/schedule": "4.0.1",
+    "@nestjs/schedule": "4.0.2",
     "@nestjs/swagger": "7.3.1",
     "axios": "1.6.8",
     "class-transformer": "0.5.1",
