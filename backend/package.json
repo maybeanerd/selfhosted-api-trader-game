@@ -43,6 +43,7 @@
     "dotenv": "16.4.5",
     "drizzle-orm": "0.30.9",
     "drizzle-zod": "0.5.1",
+    "http-signature": "1.4.0",
     "pg": "8.11.5",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1"
