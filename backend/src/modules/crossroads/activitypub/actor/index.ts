@@ -23,7 +23,7 @@ export const instanceActor: APActor = {
   outbox: 'https://actor2.example.org/outbox',
 };
 
-async function getActorFromId(
+export async function getActorFromId(
   id: string,
   username?: string,
 ): Promise<ActivityPubActor> {

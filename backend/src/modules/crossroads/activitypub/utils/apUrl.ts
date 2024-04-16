@@ -15,10 +15,6 @@ export function getActorPublicKeyUrl(actorId: string): URL {
   return new URL(`${activityPubBaseUrl}/actors/${actorId}/publicKey`);
 }
 
-export function getActorFromActorId(actorId: URL): string | null {
-  return actorId.pathname.split('/').pop() ?? null;
-}
-
 export function getInboxUrl(): URL {
   return new URL(`${activityPubBaseUrl}/inbox`);
 }

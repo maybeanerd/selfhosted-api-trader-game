@@ -1,8 +1,5 @@
 import { actors } from '@/modules/crossroads/activitypub/actor';
-import {
-  getActorFromActorId,
-  getBaseUrl,
-} from '@/modules/crossroads/activitypub/utils/apUrl';
+import { getBaseUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
 import type { APActor } from 'activitypub-types';
 
 type WebfingerResponse = {
@@ -45,8 +42,7 @@ export function findActorBySubject(
       return false;
     }
 
-    const actorId = new URL(actor.id);
-    const searchedActor = getActorFromActorId(actorId);
+    const searchedActor = actor.preferredUsername;
     if (searchedActor === null) {
       return false;
     }
