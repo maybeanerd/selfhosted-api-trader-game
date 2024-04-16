@@ -42,12 +42,12 @@ export function findActorBySubject(
       return false;
     }
 
-    const searchedActor = actor.preferredUsername;
-    if (searchedActor === null) {
+    const { preferredUsername } = actor;
+    if (preferredUsername === null) {
       return false;
     }
 
-    return searchedActor === actorName;
+    return preferredUsername === actorName;
   });
 
   if (foundActor) {
