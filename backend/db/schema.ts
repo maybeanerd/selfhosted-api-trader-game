@@ -4,7 +4,12 @@ export {
   StoredEvent,
   NewStoredEvent as NewStoredEven,
 } from 'db/schemas/Event.schema';
-export { resource,resourceType, Resource, NewResource } from 'db/schemas/Resource.schema';
+export {
+  resource,
+  resourceType,
+  Resource,
+  NewResource,
+} from 'db/schemas/Resource.schema';
 export {
   serverState,
   ServerState,

@@ -6,6 +6,7 @@ import { crossroadsTreatyPath } from '@/config/apiPaths';
 import { drizz } from 'db';
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { eq } from 'drizzle-orm';
+import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
@@ -28,9 +29,14 @@ export class TreatyService {
         return existingState.instanceId;
       }
 
+      const { privateKey, publicKey } = await generateKeys();
+
       const newlyCreatedServerStates = await transaction
         .insert(serverState)
-        .values({})
+        .values({
+          privateKey,
+          publicKey,
+        })
         .returning();
 
       const newlyCreatedServerState = newlyCreatedServerStates.at(0);

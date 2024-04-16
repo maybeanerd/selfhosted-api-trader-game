@@ -4,8 +4,8 @@ import {
   getInboxUrl,
   getOutboxUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
-import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import type { APActor, APRoot } from 'activitypub-types';
+import { drizz } from 'db';
 
 export type ActivityPubActor = APRoot<APActor> & {
   publicKey: {
@@ -27,8 +27,12 @@ async function getActorFromId(
   id: string,
   username?: string,
 ): Promise<ActivityPubActor> {
-  // TODO store and get from and to DB
-  const { publicKey } = await generateKeys();
+  const serverState = await drizz.query.serverState.findFirst();
+  if (serverState === undefined) {
+    throw new Error('Server state not found.');
+  }
+
+  const { publicKey } = serverState;
 
   const actorId = getActorUrl(id).toString();
 
