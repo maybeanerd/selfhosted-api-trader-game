@@ -4,6 +4,7 @@ import {
   getInboxUrl,
   getOutboxUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
+import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import type { APActor, APRoot } from 'activitypub-types';
 
 export type ActivityPubActor = APRoot<APActor> & {
@@ -22,10 +23,14 @@ export const instanceActor: APActor = {
   outbox: 'https://actor2.example.org/outbox',
 };
 
-function getActorFromId(id: string, username?: string): ActivityPubActor {
+async function getActorFromId(
+  id: string,
+  username?: string,
+): Promise<ActivityPubActor> {
+  // TODO store and get from and to DB
+  const { publicKey } = await generateKeys();
+
   const actorId = getActorUrl(id).toString();
-  // TODO get real key from storage or something
-  const publicKey = '-----BEGIN PUBLIC KEY-----...-----END PUBLIC KEY-----';
 
   return {
     '@context': [
@@ -46,8 +51,10 @@ function getActorFromId(id: string, username?: string): ActivityPubActor {
     },
   };
 }
+export const actors: Array<APActor> = [instanceActor];
 
-export const realInstanceActor: ActivityPubActor =
-  getActorFromId('realInstanceActor');
+const realInstanceActor = getActorFromId('realInstanceActor');
 
-export const actors: Array<APActor> = [instanceActor, realInstanceActor];
+realInstanceActor.then((actor) => {
+  actors.push(actor);
+});
