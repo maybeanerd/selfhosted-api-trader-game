@@ -46,17 +46,7 @@ services:
       - db-data:/var/lib/postgresql/data
 
   # proxy:
-  #   image: caddy:2
-  #   restart: always
-  #   networks:
-  #     - internal
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-  #   volumes:
-  #     - ./Caddyfile:/etc/caddy/Caddyfile
-  #     - caddy_data:/data
-  #     - caddy_config:/config
+  # TODO use traefik
 
 #  authserver:
 #    image: oryd/kratos:v0.11
