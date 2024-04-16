@@ -1,9 +1,18 @@
 import {
+  getActorPublicKeyUrl,
   getActorUrl,
   getInboxUrl,
   getOutboxUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
 import type { APActor, APRoot } from 'activitypub-types';
+
+export type ActivityPubActor = APRoot<APActor> & {
+  publicKey: {
+    id: string;
+    owner: string;
+    publicKeyPem: string;
+  };
+};
 
 export const instanceActor: APActor = {
   type: 'Person',
@@ -13,24 +22,32 @@ export const instanceActor: APActor = {
   outbox: 'https://actor2.example.org/outbox',
 };
 
-export const realInstanceActor: APRoot<APActor> = {
-  '@context': [
-    'https://www.w3.org/ns/activitystreams',
-    'https://w3id.org/security/v1',
-  ],
+function getActorFromId(id: string, username?: string): ActivityPubActor {
+  const actorId = getActorUrl(id).toString();
+  // TODO get real key from storage or something
+  const publicKey = '-----BEGIN PUBLIC KEY-----...-----END PUBLIC KEY-----';
 
-  id: getActorUrl('realInstanceActor').toString(),
-  type: 'Person',
-  preferredUsername: 'realInstanceActor',
-  inbox: getInboxUrl().toString(),
-  outbox: getOutboxUrl().toString(),
+  return {
+    '@context': [
+      'https://www.w3.org/ns/activitystreams',
+      'https://w3id.org/security/v1',
+    ],
 
-  // TODO figure out why this is in the example in https://blog.joinmastodon.org/2018/06/how-to-implement-a-basic-activitypub-server/, but not supported by this type
-  /*   publicKey: {
-    id: 'https://my-example.com/actor#main-key',
-    owner: 'https://my-example.com/actor',
-    publicKeyPem: '-----BEGIN PUBLIC KEY-----...-----END PUBLIC KEY-----',
-  }, */
-};
+    id: actorId,
+    type: 'Person',
+    preferredUsername: username ?? id,
+    inbox: getInboxUrl().toString(),
+    outbox: getOutboxUrl().toString(),
+
+    publicKey: {
+      id: getActorPublicKeyUrl(id).toString(),
+      owner: actorId,
+      publicKeyPem: publicKey,
+    },
+  };
+}
+
+export const realInstanceActor: ActivityPubActor =
+  getActorFromId('realInstanceActor');
 
 export const actors: Array<APActor> = [instanceActor, realInstanceActor];
