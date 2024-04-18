@@ -15,6 +15,14 @@ export function getActorPublicKeyUrl(actorId: string): URL {
   return new URL(`${activityPubBaseUrl}/actors/${actorId}/publicKey`);
 }
 
+export function getNoteUrl(noteId: string): URL {
+  return new URL(`${activityPubBaseUrl}/notes/${noteId}`);
+}
+
+export function getActivityUrl(actionId: string): URL {
+  return new URL(`${activityPubBaseUrl}/activities/${actionId}`);
+}
+
 export function getInboxUrl(): URL {
   return new URL(`${activityPubBaseUrl}/inbox`);
 }
