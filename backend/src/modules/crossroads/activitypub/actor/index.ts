@@ -52,9 +52,14 @@ export async function getInstanceActor() {
 
   const { instanceId, publicKey } = serverState;
 
-  return getActorFromId(
+  const actor = await getActorFromId(
     { id: instanceId, publicKey },
     'Application',
     instanceActorUsername,
   );
+
+  return {
+    actor,
+    internalId: instanceId,
+  };
 }

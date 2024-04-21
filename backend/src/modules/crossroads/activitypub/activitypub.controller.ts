@@ -9,10 +9,11 @@ import { ActivityPubService } from './activityPub.service';
 
 import { crossroadsActivityPubBasePath } from '@/config/apiPaths';
 import { ActivityPubActor } from '@/modules/crossroads/activitypub/actor';
+import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
 
 // TODO
 
-@Controller({ path: crossroadsActivityPubBasePath, version: '1' })
+@Controller({ path: crossroadsActivityPubBasePath, version: apiVersion })
 export class ActivityPubController {
   constructor(private readonly activityPubService: ActivityPubService) {}
 

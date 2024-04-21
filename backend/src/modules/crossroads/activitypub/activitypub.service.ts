@@ -20,11 +20,11 @@ export class ActivityPubService {
   ) {} */
 
   async findActorById(id: string): Promise<ActivityPubActor | null> {
-    const instanceActor = await getInstanceActor();
-    if (instanceActor.id !== id) {
+    const { actor, internalId } = await getInstanceActor();
+    if (internalId !== id) {
       return null;
     }
-    return instanceActor;
+    return actor;
   }
 
   async findActorWithWebfinger(
@@ -35,7 +35,7 @@ export class ActivityPubService {
       return null;
     }
 
-    const instanceActor = await getInstanceActor();
-    return mapActorToWebfingerResponse(instanceActor);
+    const { actor } = await getInstanceActor();
+    return mapActorToWebfingerResponse(actor);
   }
 }
