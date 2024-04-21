@@ -12,7 +12,7 @@ import { WebfingerResponse } from '@/modules/crossroads/activitypub/webfinger';
 // This is not part of the ActivityPub controller since it needs to be at the root of the API
 
 @Controller({ path: '.well-known' })
-export class ActivityPubController {
+export class WellKnownController {
   constructor(private readonly activityPubService: ActivityPubService) {}
 
   // TODO DTOs

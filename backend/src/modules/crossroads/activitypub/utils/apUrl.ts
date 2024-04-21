@@ -1,7 +1,8 @@
-const baseUrl = 'https://trading-game.diluz.io'; // TODO get from env somehow
-const pathPrefix = 'ap';
+import { crossroadsActivityPubBasePath } from '@/config/apiPaths';
 
-const activityPubBaseUrl = `${baseUrl}/${pathPrefix}`;
+const baseUrl = 'https://trading-game.diluz.io'; // TODO get from env somehow
+
+const activityPubBaseUrl = `${baseUrl}/${crossroadsActivityPubBasePath}`;
 
 export function getBaseUrl(): string {
   return baseUrl;
