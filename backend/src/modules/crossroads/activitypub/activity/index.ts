@@ -40,3 +40,5 @@ export function createActivity<Type extends SupportedActivityType>(
 
   return activity;
 }
+
+// TODO save and get from DB

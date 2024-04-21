@@ -1,8 +1,7 @@
-import { ActivityPubActor } from '@/modules/crossroads/activitypub/actor';
 import { getBaseUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
 import type { APActor } from 'activitypub-types';
 
-type WebfingerResponse = {
+export type WebfingerResponse = {
   subject: string;
   links: Array<{
     rel: 'self';
@@ -11,7 +10,7 @@ type WebfingerResponse = {
   }>;
 };
 
-function mapActorToWebfingerResponse(actor: APActor): WebfingerResponse {
+export function mapActorToWebfingerResponse(actor: APActor): WebfingerResponse {
   if (actor.id === undefined) {
     throw new Error('Actor ID is undefined');
   }
@@ -27,33 +26,10 @@ function mapActorToWebfingerResponse(actor: APActor): WebfingerResponse {
   };
 }
 
-type WebfingerSubject = `acct:${string}@${string}`;
+export type WebfingerSubject = `acct:${string}@${string}`;
 
-export function findActorBySubject(
+export function getUsernameFromWebfingerSubject(
   subject: WebfingerSubject,
-): WebfingerResponse | null {
-  const actorName = subject.replace('acct:', '').split('@').at(0);
-  if (!actorName) {
-    return null;
-  }
-
-  const actors: Array<ActivityPubActor> = [];
-
-  const foundActor = actors.find((actor) => {
-    if (actor.id === undefined) {
-      return false;
-    }
-
-    const { preferredUsername } = actor;
-    if (preferredUsername === null) {
-      return false;
-    }
-
-    return preferredUsername === actorName;
-  });
-
-  if (foundActor) {
-    return mapActorToWebfingerResponse(foundActor);
-  }
-  return null;
+): string | null {
+  return subject.replace('acct:', '').split('@').at(0) ?? null;
 }

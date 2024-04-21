@@ -15,18 +15,11 @@ export type ActivityPubActor = APRoot<APActor> & {
   };
 };
 
-async function getActorFromId(
-  id: string,
+export async function getActorFromId(
+  { id, publicKey }: { id: string; publicKey: string },
   type: 'Application' | 'Person' = 'Person',
   username?: string,
 ): Promise<ActivityPubActor> {
-  const serverState = await drizz.query.serverState.findFirst();
-  if (serverState === undefined) {
-    throw new Error('Server state not found.');
-  }
-
-  const { publicKey } = serverState;
-
   const actorId = getActorUrl(id).toString();
 
   return {
@@ -48,23 +41,20 @@ async function getActorFromId(
     },
   };
 }
-async function getInstanceActorId(): Promise<string> {
+
+export const instanceActorUsername = 'merchant';
+
+export async function getInstanceActor() {
   const serverState = await drizz.query.serverState.findFirst();
   if (serverState === undefined) {
     throw new Error('Server state not found.');
   }
-  const { instanceId } = serverState;
-  return instanceId;
-}
 
-const instanceActorUsername = 'merchant';
+  const { instanceId, publicKey } = serverState;
 
-export async function getInstanceActor() {
-  const instanceId = await getInstanceActorId();
-  const actor = await getActorFromId(
-    instanceId,
+  return getActorFromId(
+    { id: instanceId, publicKey },
     'Application',
     instanceActorUsername,
   );
-  return actor;
 }

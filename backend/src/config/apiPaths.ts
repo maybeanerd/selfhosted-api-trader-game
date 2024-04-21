@@ -8,3 +8,5 @@ export const crossroadsTreatyPath =
 
 export const crossroadsEventBasePath = crossroadsBasePath + '/event';
 export const crossroadsEventPath = pathVersionPrefix + crossroadsEventBasePath;
+
+export const crossroadsActivityPubBasePath = crossroadsBasePath + '/ap';

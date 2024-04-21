@@ -30,3 +30,5 @@ export function createNote(
 
   return post;
 }
+
+// TODO save and get from DB
