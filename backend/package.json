@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.0.80",
+  "version": "0.0.81",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@9.0.4",
@@ -41,7 +41,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
     "dotenv": "16.4.5",
-    "drizzle-orm": "0.30.8",
+    "drizzle-orm": "0.30.9",
     "drizzle-zod": "0.5.1",
     "pg": "8.11.5",
     "reflect-metadata": "0.2.2",
