@@ -1,4 +1,4 @@
-import { actors } from '@/modules/crossroads/activitypub/actor';
+import { ActivityPubActor } from '@/modules/crossroads/activitypub/actor';
 import { getBaseUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
 import type { APActor } from 'activitypub-types';
 
@@ -36,6 +36,8 @@ export function findActorBySubject(
   if (!actorName) {
     return null;
   }
+
+  const actors: Array<ActivityPubActor> = [];
 
   const foundActor = actors.find((actor) => {
     if (actor.id === undefined) {

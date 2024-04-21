@@ -15,16 +15,9 @@ export type ActivityPubActor = APRoot<APActor> & {
   };
 };
 
-export const instanceActor: APActor = {
-  type: 'Person',
-  id: getActorUrl('instanceActor').toString(),
-  summary: 'instanceActor',
-  inbox: 'https://actor2.example.org/inbox',
-  outbox: 'https://actor2.example.org/outbox',
-};
-
-export async function getActorFromId(
+async function getActorFromId(
   id: string,
+  type: 'Application' | 'Person' = 'Person',
   username?: string,
 ): Promise<ActivityPubActor> {
   const serverState = await drizz.query.serverState.findFirst();
@@ -43,7 +36,7 @@ export async function getActorFromId(
     ],
 
     id: actorId,
-    type: 'Person',
+    type,
     preferredUsername: username ?? id,
     inbox: getInboxUrl().toString(),
     outbox: getOutboxUrl().toString(),
@@ -55,10 +48,23 @@ export async function getActorFromId(
     },
   };
 }
-export const actors: Array<APActor> = [instanceActor];
+async function getInstanceActorId(): Promise<string> {
+  const serverState = await drizz.query.serverState.findFirst();
+  if (serverState === undefined) {
+    throw new Error('Server state not found.');
+  }
+  const { instanceId } = serverState;
+  return instanceId;
+}
 
-const realInstanceActor = getActorFromId('realInstanceActor');
+const instanceActorUsername = 'merchant';
 
-realInstanceActor.then((actor) => {
-  actors.push(actor);
-});
+export async function getInstanceActor() {
+  const instanceId = await getInstanceActorId();
+  const actor = await getActorFromId(
+    instanceId,
+    'Application',
+    instanceActorUsername,
+  );
+  return actor;
+}
