@@ -7,12 +7,14 @@ import {
 import type { APActor, APRoot } from 'activitypub-types';
 import { drizz } from 'db';
 
+export type PublicKeyObject = {
+  id: string;
+  owner: string;
+  publicKeyPem: string;
+};
+
 export type ActivityPubActor = APRoot<APActor> & {
-  publicKey: {
-    id: string;
-    owner: string;
-    publicKeyPem: string;
-  };
+  publicKey: PublicKeyObject;
 };
 
 export async function getActorFromId(
@@ -39,6 +41,23 @@ export async function getActorFromId(
       owner: actorId,
       publicKeyPem: publicKey,
     },
+  };
+}
+
+export async function getPublicKeyOfActor(
+  id: string,
+): Promise<PublicKeyObject> {
+  const serverState = await drizz.query.serverState.findFirst();
+  if (serverState === undefined) {
+    throw new Error('Server state not found.');
+  }
+
+  const { publicKey } = serverState;
+
+  return {
+    id: getActorPublicKeyUrl(id).toString(),
+    owner: getActorUrl(id).toString(),
+    publicKeyPem: publicKey,
   };
 }
 

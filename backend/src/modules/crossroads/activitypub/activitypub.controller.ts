@@ -8,7 +8,11 @@ import {
 import { ActivityPubService } from './activityPub.service';
 
 import { crossroadsActivityPubBasePath } from '@/config/apiPaths';
-import { ActivityPubActor } from '@/modules/crossroads/activitypub/actor';
+import {
+  ActivityPubActor,
+  PublicKeyObject,
+  getPublicKeyOfActor,
+} from '@/modules/crossroads/activitypub/actor';
 import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
 
 // TODO
@@ -26,5 +30,13 @@ export class ActivityPubController {
       throw new HttpException('Actor not found', HttpStatus.NOT_FOUND);
     }
     return actor;
+  }
+
+  @Get('/actors/:id/publicKey')
+  async getActorPublicKeyById(
+    @Param('id') id: string,
+  ): Promise<PublicKeyObject> {
+    const publicKey = await getPublicKeyOfActor(id);
+    return publicKey;
   }
 }
