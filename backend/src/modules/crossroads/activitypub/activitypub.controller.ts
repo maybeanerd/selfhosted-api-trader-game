@@ -5,7 +5,7 @@ import {
   HttpStatus,
   Param,
 } from '@nestjs/common';
-import { ActivityPubService } from './activitypub.service';
+import { ActivityPubService } from './activityPub.service';
 
 import { crossroadsActivityPubBasePath } from '@/config/apiPaths';
 import { ActivityPubActor } from '@/modules/crossroads/activitypub/actor';
@@ -16,8 +16,9 @@ import { ActivityPubActor } from '@/modules/crossroads/activitypub/actor';
 export class ActivityPubController {
   constructor(private readonly activityPubService: ActivityPubService) {}
 
+  // TODO DTOs
+
   @Get('/actors/:id')
-  // TODO validate param?
   async getActorById(@Param('id') id: string): Promise<ActivityPubActor> {
     const actor = await this.activityPubService.findActorById(id);
     if (!actor) {
