@@ -1,11 +1,10 @@
 FROM node:20.12.2
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
-
-# Intall dependencies
 COPY ["package.json", ".npmrc", "./"]
+# Install pnpm
+RUN corepack enable pnpm
+# Intall dependencies
 RUN pnpm i
 
 # Build
