@@ -151,8 +151,8 @@ importers:
         specifier: latest
         version: 1.2.0(@unocss/reset@0.58.6)(axios@1.6.8)(floating-vue@5.2.2(@nuxt/kit@3.11.2(rollup@4.14.0))(vue@3.4.21(typescript@5.4.5)))(fuse.js@6.6.2)(nuxt@3.11.2(@parcel/watcher@2.4.1)(@types/node@20.12.7)(@unocss/reset@0.58.6)(axios@1.6.8)(drizzle-orm@0.30.9(@types/pg@8.11.5)(pg@8.11.5))(encoding@0.1.13)(eslint@8.57.0)(floating-vue@5.2.2(@nuxt/kit@3.11.2(rollup@4.14.0))(vue@3.4.21(typescript@5.4.5)))(fuse.js@6.6.2)(ioredis@5.3.2)(optionator@0.9.3)(rollup@4.14.0)(terser@5.27.0)(typescript@5.4.5)(unocss@0.58.6(postcss@8.4.38)(rollup@4.14.0)(vite@5.2.8(@types/node@20.12.7)(terser@5.27.0)))(vite@5.2.8(@types/node@20.12.7)(terser@5.27.0)))(rollup@4.14.0)(unocss@0.58.6(postcss@8.4.38)(rollup@4.14.0)(vite@5.2.8(@types/node@20.12.7)(terser@5.27.0)))(vite@5.2.8(@types/node@20.12.7)(terser@5.27.0))(vue@3.4.21(typescript@5.4.5))
       '@nuxt/image':
-        specifier: 1.5.0
-        version: 1.5.0(ioredis@5.3.2)(rollup@4.14.0)
+        specifier: 1.6.0
+        version: 1.6.0(ioredis@5.3.2)(rollup@4.14.0)
       '@nuxt/ui':
         specifier: 2.15.2
         version: 2.15.2(axios@1.6.8)(focus-trap@7.5.4)(nuxt@3.11.2(@parcel/watcher@2.4.1)(@types/node@20.12.7)(@unocss/reset@0.58.6)(axios@1.6.8)(drizzle-orm@0.30.9(@types/pg@8.11.5)(pg@8.11.5))(encoding@0.1.13)(eslint@8.57.0)(floating-vue@5.2.2(@nuxt/kit@3.11.2(rollup@4.14.0))(vue@3.4.21(typescript@5.4.5)))(fuse.js@6.6.2)(ioredis@5.3.2)(optionator@0.9.3)(rollup@4.14.0)(terser@5.27.0)(typescript@5.4.5)(unocss@0.58.6(postcss@8.4.38)(rollup@4.14.0)(vite@5.2.8(@types/node@20.12.7)(terser@5.27.0)))(vite@5.2.8(@types/node@20.12.7)(terser@5.27.0)))(rollup@4.14.0)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))(vite@5.2.8(@types/node@20.12.7)(terser@5.27.0))(vue@3.4.21(typescript@5.4.5))
@@ -1837,8 +1837,8 @@ packages:
       nuxt: ^3.9.0
       vite: '*'
 
-  '@nuxt/image@1.5.0':
-    resolution: {integrity: sha512-k1QvuGb3GCkpy35t8lpYjOjCDMajIIZ+vKw2XgRg89WlLDlpMNRPNBpSCn/9ixuly1LyjB4k5vggRJ2RxWVvsw==}
+  '@nuxt/image@1.6.0':
+    resolution: {integrity: sha512-rgi7u6v/Dz/Ye87ym5Yg6nJtyDZgqog3G4k1AH7h5ug76JxiM727up5wpWb1AhHFb6vsW2ttteA6mPwwRyuENQ==}
     engines: {node: ^14.16.0 || >=16.11.0}
 
   '@nuxt/kit@3.10.3':
@@ -3553,9 +3553,6 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
-
-  cookie-es@1.0.0:
-    resolution: {integrity: sha512-mWYvfOLrfEc996hlKcdABeIiPHUPC6DM2QYZdGGOvhOTbA3tjm2eBwqlJpoFdjC89NI4Qt6h0Pu06Mp+1Pj5OQ==}
 
   cookie-es@1.1.0:
     resolution: {integrity: sha512-L2rLOcK0wzWSfSDA33YR+PUHDG10a8px7rUHKWbGLP4YfbsMed2KFUw5fczvDPbT98DDe3LEzviswl810apTEw==}
@@ -5876,9 +5873,6 @@ packages:
   node-emoji@1.11.0:
     resolution: {integrity: sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==}
 
-  node-fetch-native@1.6.2:
-    resolution: {integrity: sha512-69mtXOFZ6hSkYiXAVB5SqaRvrbITC/NPyqv7yuu/qw0nmgPyYbIMYYNIDhNtwPrzk0ptrimrLz/hhjvm4w5Z+w==}
-
   node-fetch-native@1.6.4:
     resolution: {integrity: sha512-IhOigYzAKHd244OC0JIMIUrjzctirCmPkaIfhDeGcEETWof5zKYUW7e7MYvChGWh/4CJeXEgsRyGzuF334rOOQ==}
 
@@ -6653,9 +6647,6 @@ packages:
 
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
-
-  radix3@1.1.1:
-    resolution: {integrity: sha512-yUUd5VTiFtcMEx0qFUxGAv5gbMc1un4RvEO1JZdP7ZUl/RHygZK6PknIKntmQRZxnMY3ZXD2ISaw1ij8GYW1yg==}
 
   radix3@1.1.2:
     resolution: {integrity: sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==}
@@ -10037,9 +10028,9 @@ snapshots:
       - utf-8-validate
       - vue
 
-  '@nuxt/image@1.5.0(ioredis@5.3.2)(rollup@4.14.0)':
+  '@nuxt/image@1.6.0(ioredis@5.3.2)(rollup@4.14.0)':
     dependencies:
-      '@nuxt/kit': 3.11.1(rollup@4.14.0)
+      '@nuxt/kit': 3.11.2(rollup@4.14.0)
       consola: 3.2.3
       defu: 6.1.4
       h3: 1.11.1
@@ -10085,7 +10076,7 @@ snapshots:
       pkg-types: 1.0.3
       scule: 1.3.0
       semver: 7.6.0
-      ufo: 1.5.2
+      ufo: 1.5.3
       unctx: 2.3.1
       unimport: 3.7.1(rollup@4.14.0)
       untyped: 1.4.2
@@ -12334,8 +12325,6 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cookie-es@1.0.0: {}
-
   cookie-es@1.1.0: {}
 
   cookie@0.6.0: {}
@@ -13800,13 +13789,13 @@ snapshots:
 
   h3@1.11.1:
     dependencies:
-      cookie-es: 1.0.0
+      cookie-es: 1.1.0
       crossws: 0.2.4
       defu: 6.1.4
       destr: 2.0.3
       iron-webcrypto: 1.0.0
       ohash: 1.1.3
-      radix3: 1.1.1
+      radix3: 1.1.2
       ufo: 1.5.3
       uncrypto: 0.1.3
       unenv: 1.9.0
@@ -14042,7 +14031,7 @@ snapshots:
       h3: 1.11.1
       image-meta: 0.2.0
       listhen: 1.7.2
-      ofetch: 1.3.3
+      ofetch: 1.3.4
       pathe: 1.1.2
       sharp: 0.32.6
       svgo: 3.2.0
@@ -15208,8 +15197,6 @@ snapshots:
     dependencies:
       lodash: 4.17.21
 
-  node-fetch-native@1.6.2: {}
-
   node-fetch-native@1.6.4: {}
 
   node-fetch@2.6.12(encoding@0.1.13):
@@ -16117,8 +16104,6 @@ snapshots:
   queue-tick@1.0.1: {}
 
   quick-format-unescaped@4.0.4: {}
-
-  radix3@1.1.1: {}
 
   radix3@1.1.2: {}
 
@@ -17212,7 +17197,7 @@ snapshots:
       consola: 3.2.3
       defu: 6.1.4
       mime: 3.0.0
-      node-fetch-native: 1.6.2
+      node-fetch-native: 1.6.4
       pathe: 1.1.2
 
   unhead@1.9.4:
