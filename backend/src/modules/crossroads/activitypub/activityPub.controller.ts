@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  Post,
 } from '@nestjs/common';
 import { ActivityPubService } from './activityPub.service';
 
@@ -38,5 +39,31 @@ export class ActivityPubController {
   ): Promise<PublicKeyObject> {
     const publicKey = await getPublicKeyOfActor(id);
     return publicKey;
+  }
+
+  @Get('/notes/:id')
+  async getNoteById(@Param('id') id: string): Promise<unknown> {
+    console.log('getNoteById', id);
+    // TODO
+    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @Get('/activities/:id')
+  async getActivityById(@Param('id') id: string): Promise<unknown> {
+    console.log('getActivityById', id);
+    // TODO
+    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @Get('/outbox')
+  async getOutbox(): Promise<unknown> {
+    // TODO
+    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @Post('/inbox')
+  async postToInbox(): Promise<unknown> {
+    // TODO
+    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
   }
 }
