@@ -1,0 +1,382 @@
+{
+  "id": "5fb1a1cb-7d67-443f-bcf4-da1eabba531c",
+  "prevId": "1299fde7-6922-49f8-9655-f616f5de997e",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "activityPubActivity": {
+      "name": "activityPubActivity",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "receivedOn": {
+          "name": "receivedOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "activityPubActivityType",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "actor": {
+          "name": "actor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "object": {
+          "name": "object",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "activityPubActivity_object_activityPubObject_id_fk": {
+          "name": "activityPubActivity_object_activityPubObject_id_fk",
+          "tableFrom": "activityPubActivity",
+          "tableTo": "activityPubObject",
+          "columnsFrom": [
+            "object"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "activityPubObject": {
+      "name": "activityPubObject",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "receivedOn": {
+          "name": "receivedOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "activityPubObjectType",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "published": {
+          "name": "published",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attributedTo": {
+          "name": "attributedTo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inReplyTo": {
+          "name": "inReplyTo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "to": {
+          "name": "to",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'https://www.w3.org/ns/activitystreams#Public'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "resource": {
+      "name": "resource",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "ownerId": {
+          "name": "ownerId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "upgradeLevel": {
+          "name": "upgradeLevel",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "resourceType",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "resource_ownerId_type_unique": {
+          "name": "resource_ownerId_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ownerId",
+            "type"
+          ]
+        }
+      }
+    },
+    "serverState": {
+      "name": "serverState",
+      "schema": "",
+      "columns": {
+        "instanceId": {
+          "name": "instanceId",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "privateKey": {
+          "name": "privateKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "publicKey": {
+          "name": "publicKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "storedEvent": {
+      "name": "storedEvent",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "createdOn": {
+          "name": "createdOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "receivedOn": {
+          "name": "receivedOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "remoteInstanceId": {
+          "name": "remoteInstanceId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "storedEventType",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "storedTreaty": {
+      "name": "storedTreaty",
+      "schema": "",
+      "columns": {
+        "instanceId": {
+          "name": "instanceId",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "instanceBaseUrl": {
+          "name": "instanceBaseUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "treatyStatus",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdOn": {
+          "name": "createdOn",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "storedTreaty_instanceBaseUrl_unique": {
+          "name": "storedTreaty_instanceBaseUrl_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "instanceBaseUrl"
+          ]
+        }
+      }
+    },
+    "trade": {
+      "name": "trade",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "creatorId": {
+          "name": "creatorId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "offeredResources": {
+          "name": "offeredResources",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "requestedResources": {
+          "name": "requestedResources",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "remoteInstanceId": {
+          "name": "remoteInstanceId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "activityPubActivityType": {
+      "name": "activityPubActivityType",
+      "values": {
+        "Create": "Create",
+        "Update": "Update",
+        "Delete": "Delete",
+        "Follow": "Follow",
+        "Like": "Like"
+      }
+    },
+    "activityPubObjectType": {
+      "name": "activityPubObjectType",
+      "values": {
+        "Note": "Note"
+      }
+    },
+    "resourceType": {
+      "name": "resourceType",
+      "values": {
+        "stone": "stone",
+        "wood": "wood",
+        "iron": "iron",
+        "gold": "gold",
+        "diamond": "diamond"
+      }
+    },
+    "storedEventType": {
+      "name": "storedEventType",
+      "values": {
+        "TradeOfferCreated": "TradeOfferCreated",
+        "TradeOfferAccepted": "TradeOfferAccepted",
+        "TradeOfferRemoved": "TradeOfferRemoved"
+      }
+    },
+    "treatyStatus": {
+      "name": "treatyStatus",
+      "values": {
+        "requested": "requested",
+        "denied": "denied",
+        "signed": "signed"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

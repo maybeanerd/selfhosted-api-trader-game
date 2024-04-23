@@ -22,3 +22,15 @@ export {
   NewStoredTreaty,
 } from 'db/schemas/Treaty.schema';
 export { trade, Trade, NewTrade } from 'db/schemas/Trade.schema';
+export {
+  activityPubActivity,
+  activityPubActivityType,
+  ActivityPubActivity,
+  NewActivityPubActivity,
+} from 'db/schemas/ActivityPubActivity.schema';
+export {
+  activityPubObject,
+  activityPubObjectType,
+  ActivityPubObject,
+  NewActivityPubObject,
+} from 'db/schemas/ActivityPubObject.schema';

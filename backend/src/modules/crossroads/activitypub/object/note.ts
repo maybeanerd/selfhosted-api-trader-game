@@ -9,6 +9,10 @@ function generateNoteId(): string {
   return url.toString();
 }
 
+export enum SupportedObjectType {
+  'Note' = 'Note',
+}
+
 export function createNote(
   actorId: string,
   content: string,
@@ -20,7 +24,7 @@ export function createNote(
 ): APRoot<APNote> {
   const post: APRoot<APNote> = {
     id: generateNoteId(),
-    type: 'Note',
+    type: SupportedObjectType.Note,
     published: new Date().toISOString(),
     attributedTo: actorId,
     content,

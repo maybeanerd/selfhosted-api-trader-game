@@ -17,7 +17,13 @@ function generateActivityId(): string {
   return url.toString();
 }
 
-type SupportedActivityType = 'Create' | 'Update' | 'Delete' | 'Follow' | 'Like';
+export enum SupportedActivityType {
+  'Create' = 'Create',
+  'Update' = 'Update',
+  'Delete' = 'Delete',
+  'Follow' = 'Follow',
+  'Like' = 'Like',
+}
 
 type SupportedActivity = APRoot<
 APCreate | APUpdate | APDelete | APFollow | APLike
