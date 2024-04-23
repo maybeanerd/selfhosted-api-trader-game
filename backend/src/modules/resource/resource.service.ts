@@ -3,7 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { Resource, resource } from 'db/schema';
-import { userIdForTestingResourceGeneration } from '@/modules/resource/utils/testUser';
+import { getUserId } from '@/modules/resource/utils/testUser';
 import { type DbTransaction, drizz } from 'db';
 import { and, eq, gte } from 'drizzle-orm';
 
@@ -43,6 +43,8 @@ export class ResourceService {
     );
 
     console.log(resources);
+
+    const userIdForTestingResourceGeneration = await getUserId();
 
     // TODO remove this temporary solution to creating some initial resource growth
     const stone = await this.getStatisticOfResource(

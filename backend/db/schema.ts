@@ -34,3 +34,4 @@ export {
   ActivityPubObject,
   NewActivityPubObject,
 } from 'db/schemas/ActivityPubObject.schema';
+export { user, User, NewUser } from 'db/schemas/User.schema';
