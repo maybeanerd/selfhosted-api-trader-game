@@ -16,8 +16,6 @@ import {
 } from '@/modules/crossroads/activitypub/actor';
 import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
 
-// TODO
-
 @Controller({ path: crossroadsActivityPubBasePath, version: apiVersion })
 export class ActivityPubController {
   constructor(private readonly activityPubService: ActivityPubService) {}
@@ -43,16 +41,20 @@ export class ActivityPubController {
 
   @Get('/notes/:id')
   async getNoteById(@Param('id') id: string): Promise<unknown> {
-    console.log('getNoteById', id);
-    // TODO
-    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+    const note = await this.activityPubService.findObjectById(id);
+    if (!note) {
+      throw new HttpException('Note not found', HttpStatus.NOT_FOUND);
+    }
+    return note;
   }
 
   @Get('/activities/:id')
   async getActivityById(@Param('id') id: string): Promise<unknown> {
-    console.log('getActivityById', id);
-    // TODO
-    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+    const activity = await this.activityPubService.findActivityById(id);
+    if (!activity) {
+      throw new HttpException('Activity not found', HttpStatus.NOT_FOUND);
+    }
+    return activity;
   }
 
   @Get('/outbox')

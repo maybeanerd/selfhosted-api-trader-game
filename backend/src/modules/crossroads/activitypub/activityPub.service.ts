@@ -10,6 +10,34 @@ import {
   getUsernameFromWebfingerSubject,
   mapActorToWebfingerResponse,
 } from '@/modules/crossroads/activitypub/webfinger';
+import type { APActivity, APObject, APRoot } from 'activitypub-types';
+import { drizz } from 'db';
+import { eq } from 'drizzle-orm';
+import { ActivityPubActivity, ActivityPubObject } from 'db/schema';
+
+function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
+  return {
+    id: object.id,
+    type: object.type,
+    published: object.published,
+    attributedTo: object.attributedTo,
+    content: object.content,
+    inReplyTo: object.inReplyTo ?? undefined,
+    to: object.to,
+  };
+}
+
+function mapActivityPubActivityToDto(
+  activity: ActivityPubActivity,
+): APRoot<APActivity> {
+  return {
+    '@context': 'https://www.w3.org/ns/activitystreams',
+    id: activity.id,
+    type: activity.type,
+    actor: activity.actor,
+    object: activity.object,
+  };
+}
 
 @Injectable()
 export class ActivityPubService {
@@ -37,5 +65,29 @@ export class ActivityPubService {
 
     const { actor } = await getInstanceActor();
     return mapActorToWebfingerResponse(actor);
+  }
+
+  async findObjectById(id: string): Promise<APObject | null> {
+    const apObject = await drizz.query.activityPubObject.findFirst({
+      where: (o) => eq(o.id, id),
+    });
+
+    if (apObject === undefined) {
+      return null;
+    }
+
+    return mapActivityPubObjectToDto(apObject);
+  }
+
+  async findActivityById(id: string): Promise<APRoot<APActivity> | null> {
+    const apActivity = await drizz.query.activityPubActivity.findFirst({
+      where: (activity) => eq(activity.id, id),
+    });
+
+    if (apActivity === undefined) {
+      return null;
+    }
+
+    return mapActivityPubActivityToDto(apActivity);
   }
 }
