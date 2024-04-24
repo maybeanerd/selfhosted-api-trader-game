@@ -1,13 +1,5 @@
 import { getActivityUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
-import type {
-  APCreate,
-  APDelete,
-  APFollow,
-  APLike,
-  APObject,
-  APRoot,
-  APUpdate,
-} from 'activitypub-types';
+import type { APObject, APRoot } from 'activitypub-types';
 import { randomUUID } from 'crypto';
 
 function generateActivityId(): string {
@@ -25,16 +17,24 @@ export enum SupportedActivityType {
   'Like' = 'Like',
 }
 
-type SupportedActivity = APRoot<
-APCreate | APUpdate | APDelete | APFollow | APLike
->;
+/* type SupportedActivity = APRoot<
+  APCreate | APUpdate | APDelete | APFollow | APLike
+>; */
+
+type ActivityPubActivity = {
+  '@context': 'https://www.w3.org/ns/activitystreams';
+  id: string;
+  type: SupportedActivityType;
+  actor: string;
+  object: APObject & { id: string };
+};
 
 export function createActivity<Type extends SupportedActivityType>(
   actorId: string,
   activityType: Type,
-  object: APRoot<APObject>,
-): SupportedActivity {
-  const activity: SupportedActivity = {
+  object: APRoot<APObject> & { id: string },
+): ActivityPubActivity {
+  const activity: ActivityPubActivity = {
     '@context': 'https://www.w3.org/ns/activitystreams',
 
     id: generateActivityId(),
