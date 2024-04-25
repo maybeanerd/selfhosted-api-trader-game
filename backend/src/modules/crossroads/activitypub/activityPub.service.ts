@@ -12,7 +12,7 @@ import {
 } from '@/modules/crossroads/activitypub/webfinger';
 import type { APActivity, APObject, APRoot } from 'activitypub-types';
 import { drizz } from 'db';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import {
   ActivityPubActivity,
   ActivityPubObject,
@@ -136,12 +136,62 @@ export class ActivityPubService {
         type: createdActivity.type,
         actor: createdActivity.actor,
         object: createdActivity.object.id,
-        handled: true,
+        handled: true, // TODO mark as outgoing handler?
       };
 
       await transaction
         .insert(activityPubActivity)
         .values(newActivityPubActivity);
+    });
+  }
+
+  async updateNoteObject(
+    actorId: string,
+    objectId: string,
+    content: string,
+  ): Promise<boolean> {
+    return drizz.transaction(async (transaction) => {
+      const receivedOn = new Date();
+
+      const updatedActivityPubObject = {
+        content: content,
+      };
+
+      const updatedNotes = await transaction
+        .update(activityPubObject)
+        .set(updatedActivityPubObject)
+        .where(
+          and(
+            eq(activityPubObject.id, objectId),
+            eq(activityPubObject.attributedTo, actorId),
+          ),
+        )
+        .returning();
+
+      // Found no note to update, which most likely means the note does not belong to the actor
+      if (updatedNotes.length === 0) {
+        return false;
+      }
+
+      const createdActivity = createActivity(
+        actorId,
+        SupportedActivityType.Update,
+        { id: objectId },
+      );
+      const newActivityPubActivity: NewActivityPubActivity = {
+        id: createdActivity.id,
+        receivedOn,
+        type: createdActivity.type,
+        actor: createdActivity.actor,
+        object: createdActivity.object.id,
+        handled: true, // TODO mark as outgoing handler?
+      };
+
+      await transaction
+        .insert(activityPubActivity)
+        .values(newActivityPubActivity);
+
+      return true;
     });
   }
 
