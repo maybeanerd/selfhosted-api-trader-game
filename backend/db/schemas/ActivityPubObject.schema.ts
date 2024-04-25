@@ -1,4 +1,4 @@
-import { SupportedObjectType } from '@/modules/crossroads/activitypub/object/note';
+import { SupportedObjectType } from '@/modules/crossroads/activitypub/object/';
 import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const activityPubObjectType = pgEnum(

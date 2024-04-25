@@ -21,11 +21,13 @@ import {
   activityPubActivity,
   activityPubObject,
 } from 'db/schema';
-import { createNote } from '@/modules/crossroads/activitypub/object/note';
+import { SupportedObjectType } from '@/modules/crossroads/activitypub/object';
 import {
   SupportedActivityType,
   createActivity,
 } from '@/modules/crossroads/activitypub/activity';
+import { randomUUID } from 'crypto';
+import { getNoteUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -91,21 +93,25 @@ export class ActivityPubService {
     return mapActivityPubObjectToDto(apObject);
   }
 
-  async createObject(actorId: string, content: string): Promise<void> {
+  async createNoteObject(
+    actorId: string,
+    content: string,
+    inReplyTo?: string,
+  ): Promise<void> {
     await drizz.transaction(async (transaction) => {
       const receivedOn = new Date();
+      const internalId = randomUUID();
 
-      const { note, id } = createNote(actorId, content, {});
       const newActivityPubObject: NewActivityPubObject = {
-        id: note.id,
-        internalId: id, // TODO use this to create the trade offer? Or pass the id of the trade offer into here instead
-        type: note.type,
-        published: note.published,
+        id: getNoteUrl(internalId).toString(),
+        internalId: internalId, // TODO use this to create the trade offer? Or pass the id of the trade offer into here instead
+        type: SupportedObjectType.Note,
+        published: receivedOn,
         receivedOn,
-        attributedTo: note.attributedTo,
-        content: note.content,
-        inReplyTo: note.inReplyTo ?? undefined,
-        to: note.to,
+        attributedTo: actorId,
+        content: content,
+        inReplyTo: inReplyTo,
+        to: 'https://www.w3.org/ns/activitystreams#Public',
       };
 
       const createdObjects = await transaction
