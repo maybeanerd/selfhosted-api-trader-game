@@ -14,9 +14,7 @@ export const activityPubObject = pgTable('activityPubObject', {
   attributedTo: text('attributedTo').notNull(),
   content: text('content').notNull(),
   inReplyTo: text('inReplyTo'),
-  to: text('to')
-    .notNull()
-    .default('https://www.w3.org/ns/activitystreams#Public'),
+  to: text('to').notNull(),
   /**
    * If the object comes from this server it will have an internalId
    * which will be mapped to the id in the corresponding table (e.g. the trade)

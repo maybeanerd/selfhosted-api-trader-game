@@ -1,27 +1,21 @@
 import {
+  ActivityPubActorObject,
+  PublicKeyObject,
+  SupportedActorType,
+} from '@/modules/crossroads/activitypub/actor/types';
+import {
   getActorPublicKeyUrl,
   getActorUrl,
   getInboxUrl,
   getOutboxUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
-import type { APActor, APRoot } from 'activitypub-types';
 import { drizz } from 'db';
 
-export type PublicKeyObject = {
-  id: string;
-  owner: string;
-  publicKeyPem: string;
-};
-
-export type ActivityPubActor = APRoot<APActor> & {
-  publicKey: PublicKeyObject;
-};
-
-export async function getActorFromId(
+async function getActorFromId(
   { id, publicKey }: { id: string; publicKey: string },
-  type: 'Application' | 'Person' = 'Person',
+  type: SupportedActorType = SupportedActorType.Person,
   username?: string,
-): Promise<ActivityPubActor> {
+): Promise<ActivityPubActorObject> {
   const actorId = getActorUrl(id).toString();
 
   return {
@@ -73,7 +67,7 @@ export async function getInstanceActor() {
 
   const actor = await getActorFromId(
     { id: instanceId, publicKey },
-    'Application',
+    SupportedActorType.Application,
     instanceActorUsername,
   );
 

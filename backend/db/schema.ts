@@ -35,3 +35,9 @@ export {
   NewActivityPubObject,
 } from 'db/schemas/ActivityPubObject.schema';
 export { user, User, NewUser } from 'db/schemas/User.schema';
+export {
+  activityPubActor,
+  activityPubActorType,
+  ActivityPubActor,
+  NewActivityPubActor,
+} from 'db/schemas/ActivityPubActor.schema';

@@ -1,5 +1,4 @@
 import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
-import { activityPubObject } from 'db/schemas/ActivityPubObject.schema';
 import { pgEnum, pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 export const activityPubActivityType = pgEnum(
@@ -14,9 +13,7 @@ export const activityPubActivity = pgTable('activityPubActivity', {
     .$type<SupportedActivityType>()
     .notNull(),
   actor: text('actor').notNull(),
-  object: text('object')
-    .notNull()
-    .references(() => activityPubObject.id),
+  object: text('object').notNull(),
   /**
    * If the activity has been handled by the server.
    * By default everything is unhandled and workers need to pick it up first.

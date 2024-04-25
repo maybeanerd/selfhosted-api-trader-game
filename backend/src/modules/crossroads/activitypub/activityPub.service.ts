@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import {
-  ActivityPubActor,
   getInstanceActor,
   instanceActorUsername,
 } from '@/modules/crossroads/activitypub/actor';
+import type { ActivityPubActorObject } from '@/modules/crossroads/activitypub/actor/types';
 import {
   WebfingerResponse,
   WebfingerSubject,
@@ -61,7 +61,7 @@ export class ActivityPubService {
     private readonly tradeService: TradeService,
   ) {} */
 
-  async findActorById(id: string): Promise<ActivityPubActor | null> {
+  async findActorById(id: string): Promise<ActivityPubActorObject | null> {
     const { actor, internalId } = await getInstanceActor();
     if (internalId !== id) {
       return null;
