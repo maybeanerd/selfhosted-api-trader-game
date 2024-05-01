@@ -1,0 +1,1 @@
+ALTER TABLE "activityPubActivityQueue" ADD COLUMN "createdOn" timestamp DEFAULT now() NOT NULL;

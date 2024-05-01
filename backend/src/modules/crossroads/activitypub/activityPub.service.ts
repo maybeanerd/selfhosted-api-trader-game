@@ -12,7 +12,7 @@ import {
 } from '@/modules/crossroads/activitypub/webfinger';
 import type { APActivity, APObject, APRoot } from 'activitypub-types';
 import { drizz } from 'db';
-import { and, eq } from 'drizzle-orm';
+import { and, asc, eq } from 'drizzle-orm';
 import {
   ActivityPubActivity,
   ActivityPubObject,
@@ -72,6 +72,7 @@ export class ActivityPubService {
     const activitiesToProcess =
       await drizz.query.activityPubActivityQueue.findMany({
         where: (queue) => eq(queue.type, ActivityPubActivityQueueType.Incoming),
+        orderBy: (queue) => asc(queue.createdOn),
       });
 
     // TODO process the activities (e.g. create or update game resources like trades or treaties)
@@ -80,6 +81,7 @@ export class ActivityPubService {
     const activitiesToSend =
       await drizz.query.activityPubActivityQueue.findMany({
         where: (queue) => eq(queue.type, ActivityPubActivityQueueType.Outgoing),
+        orderBy: (queue) => asc(queue.createdOn),
       });
 
     // TODO send the activities to the appropriate actors
