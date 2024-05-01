@@ -19,6 +19,7 @@ import {
   NewActivityPubActivity,
   NewActivityPubObject,
   activityPubActivity,
+  activityPubActivityQueue,
   activityPubObject,
 } from 'db/schema';
 import { SupportedObjectType } from '@/modules/crossroads/activitypub/object';
@@ -28,6 +29,7 @@ import {
 } from '@/modules/crossroads/activitypub/activity';
 import { randomUUID } from 'crypto';
 import { getNoteUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
+import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -142,7 +144,10 @@ export class ActivityPubService {
         .insert(activityPubActivity)
         .values(newActivityPubActivity);
 
-      // TODO add to ActivityPubActivityQueue
+      await transaction.insert(activityPubActivityQueue).values({
+        id: newActivityPubActivity.id,
+        type: ActivityPubActivityQueueType.Outgoing,
+      });
     });
   }
 
@@ -191,7 +196,10 @@ export class ActivityPubService {
         .insert(activityPubActivity)
         .values(newActivityPubActivity);
 
-      // TODO add to ActivityPubActivityQueue
+      await transaction.insert(activityPubActivityQueue).values({
+        id: newActivityPubActivity.id,
+        type: ActivityPubActivityQueueType.Outgoing,
+      });
 
       return true;
     });

@@ -1,7 +1,7 @@
 import { activityPubActivity } from 'db/schema';
 import { pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
 
-enum ActivityPubActivityQueueType {
+export enum ActivityPubActivityQueueType {
   'Incoming' = 'Incoming',
   'Outgoing' = 'Outgoing',
 }
