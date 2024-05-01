@@ -1,5 +1,5 @@
 import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
-import { pgEnum, pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const activityPubActivityType = pgEnum(
   'activityPubActivityType',
@@ -14,11 +14,6 @@ export const activityPubActivity = pgTable('activityPubActivity', {
     .notNull(),
   actor: text('actor').notNull(),
   object: text('object').notNull(),
-  /**
-   * If the activity has been handled by the server.
-   * By default everything is unhandled and workers need to pick it up first.
-   */
-  handled: boolean('handled').default(false),
 });
 
 export type ActivityPubActivity = typeof activityPubActivity.$inferSelect;

@@ -136,12 +136,13 @@ export class ActivityPubService {
         type: createdActivity.type,
         actor: createdActivity.actor,
         object: createdActivity.object.id,
-        handled: true, // TODO mark as outgoing handler?
       };
 
       await transaction
         .insert(activityPubActivity)
         .values(newActivityPubActivity);
+
+      // TODO add to ActivityPubActivityQueue
     });
   }
 
@@ -184,12 +185,13 @@ export class ActivityPubService {
         type: createdActivity.type,
         actor: createdActivity.actor,
         object: createdActivity.object.id,
-        handled: true, // TODO mark as outgoing handler?
       };
 
       await transaction
         .insert(activityPubActivity)
         .values(newActivityPubActivity);
+
+      // TODO add to ActivityPubActivityQueue
 
       return true;
     });

@@ -29,6 +29,12 @@ export {
   NewActivityPubActivity,
 } from 'db/schemas/ActivityPubActivity.schema';
 export {
+  activityPubActivityQueue,
+  activityPubActivityQueueType,
+  ActivityPubActivityQueue,
+  NewActivityPubActivityQueue,
+} from 'db/schemas/ActivityPubActivityQueue.schema';
+export {
   activityPubObject,
   activityPubObjectType,
   ActivityPubObject,
