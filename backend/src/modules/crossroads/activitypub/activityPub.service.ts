@@ -30,6 +30,7 @@ import {
 import { randomUUID } from 'crypto';
 import { getNoteUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -62,6 +63,30 @@ export class ActivityPubService {
     private readonly httpService: HttpService,
     private readonly tradeService: TradeService,
   ) {} */
+
+  // TODO at some point consider real workers to take care of this. for now, a cron job is enough
+  @Cron(CronExpression.EVERY_MINUTE)
+  async handleCron() {
+    console.time('ap-cron');
+
+    const activitiesToProcess =
+      await drizz.query.activityPubActivityQueue.findMany({
+        where: (queue) => eq(queue.type, ActivityPubActivityQueueType.Incoming),
+      });
+
+    // TODO process the activities (e.g. create or update game resources like trades or treaties)
+    console.log('Activities to process:', activitiesToProcess);
+
+    const activitiesToSend =
+      await drizz.query.activityPubActivityQueue.findMany({
+        where: (queue) => eq(queue.type, ActivityPubActivityQueueType.Outgoing),
+      });
+
+    // TODO send the activities to the appropriate actors
+    console.log('Activities to send:', activitiesToSend);
+
+    console.timeEnd('ap-cron');
+  }
 
   async findActorById(id: string): Promise<ActivityPubActorObject | null> {
     const { actor, internalId } = await getInstanceActor();
