@@ -26,6 +26,7 @@ import { SupportedObjectType } from '@/modules/crossroads/activitypub/object';
 import {
   SupportedActivityType,
   createActivity,
+  isSupportedActivityType,
 } from '@/modules/crossroads/activitypub/activity';
 import { randomUUID } from 'crypto';
 import { getNoteUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
@@ -242,5 +243,64 @@ export class ActivityPubService {
     }
 
     return mapActivityPubActivityToDto(apActivity);
+  }
+
+  async receiveActivities(
+    activities: Array<APRoot<APActivity>>,
+  ): Promise<void> {
+    await drizz.transaction(async (transaction) => {
+      await Promise.all(
+        activities.map(async (activity) => {
+          const receivedOn = new Date();
+
+          const { id, type, actor, object } = activity;
+          if (!id || !type || !actor || !object) {
+            console.info(
+              'Got unsupported activity. Ignoring. ->\n',
+              JSON.stringify(activity, null, 2),
+            );
+            return;
+          }
+
+          if (Array.isArray(type) || !isSupportedActivityType(type)) {
+            console.info(
+              'Got unsupported activity type. Ignoring. ->\n',
+              JSON.stringify(activity, null, 2),
+            );
+            return;
+          }
+
+          if (Array.isArray(actor)) {
+            console.info(
+              'Got multiple actors. Ignoring. ->\n',
+              JSON.stringify(activity, null, 2),
+            );
+            return;
+          }
+
+          // TODO handle actors only being an ID (fetch?) or object (use it)
+          // TODO handle multiple objects
+          // TODO handle objects only being an ID (fetch?) or object (use it)
+          // Figure out: do we want to fetch immediately, or just store the ID and then later when handling it, fetch the rest? might be nicer.
+
+          const newActivityPubActivity: NewActivityPubActivity = {
+            id,
+            receivedOn,
+            type,
+            actor,
+            object: object.id,
+          };
+
+          await transaction
+            .insert(activityPubActivity)
+            .values(newActivityPubActivity);
+
+          await transaction.insert(activityPubActivityQueue).values({
+            id: newActivityPubActivity.id,
+            type: ActivityPubActivityQueueType.Incoming,
+          });
+        }),
+      );
+    });
   }
 }

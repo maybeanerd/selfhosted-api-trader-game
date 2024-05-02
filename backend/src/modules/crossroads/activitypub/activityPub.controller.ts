@@ -58,13 +58,15 @@ export class ActivityPubController {
 
   @Get('/outbox')
   async getOutbox(): Promise<unknown> {
-    // TODO
+    // TODO?
     throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
   }
 
   @Post('/inbox')
   async postToInbox(): Promise<unknown> {
-    // TODO
+    // TODO get the activities from the request
+    await this.activityPubService.receiveActivities([]);
+    // TODO return something?
     throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
   }
 }
