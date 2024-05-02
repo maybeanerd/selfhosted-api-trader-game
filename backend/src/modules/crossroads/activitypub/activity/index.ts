@@ -17,6 +17,14 @@ export enum SupportedActivityType {
   'Like' = 'Like',
 }
 
+export function isSupportedActivityType(
+  type: string,
+): type is SupportedActivityType {
+  return Object.values(SupportedActivityType).includes(
+    type as SupportedActivityType,
+  );
+}
+
 /* type SupportedActivity = APRoot<
   APCreate | APUpdate | APDelete | APFollow | APLike
 >; */
