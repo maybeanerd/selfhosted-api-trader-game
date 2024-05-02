@@ -1,0 +1,1 @@
+ALTER TABLE "activityPubObject" DROP COLUMN IF EXISTS "receivedOn";

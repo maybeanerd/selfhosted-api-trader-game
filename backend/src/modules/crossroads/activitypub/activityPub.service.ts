@@ -3,7 +3,7 @@ import {
   getInstanceActor,
   instanceActorUsername,
 } from '@/modules/crossroads/activitypub/actor';
-import type { ActivityPubActorObject } from '@/modules/crossroads/activitypub/actor/types';
+import { type ActivityPubActorObject } from '@/modules/crossroads/activitypub/actor/types';
 import {
   WebfingerResponse,
   WebfingerSubject,
@@ -17,21 +17,23 @@ import {
   ActivityPubActivity,
   ActivityPubObject,
   NewActivityPubActivity,
+  NewActivityPubActor,
   NewActivityPubObject,
   activityPubActivity,
   activityPubActivityQueue,
+  activityPubActor,
   activityPubObject,
 } from 'db/schema';
 import { SupportedObjectType } from '@/modules/crossroads/activitypub/object';
 import {
   SupportedActivityType,
   createActivity,
-  isSupportedActivityType,
 } from '@/modules/crossroads/activitypub/activity';
 import { randomUUID } from 'crypto';
 import { getNoteUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { inboxActivity } from '@/modules/crossroads/activitypub/dto/Inbox.dto';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -137,7 +139,6 @@ export class ActivityPubService {
         internalId: internalId, // TODO use this to create the trade offer? Or pass the id of the trade offer into here instead
         type: SupportedObjectType.Note,
         published: receivedOn,
-        receivedOn,
         attributedTo: actorId,
         content: content,
         inReplyTo: inReplyTo,
@@ -253,8 +254,8 @@ export class ActivityPubService {
         activities.map(async (activity) => {
           const receivedOn = new Date();
 
-          const { id, type, actor, object } = activity;
-          if (!id || !type || !actor || !object) {
+          const validation = await inboxActivity.safeParseAsync(activity);
+          if (validation.success === false) {
             console.info(
               'Got unsupported activity. Ignoring. ->\n',
               JSON.stringify(activity, null, 2),
@@ -262,33 +263,20 @@ export class ActivityPubService {
             return;
           }
 
-          if (Array.isArray(type) || !isSupportedActivityType(type)) {
-            console.info(
-              'Got unsupported activity type. Ignoring. ->\n',
-              JSON.stringify(activity, null, 2),
-            );
-            return;
-          }
-
-          if (Array.isArray(actor)) {
-            console.info(
-              'Got multiple actors. Ignoring. ->\n',
-              JSON.stringify(activity, null, 2),
-            );
-            return;
-          }
-
-          // TODO handle actors only being an ID (fetch?) or object (use it)
-          // TODO handle multiple objects
-          // TODO handle objects only being an ID (fetch?) or object (use it)
-          // Figure out: do we want to fetch immediately, or just store the ID and then later when handling it, fetch the rest? might be nicer.
+          const validatedActivity = validation.data;
 
           const newActivityPubActivity: NewActivityPubActivity = {
-            id,
+            id: validatedActivity.id,
             receivedOn,
-            type,
-            actor,
-            object: object.id,
+            type: validatedActivity.type,
+            actor:
+              typeof validatedActivity.actor === 'string'
+                ? validatedActivity.actor
+                : validatedActivity.actor.id,
+            object:
+              typeof validatedActivity.object === 'string'
+                ? validatedActivity.object
+                : validatedActivity.object.id,
           };
 
           await transaction
@@ -299,6 +287,54 @@ export class ActivityPubService {
             id: newActivityPubActivity.id,
             type: ActivityPubActivityQueueType.Incoming,
           });
+
+          const actorObject =
+            typeof validatedActivity.actor === 'string'
+              ? null
+              : validatedActivity.actor;
+
+          // If we get more than just an actorId and it includes the publicKey, we could store it
+          // TODO figure out if we really should. maybe we need to validate the signature of the activity first
+          // by going against the actor's publicKey
+          if (
+            actorObject !== null &&
+            typeof actorObject.publicKey !== 'string'
+          ) {
+            const newActor: NewActivityPubActor = {
+              id: actorObject.id,
+              type: actorObject.type,
+              preferredUsername: actorObject.preferredUsername,
+              inbox: actorObject.inbox,
+              outbox: actorObject.outbox,
+              publicKeyId: actorObject.publicKey.id,
+              publicKeyPem: actorObject.publicKey.publicKeyPem,
+              // TODO calculate this based on context of the actor type. Does it include a game specific extension?
+              isGameServer: false,
+            };
+
+            await transaction.insert(activityPubActor).values(newActor);
+          }
+
+          // TODO handle objects only being an ID (fetch?) or object (use it)
+          if (typeof validatedActivity.object !== 'string') {
+            const newObject: NewActivityPubObject = {
+              id: validatedActivity.object.id,
+              internalId: validatedActivity.object.internalId,
+              type: validatedActivity.object.type,
+              published: new Date(validatedActivity.object.published),
+              attributedTo:
+                typeof validatedActivity.object.attributedTo === 'string'
+                  ? validatedActivity.object.attributedTo
+                  : validatedActivity.object.attributedTo.id,
+              content: validatedActivity.object.content,
+              inReplyTo:
+                typeof validatedActivity.object.inReplyTo === 'string'
+                  ? validatedActivity.object.inReplyTo
+                  : validatedActivity.object.inReplyTo?.id,
+              to: validatedActivity.object.to,
+            };
+            await transaction.insert(activityPubObject).values(newObject);
+          }
         }),
       );
     });
