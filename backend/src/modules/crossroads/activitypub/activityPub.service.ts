@@ -115,7 +115,7 @@ export class ActivityPubService {
 
   async findObjectById(id: string): Promise<APObject | null> {
     const apObject = await drizz.query.activityPubObject.findFirst({
-      where: (o) => eq(o.id, id),
+      where: (o) => eq(o.internalId, id),
     });
 
     if (apObject === undefined) {
