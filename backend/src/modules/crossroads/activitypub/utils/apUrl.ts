@@ -1,7 +1,9 @@
 import { crossroadsActivityPubBasePath } from '@/config/apiPaths';
+import { serverInfo } from '@/config/serverInfo';
 
-const baseUrl = 'http://localhost:8080'; // TODO get from env or request somehow
 export const apiVersion = '1';
+
+const { baseUrl } = serverInfo;
 
 const activityPubBaseUrl = `${baseUrl}/v${apiVersion}/${crossroadsActivityPubBasePath}`;
 

@@ -17,6 +17,8 @@ services:
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
       - DATABASE_HOST=database
+      # TODO this should be the same as the reverse proxy address, once we have it
+      - BASE_URL=http://localhost:8080
 
   frontend:
     build: ./frontend
