@@ -8,7 +8,6 @@ export const activityPubObjectType = pgEnum(
 
 export const activityPubObject = pgTable('activityPubObject', {
   id: text('id').primaryKey(),
-  receivedOn: timestamp('receivedOn').notNull(),
   type: activityPubObjectType('type').$type<SupportedObjectType>().notNull(),
   published: timestamp('published').notNull(),
   attributedTo: text('attributedTo').notNull(),

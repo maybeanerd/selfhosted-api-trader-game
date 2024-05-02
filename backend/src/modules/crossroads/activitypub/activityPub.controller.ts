@@ -64,7 +64,7 @@ export class ActivityPubController {
 
   @Post('/inbox')
   async postToInbox(): Promise<unknown> {
-    // TODO get the activities from the request
+    // TODO get the activities from the request AND validate them
     await this.activityPubService.receiveActivities([]);
     // TODO return something?
     throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
