@@ -315,7 +315,6 @@ export class ActivityPubService {
             await transaction.insert(activityPubActor).values(newActor);
           }
 
-          // TODO handle objects only being an ID (fetch?) or object (use it)
           if (typeof validatedActivity.object !== 'string') {
             const newObject: NewActivityPubObject = {
               id: validatedActivity.object.id,
