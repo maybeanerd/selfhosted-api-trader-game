@@ -1,5 +1,5 @@
 import { SupportedActorType } from '@/modules/crossroads/activitypub/actor/types';
-import { pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
+import { boolean, pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
 
 export const activityPubActorType = pgEnum(
   'activityPubActorType',
@@ -14,6 +14,7 @@ export const activityPubActor = pgTable('activityPubActor', {
   outbox: text('outbox').notNull(),
   publicKeyId: text('publicKeyId').notNull(),
   publicKeyPem: text('publicKeyPem').notNull(),
+  isGameServer: boolean('isGameServer').notNull(),
 });
 
 export type ActivityPubActor = typeof activityPubActor.$inferSelect;

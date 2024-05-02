@@ -1,0 +1,1 @@
+ALTER TABLE "activityPubActor" ADD COLUMN "isGameServer" boolean NOT NULL;
