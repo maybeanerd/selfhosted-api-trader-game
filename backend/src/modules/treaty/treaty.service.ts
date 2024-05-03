@@ -160,23 +160,24 @@ export class TreatyService {
   }
 
   async removeTreaty(sourceInstanceId: string): Promise<boolean> {
-    // TODO activitypub delete
-    const { rowCount: deletedTreaties } = await drizz
-      .delete(storedTreaty)
-      .where(eq(storedTreaty.instanceId, sourceInstanceId));
+    return drizz.transaction(async (transaction) => {
+      const existingTreaty = await transaction.query.storedTreaty.findFirst({
+        where: eq(storedTreaty.instanceId, sourceInstanceId),
+      });
 
-    if (deletedTreaties === null) {
-      return false;
-    }
+      if (existingTreaty === undefined) {
+        return false;
+      }
 
-    const successfullyDeleted = deletedTreaties > 0;
-    if (!successfullyDeleted) {
-      return false;
-    }
+      const { activityPubActorId } = existingTreaty;
 
-    // TODO activitypub unfollow, we need to get the actor id (pobably before deleting it.)
-    // await this.activityPubService.unfollowActor(sourceInstanceId);
+      await this.activityPubService.unfollowActor(activityPubActorId);
 
-    return true;
+      await transaction
+        .delete(storedTreaty)
+        .where(eq(storedTreaty.instanceId, sourceInstanceId));
+
+      return true;
+    });
   }
 }
