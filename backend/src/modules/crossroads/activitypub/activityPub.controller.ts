@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
@@ -20,7 +21,7 @@ import type { APActivity, APRoot } from 'activitypub-types';
 export class ActivityPubController {
   constructor(private readonly activityPubService: ActivityPubService) {}
 
-  // TODO DTOs
+  // TODO DTOs and validate them
 
   @Get('/actors/:id')
   async getActorById(@Param('id') id: string): Promise<ActivityPubActorObject> {
@@ -66,10 +67,7 @@ export class ActivityPubController {
   }
 
   @Post('/inbox')
-  async postToInbox(): Promise<unknown> {
-    // TODO get the activities from the request AND validate them
-    await this.activityPubService.handleInbox([]);
-    // TODO return something?
-    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+  async postToInbox(@Body() body: Array<APRoot<APActivity>>): Promise<void> {
+    await this.activityPubService.handleInbox(body);
   }
 }
