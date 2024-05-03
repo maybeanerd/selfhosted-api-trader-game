@@ -15,6 +15,7 @@ import { drizz } from 'db';
 import { and, asc, eq } from 'drizzle-orm';
 import {
   ActivityPubActivity,
+  ActivityPubActor,
   ActivityPubObject,
   NewActivityPubActivity,
   NewActivityPubActor,
@@ -33,7 +34,13 @@ import { randomUUID } from 'crypto';
 import { getNoteUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { inboxActivity } from '@/modules/crossroads/activitypub/dto/Inbox.dto';
+import {
+  inboxActivity,
+  activityPubActorDto,
+  publicKeyDto,
+} from '@/modules/crossroads/activitypub/dto/Inbox.dto';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -61,11 +68,12 @@ function mapActivityPubActivityToDto(
 
 @Injectable()
 export class ActivityPubService {
-  /* constructor(
-    private readonly treatyService: TreatyService,
+  constructor(
     private readonly httpService: HttpService,
-    private readonly tradeService: TradeService,
-  ) {} */
+    /* private readonly treatyService: TreatyService,
+    private readonly httpService: HttpService,
+    private readonly tradeService: TradeService, */
+  ) {}
 
   // TODO at some point consider real workers to take care of this. for now, a cron job is enough
   @Cron(CronExpression.EVERY_MINUTE)
@@ -91,6 +99,79 @@ export class ActivityPubService {
     console.log('Activities to send:', activitiesToSend);
 
     console.timeEnd('ap-cron');
+  }
+
+  /**
+   * Fetch actor data from their instance.
+   */
+  async getRemoteActor(actorId: string): Promise<NewActivityPubActor | null> {
+    try {
+      const url = new URL(actorId);
+      const remoteActor = (
+        await lastValueFrom(this.httpService.get(url.toString()))
+      ).data;
+      const validation = await activityPubActorDto.safeParseAsync(remoteActor);
+      if (validation.success === false) {
+        return null;
+      }
+
+      // TODO figure this out baesed on either actor context or game server API (server info)
+      const isGameServer = false;
+
+      const receivedActor = validation.data;
+
+      const receivedPublicKey = receivedActor.publicKey;
+
+      if (typeof receivedPublicKey === 'string') {
+        const publicKeyUrl = new URL(receivedPublicKey);
+        const publicKey = (
+          await lastValueFrom(this.httpService.get(publicKeyUrl.toString()))
+        ).data;
+
+        const validatePublicKey = await publicKeyDto.safeParseAsync(publicKey);
+        if (validatePublicKey.success === false) {
+          return null;
+        }
+
+        return {
+          ...receivedActor,
+          publicKeyId: validatePublicKey.data.id,
+          publicKeyPem: validatePublicKey.data.publicKeyPem,
+          isGameServer,
+        };
+      }
+
+      return {
+        ...receivedActor,
+        publicKeyId: receivedPublicKey.id,
+        publicKeyPem: receivedPublicKey.publicKeyPem,
+        isGameServer,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Ensure an actor exists in this instance, either loading the existing one or falling back to fetching them
+   */
+  async ensureRemoteActor(actorId: string): Promise<ActivityPubActor | null> {
+    const existingActor = await drizz.query.activityPubActor.findFirst({
+      where: (actor) => eq(actor.id, actorId),
+    });
+
+    if (existingActor !== undefined) {
+      return existingActor;
+    }
+
+    const remoteActor = await this.getRemoteActor(actorId);
+
+    if (remoteActor === null) {
+      return null;
+    }
+    await drizz.insert(activityPubActor).values(remoteActor);
+
+    return remoteActor;
   }
 
   async findActorById(id: string): Promise<ActivityPubActorObject | null> {
@@ -176,6 +257,7 @@ export class ActivityPubService {
       await transaction.insert(activityPubActivityQueue).values({
         id: newActivityPubActivity.id,
         type: ActivityPubActivityQueueType.Outgoing,
+        objectWasStored: true,
       });
     });
   }
@@ -228,6 +310,7 @@ export class ActivityPubService {
       await transaction.insert(activityPubActivityQueue).values({
         id: newActivityPubActivity.id,
         type: ActivityPubActivityQueueType.Outgoing,
+        objectWasStored: true,
       });
 
       return true;
@@ -293,45 +376,22 @@ export class ActivityPubService {
             object: objectId,
           };
 
+          const remoteActor = await this.ensureRemoteActor(actordId);
+          if (remoteActor === null) {
+            throw new Error('Failed to receive remote actor');
+          }
+
+          // TODO validate the original inbox request with the actor's public key
+
           await transaction
             .insert(activityPubActivity)
             .values(newActivityPubActivity);
 
-          await transaction.insert(activityPubActivityQueue).values({
-            id: newActivityPubActivity.id,
-            type: ActivityPubActivityQueueType.Incoming,
-          });
-
-          /**
-           * TODO: Never use actor from Incoming activity ( only it's ID)
-           * If it's a new actor, get it and it's Key to validate the request
-           * If it's known, validate with the stored key
-           */
-          const actorObject =
-            typeof validatedActivity.actor === 'string'
-              ? null
-              : validatedActivity.actor;
-
-          if (
-            actorObject !== null &&
-            typeof actorObject.publicKey !== 'string'
-          ) {
-            const newActor: NewActivityPubActor = {
-              id: actorObject.id,
-              type: actorObject.type,
-              preferredUsername: actorObject.preferredUsername,
-              inbox: actorObject.inbox,
-              outbox: actorObject.outbox,
-              publicKeyId: actorObject.publicKey.id,
-              publicKeyPem: actorObject.publicKey.publicKeyPem,
-              // TODO calculate this based on context of the actor type. Does it include a game specific extension?
-              isGameServer: false,
-            };
-
-            await transaction.insert(activityPubActor).values(newActor);
-          }
-
+          // If the activity already includes the object it relates to,
+          // we don't need to fetch it later on and can immediately store it
+          let objectWasStored = false;
           if (typeof validatedActivity.object !== 'string') {
+            objectWasStored = true; // We can't use this value for the if-clause, since type narrowing won't work
             const newObject: NewActivityPubObject = {
               id: validatedActivity.object.id,
               internalId: validatedActivity.object.internalId,
@@ -350,6 +410,12 @@ export class ActivityPubService {
             };
             await transaction.insert(activityPubObject).values(newObject);
           }
+
+          await transaction.insert(activityPubActivityQueue).values({
+            id: newActivityPubActivity.id,
+            type: ActivityPubActivityQueueType.Incoming,
+            objectWasStored,
+          });
         }),
       );
     });

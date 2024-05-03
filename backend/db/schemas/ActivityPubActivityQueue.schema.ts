@@ -1,5 +1,5 @@
 import { activityPubActivity } from 'db/schema';
-import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export enum ActivityPubActivityQueueType {
   'Incoming' = 'Incoming',
@@ -18,6 +18,7 @@ export const activityPubActivityQueue = pgTable('activityPubActivityQueue', {
   type: activityPubActivityQueueType('type')
     .$type<ActivityPubActivityQueueType>()
     .notNull(),
+  objectWasStored: boolean('objectWasStored').notNull(),
   createdOn: timestamp('createdOn').notNull().defaultNow(),
 });
 

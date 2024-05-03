@@ -5,24 +5,22 @@ import { z } from 'zod';
 
 const activityPubId = z.string().url();
 
-const publicKey = activityPubId.or(
-  z.object({
-    id: activityPubId,
-    owner: activityPubId,
-    publicKeyPem: z.string(),
-  }),
-);
+export const publicKeyDto = z.object({
+  id: activityPubId,
+  owner: activityPubId,
+  publicKeyPem: z.string(),
+});
 
-export const inboxActivityActor = activityPubId.or(
-  z.object({
-    id: activityPubId,
-    type: z.nativeEnum(SupportedActorType),
-    preferredUsername: z.string().default('noname'),
-    inbox: z.string().url(),
-    outbox: z.string().url(),
-    publicKey: publicKey,
-  }),
-);
+export const activityPubActorDto = z.object({
+  id: activityPubId,
+  type: z.nativeEnum(SupportedActorType),
+  preferredUsername: z.string().default('noname'),
+  inbox: z.string().url(),
+  outbox: z.string().url(),
+  publicKey: activityPubId.or(publicKeyDto),
+});
+
+export const inboxActivityActor = activityPubId.or(activityPubActorDto);
 
 export const inboxActivityObject = activityPubId.or(
   z.object({

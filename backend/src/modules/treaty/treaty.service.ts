@@ -92,6 +92,8 @@ export class TreatyService {
   ownURL = 'http://7.22.217.133:8080'; // TODO get own URL
 
   async offerTreaty(instanceBaseUrl: string): Promise<TreatyDto | null> {
+    // TODO rework this. Instead of going against a treaty API,
+    // use AcitvityPub to get an actor from that url and follow it.
     const serverId = await this.ensureServerId();
 
     const body: ProposeTreatyDto = {

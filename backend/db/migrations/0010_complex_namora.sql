@@ -1,0 +1,1 @@
+ALTER TABLE "activityPubActivityQueue" ADD COLUMN "objectWasStored" boolean NOT NULL;

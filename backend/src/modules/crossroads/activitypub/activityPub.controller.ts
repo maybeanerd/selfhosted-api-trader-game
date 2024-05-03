@@ -14,7 +14,7 @@ import type {
   PublicKeyObject,
 } from '@/modules/crossroads/activitypub/actor/types';
 import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
-import { APActivity, APRoot } from 'activitypub-types';
+import type { APActivity, APRoot } from 'activitypub-types';
 
 @Controller({ path: crossroadsActivityPubBasePath, version: apiVersion })
 export class ActivityPubController {
