@@ -169,6 +169,14 @@ export class TreatyService {
       return false;
     }
 
-    return deletedTreaties > 0;
+    const successfullyDeleted = deletedTreaties > 0;
+    if (!successfullyDeleted) {
+      return false;
+    }
+
+    // TODO activitypub unfollow, we need to get the actor id (pobably before deleting it.)
+    // await this.activityPubService.unfollowActor(sourceInstanceId);
+
+    return true;
   }
 }
