@@ -108,7 +108,13 @@ export class ActivityPubService {
     try {
       const url = new URL(actorId);
       const remoteActor = (
-        await lastValueFrom(this.httpService.get(url.toString()))
+        await lastValueFrom(
+          this.httpService.get(url.toString(), {
+            headers: {
+              Accept: 'application/activity+json',
+            },
+          }),
+        )
       ).data;
       const validation = await activityPubActorDto.safeParseAsync(remoteActor);
       if (validation.success === false) {
@@ -125,7 +131,13 @@ export class ActivityPubService {
       if (typeof receivedPublicKey === 'string') {
         const publicKeyUrl = new URL(receivedPublicKey);
         const publicKey = (
-          await lastValueFrom(this.httpService.get(publicKeyUrl.toString()))
+          await lastValueFrom(
+            this.httpService.get(publicKeyUrl.toString(), {
+              headers: {
+                Accept: 'application/activity+json',
+              },
+            }),
+          )
         ).data;
 
         const validatePublicKey = await publicKeyDto.safeParseAsync(publicKey);
@@ -341,7 +353,7 @@ export class ActivityPubService {
     return activities.map(mapActivityPubActivityToDto);
   }
 
-  async handleInbox(activities: Array<APRoot<APActivity>>): Promise<void> {
+  async handleInbox(activities: Array<unknown>): Promise<void> {
     await drizz.transaction(async (transaction) => {
       await Promise.all(
         activities.map(async (activity) => {
@@ -352,6 +364,7 @@ export class ActivityPubService {
             console.info(
               'Got unsupported activity. Ignoring. ->\n',
               JSON.stringify(activity, null, 2),
+              validation.error,
             );
             return;
           }

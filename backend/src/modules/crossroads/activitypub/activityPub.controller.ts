@@ -16,6 +16,7 @@ import type {
 } from '@/modules/crossroads/activitypub/actor/types';
 import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
 import type { APActivity, APRoot } from 'activitypub-types';
+import { z } from 'zod';
 
 @Controller({ path: crossroadsActivityPubBasePath, version: apiVersion })
 export class ActivityPubController {
@@ -68,6 +69,12 @@ export class ActivityPubController {
 
   @Post('/inbox')
   async postToInbox(@Body() body: Array<APRoot<APActivity>>): Promise<void> {
-    await this.activityPubService.handleInbox(body);
+    try {
+      const validatedBody = await z.array(z.unknown()).parseAsync(body);
+      await this.activityPubService.handleInbox(validatedBody);
+    } catch (e: unknown) {
+      console.error(e);
+      throw new HttpException('Invalid Input', HttpStatus.BAD_REQUEST);
+    }
   }
 }

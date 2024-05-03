@@ -42,8 +42,6 @@ export class ResourceService {
       ),
     );
 
-    console.log(resources);
-
     const userIdForTestingResourceGeneration = await getUserId();
 
     // TODO remove this temporary solution to creating some initial resource growth
