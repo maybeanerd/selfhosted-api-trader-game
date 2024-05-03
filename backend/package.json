@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.0.88",
+  "version": "0.0.89",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@9.0.6",
@@ -48,7 +48,7 @@
     "pg": "8.11.5",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1",
-    "zod": "3.23.5"
+    "zod": "3.23.6"
   },
   "devDependencies": {
     "@fastify/static": "7.0.3",
