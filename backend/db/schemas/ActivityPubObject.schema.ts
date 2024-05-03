@@ -1,5 +1,12 @@
 import { SupportedObjectType } from '@/modules/crossroads/activitypub/object/';
-import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  jsonb,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 export const activityPubObjectType = pgEnum(
   'activityPubObjectType',
@@ -12,6 +19,7 @@ export const activityPubObject = pgTable('activityPubObject', {
   published: timestamp('published').notNull(),
   attributedTo: text('attributedTo').notNull(),
   content: text('content').notNull(),
+  gameContent: jsonb('gameContent').notNull(),
   inReplyTo: text('inReplyTo'),
   to: text('to').notNull(),
   /**

@@ -221,6 +221,7 @@ export class ActivityPubService {
   async createNoteObject(
     actorId: string,
     content: string,
+    gameContent: unknown = {}, // TODO define this type
     inReplyTo?: string,
   ): Promise<void> {
     await drizz.transaction(async (transaction) => {
@@ -234,6 +235,7 @@ export class ActivityPubService {
         published: receivedOn,
         attributedTo: actorId,
         content: content,
+        gameContent,
         inReplyTo: inReplyTo,
         to: 'https://www.w3.org/ns/activitystreams#Public',
       };
@@ -421,6 +423,7 @@ export class ActivityPubService {
                   ? validatedActivity.object.attributedTo
                   : validatedActivity.object.attributedTo.id,
               content: validatedActivity.object.content,
+              gameContent: validatedActivity.object.gameContent,
               inReplyTo:
                 typeof validatedActivity.object.inReplyTo === 'string'
                   ? validatedActivity.object.inReplyTo

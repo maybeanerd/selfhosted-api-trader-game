@@ -1,0 +1,1 @@
+ALTER TABLE "activityPubObject" ADD COLUMN "gameContent" jsonb NOT NULL;
