@@ -390,7 +390,13 @@ export class ActivityPubService {
           // If the activity already includes the object it relates to,
           // we don't need to fetch it later on and can immediately store it
           let objectWasStored = false;
-          if (typeof validatedActivity.object !== 'string') {
+
+          // We only store the object if it was manipulated. Otherwise we can just reference it.
+          if (
+            typeof validatedActivity.object !== 'string' &&
+            (validatedActivity.type === SupportedActivityType.Create ||
+              validatedActivity.type === SupportedActivityType.Update)
+          ) {
             objectWasStored = true; // We can't use this value for the if-clause, since type narrowing won't work
             const newObject: NewActivityPubObject = {
               id: validatedActivity.object.id,
