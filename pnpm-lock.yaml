@@ -43,7 +43,7 @@ importers:
         version: 0.30.10(@types/pg@8.11.5)(pg@8.11.5)
       drizzle-zod:
         specifier: 0.5.1
-        version: 0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.5)(pg@8.11.5))(zod@3.23.5)
+        version: 0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.5)(pg@8.11.5))(zod@3.23.6)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -57,8 +57,8 @@ importers:
         specifier: 7.8.1
         version: 7.8.1
       zod:
-        specifier: 3.23.5
-        version: 3.23.5
+        specifier: 3.23.6
+        version: 3.23.6
     devDependencies:
       '@fastify/static':
         specifier: 7.0.3
@@ -8149,8 +8149,8 @@ packages:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
 
-  zod@3.23.5:
-    resolution: {integrity: sha512-fkwiq0VIQTksNNA131rDOsVJcns0pfVUjHzLrNBiF/O/Xxb5lQyEXkhZWcJ7npWsYlvs+h0jFWXXy4X46Em1JA==}
+  zod@3.23.6:
+    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
 
 snapshots:
 
@@ -9310,10 +9310,10 @@ snapshots:
 
   '@hono/node-server@1.11.0': {}
 
-  '@hono/zod-validator@0.2.1(hono@4.2.5)(zod@3.23.5)':
+  '@hono/zod-validator@0.2.1(hono@4.2.5)(zod@3.23.6)':
     dependencies:
       hono: 4.2.5
-      zod: 3.23.5
+      zod: 3.23.6
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
@@ -12532,7 +12532,7 @@ snapshots:
     dependencies:
       '@esbuild-kit/esm-loader': 2.5.5
       '@hono/node-server': 1.11.0
-      '@hono/zod-validator': 0.2.1(hono@4.2.5)(zod@3.23.5)
+      '@hono/zod-validator': 0.2.1(hono@4.2.5)(zod@3.23.6)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -12546,7 +12546,7 @@ snapshots:
       minimatch: 7.4.6
       semver: 7.6.0
       superjson: 2.2.1
-      zod: 3.23.5
+      zod: 3.23.6
     transitivePeerDependencies:
       - supports-color
 
@@ -12555,10 +12555,10 @@ snapshots:
       '@types/pg': 8.11.5
       pg: 8.11.5
 
-  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.5)(pg@8.11.5))(zod@3.23.5):
+  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.5)(pg@8.11.5))(zod@3.23.6):
     dependencies:
       drizzle-orm: 0.30.10(@types/pg@8.11.5)(pg@8.11.5)
-      zod: 3.23.5
+      zod: 3.23.6
 
   duplexer@0.1.2: {}
 
@@ -17773,4 +17773,4 @@ snapshots:
       compress-commons: 6.0.2
       readable-stream: 4.4.2
 
-  zod@3.23.5: {}
+  zod@3.23.6: {}
