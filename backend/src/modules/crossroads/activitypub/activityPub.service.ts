@@ -265,18 +265,22 @@ export class ActivityPubService {
 
           const validatedActivity = validation.data;
 
+          const actordId =
+            typeof validatedActivity.actor === 'string'
+              ? validatedActivity.actor
+              : validatedActivity.actor.id;
+
+          const objectId =
+            typeof validatedActivity.object === 'string'
+              ? validatedActivity.object
+              : validatedActivity.object.id;
+
           const newActivityPubActivity: NewActivityPubActivity = {
             id: validatedActivity.id,
             receivedOn,
             type: validatedActivity.type,
-            actor:
-              typeof validatedActivity.actor === 'string'
-                ? validatedActivity.actor
-                : validatedActivity.actor.id,
-            object:
-              typeof validatedActivity.object === 'string'
-                ? validatedActivity.object
-                : validatedActivity.object.id,
+            actor: actordId,
+            object: objectId,
           };
 
           await transaction
@@ -288,14 +292,16 @@ export class ActivityPubService {
             type: ActivityPubActivityQueueType.Incoming,
           });
 
+          /**
+           * TODO: Never use actor from Incoming activity ( only it's ID)
+           * If it's a new actor, get it and it's Key to validate the request
+           * If it's known, validate with the stored key
+           */
           const actorObject =
             typeof validatedActivity.actor === 'string'
               ? null
               : validatedActivity.actor;
 
-          // If we get more than just an actorId and it includes the publicKey, we could store it
-          // TODO figure out if we really should. maybe we need to validate the signature of the activity first
-          // by going against the actor's publicKey
           if (
             actorObject !== null &&
             typeof actorObject.publicKey !== 'string'
