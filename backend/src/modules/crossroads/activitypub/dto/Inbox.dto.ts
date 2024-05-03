@@ -32,7 +32,6 @@ export const inboxActivityObject = activityPubId.or(
     gameContent: z.object({}), // TODO define gameContent
     to: z.string(),
     inReplyTo: inboxActivityActor.optional(),
-    internalId: z.string().uuid().optional(),
   }),
 );
 

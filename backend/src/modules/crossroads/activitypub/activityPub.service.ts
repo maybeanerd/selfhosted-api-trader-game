@@ -31,7 +31,10 @@ import {
   createActivity,
 } from '@/modules/crossroads/activitypub/activity';
 import { randomUUID } from 'crypto';
-import { getNoteUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
+import {
+  getActivityUrl,
+  getNoteUrl,
+} from '@/modules/crossroads/activitypub/utils/apUrl';
 import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import {
@@ -280,8 +283,11 @@ export class ActivityPubService {
     await drizz.transaction(async (transaction) => {
       const receivedOn = new Date();
 
+      const id = randomUUID();
+
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: randomUUID(),
+        id: getActivityUrl(id).toString(),
+        internalId: id,
         receivedOn,
         type: SupportedActivityType.Follow,
         actor: (await getInstanceActor()).actor.id,
@@ -320,8 +326,11 @@ export class ActivityPubService {
         throw new Error('Cant unfollow actor that was not followed before.');
       }
 
+      const id = randomUUID();
+
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: randomUUID(),
+        id: getActivityUrl(id).toString(),
+        internalId: id,
         receivedOn,
         type: SupportedActivityType.Undo,
         actor: instanceActorId,
@@ -542,7 +551,7 @@ export class ActivityPubService {
             objectWasStored = true; // We can't use this value for the if-clause, since type narrowing won't work
             const newObject: NewActivityPubObject = {
               id: validatedActivity.object.id,
-              internalId: validatedActivity.object.internalId,
+              internalId: randomUUID(),
               type: validatedActivity.object.type,
               published: new Date(validatedActivity.object.published),
               attributedTo:
