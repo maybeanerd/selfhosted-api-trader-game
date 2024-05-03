@@ -246,9 +246,19 @@ export class ActivityPubService {
     return mapActivityPubActivityToDto(apActivity);
   }
 
-  async receiveActivities(
-    activities: Array<APRoot<APActivity>>,
-  ): Promise<void> {
+  // TODO paginationand start date
+  async getOutbox(): Promise<Array<APRoot<APActivity>>> {
+    const { actor } = await getInstanceActor();
+    const activities = await drizz.query.activityPubActivity.findMany({
+      where: (activity) => eq(activity.actor, actor.id),
+      orderBy: (activity) => asc(activity.receivedOn),
+      limit: 100,
+    });
+
+    return activities.map(mapActivityPubActivityToDto);
+  }
+
+  async handleInbox(activities: Array<APRoot<APActivity>>): Promise<void> {
     await drizz.transaction(async (transaction) => {
       await Promise.all(
         activities.map(async (activity) => {

@@ -14,6 +14,7 @@ import type {
   PublicKeyObject,
 } from '@/modules/crossroads/activitypub/actor/types';
 import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
+import { APActivity, APRoot } from 'activitypub-types';
 
 @Controller({ path: crossroadsActivityPubBasePath, version: apiVersion })
 export class ActivityPubController {
@@ -57,15 +58,17 @@ export class ActivityPubController {
   }
 
   @Get('/outbox')
-  async getOutbox(): Promise<unknown> {
-    // TODO?
-    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
+  async getOutbox(): Promise<Array<APRoot<APActivity>>> {
+    // TODO pagination
+    const outbox = await this.activityPubService.getOutbox();
+
+    return outbox;
   }
 
   @Post('/inbox')
   async postToInbox(): Promise<unknown> {
     // TODO get the activities from the request AND validate them
-    await this.activityPubService.receiveActivities([]);
+    await this.activityPubService.handleInbox([]);
     // TODO return something?
     throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
   }

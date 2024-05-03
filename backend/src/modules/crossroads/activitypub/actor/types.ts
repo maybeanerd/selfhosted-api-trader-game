@@ -8,6 +8,7 @@ export type PublicKeyObject = {
 
 export type ActivityPubActorObject = APRoot<APActor> & {
   publicKey: PublicKeyObject;
+  id: string;
 };
 
 export enum SupportedActorType {
