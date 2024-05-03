@@ -12,9 +12,9 @@ export const storedTreaty = pgTable('storedTreaty', {
    */
   instanceId: uuid('instanceId').defaultRandom().primaryKey(),
   /**
-   * The URL this instance can be reached at.
+   * The AP Actor this instance can be reached at.
    * */
-  instanceBaseUrl: text('instanceBaseUrl').unique().notNull(),
+  activityPubActorId: text('activityPubActorId').unique().notNull(),
   /**
    * The state of the treaty. A treaty is a request at first, and then either gets accepted or denied by the other instance.
    */

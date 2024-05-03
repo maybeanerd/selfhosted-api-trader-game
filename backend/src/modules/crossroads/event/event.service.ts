@@ -55,7 +55,7 @@ export class EventService {
           events: filteredEvents,
         };
 
-        const url = treaty.url + crossroadsEventPath;
+        const url = treaty.activityPubActorId + crossroadsEventPath; // TODO this is definitely wrong now
         try {
           await this.httpService.post(url, body).toPromise();
         } catch {

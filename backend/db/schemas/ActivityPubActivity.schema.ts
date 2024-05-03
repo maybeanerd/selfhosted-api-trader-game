@@ -14,6 +14,7 @@ export const activityPubActivity = pgTable('activityPubActivity', {
     .notNull(),
   actor: text('actor').notNull(),
   object: text('object').notNull(),
+  target: text('target'),
 });
 
 export type ActivityPubActivity = typeof activityPubActivity.$inferSelect;

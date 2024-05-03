@@ -1,24 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { StoredTreaty, serverState, storedTreaty } from 'db/schema';
-import { ProposeTreatyDto, TreatyDto } from './dto/Treaty.dto';
+import { TreatyDto } from './dto/Treaty.dto';
 import { HttpService } from '@nestjs/axios';
 import { crossroadsTreatyPath } from '@/config/apiPaths';
 import { drizz } from 'db';
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { eq } from 'drizzle-orm';
 import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
+import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
+import { randomUUID } from 'crypto';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
     instanceId: treaty.instanceId,
-    url: treaty.instanceBaseUrl,
+    activityPubActorId: treaty.activityPubActorId,
     status: treaty.status,
   };
 }
 
 @Injectable()
 export class TreatyService {
-  constructor(private readonly httpService: HttpService) {
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly activityPubService: ActivityPubService,
+  ) {
     this.ensureServerId();
   }
 
@@ -64,7 +69,7 @@ export class TreatyService {
 
   async createTreaty(
     sourceInstanceId: string,
-    instanceBaseUrl: string,
+    activityPubActorId: string,
     status = TreatyStatus.Requested,
   ): Promise<TreatyDto> {
     const serverId = await this.ensureServerId();
@@ -72,7 +77,7 @@ export class TreatyService {
       .insert(storedTreaty)
       .values({
         instanceId: sourceInstanceId,
-        instanceBaseUrl: instanceBaseUrl,
+        activityPubActorId,
         status,
       })
       .returning();
@@ -84,7 +89,7 @@ export class TreatyService {
 
     return {
       instanceId: serverId,
-      url: createdTreaty.instanceBaseUrl,
+      activityPubActorId: createdTreaty.activityPubActorId,
       status: createdTreaty.status,
     };
   }
@@ -92,33 +97,19 @@ export class TreatyService {
   ownURL = 'http://7.22.217.133:8080'; // TODO get own URL
 
   async offerTreaty(instanceBaseUrl: string): Promise<TreatyDto | null> {
-    // TODO rework this. Instead of going against a treaty API,
-    // use AcitvityPub to get an actor from that url and follow it.
-    const serverId = await this.ensureServerId();
+    const actor =
+      await this.activityPubService.importActorFromWebfinger(instanceBaseUrl);
 
-    const body: ProposeTreatyDto = {
-      url: this.ownURL,
-      instanceId: serverId,
-    };
-
-    const url = instanceBaseUrl + crossroadsTreatyPath;
-    let offeredTreaty: TreatyDto | undefined;
-    try {
-      offeredTreaty = (
-        await this.httpService.post<TreatyDto>(url, body).toPromise()
-      )?.data;
-    } catch {
+    if (actor === null) {
       return null;
     }
 
-    if (offeredTreaty === undefined) {
-      return null;
-    }
+    await this.activityPubService.followActor(actor.id);
 
     const createdTreaty = await this.createTreaty(
-      offeredTreaty.instanceId,
-      instanceBaseUrl,
-      offeredTreaty.status,
+      randomUUID(),
+      actor.id,
+      TreatyStatus.Requested,
     );
 
     return createdTreaty;
@@ -126,7 +117,7 @@ export class TreatyService {
 
   async updateTreaty(
     sourceInstanceId: string,
-    update: { url?: string; status?: TreatyStatus },
+    update: { status?: TreatyStatus },
   ): Promise<TreatyDto | null> {
     const serverId = await this.ensureServerId();
 
@@ -139,17 +130,14 @@ export class TreatyService {
         return null;
       }
 
-      if (update.url) {
-        existingTreaty.instanceBaseUrl = update.url;
-      }
       if (update.status) {
         existingTreaty.status = update.status;
       }
 
-      const url = existingTreaty.instanceBaseUrl + crossroadsTreatyPath;
+      const url = existingTreaty.activityPubActorId + crossroadsTreatyPath;
       const body: TreatyDto = {
         status: existingTreaty.status,
-        url: this.ownURL,
+        activityPubActorId: this.ownURL,
         instanceId: serverId,
       };
       try {
@@ -165,13 +153,14 @@ export class TreatyService {
 
       return {
         instanceId: serverId,
-        url: existingTreaty.instanceBaseUrl,
+        activityPubActorId: existingTreaty.activityPubActorId,
         status: existingTreaty.status,
       };
     });
   }
 
   async removeTreaty(sourceInstanceId: string): Promise<boolean> {
+    // TODO activitypub delete
     const { rowCount: deletedTreaties } = await drizz
       .delete(storedTreaty)
       .where(eq(storedTreaty.instanceId, sourceInstanceId));

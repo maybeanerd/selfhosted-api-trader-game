@@ -20,7 +20,7 @@ export class ProposeTreatyDto {
    * The URL this instance can be reached at.
    */
   @IsUrl({ require_protocol: true })
-    url: string;
+    activityPubActorId: string;
 }
 
 export class TreatyDto extends ProposeTreatyDto {
@@ -34,13 +34,6 @@ export class UpdateTreatyDto {
    */
   @IsUUID(4)
     instanceId: string;
-
-  /**
-   * The URL this instance can be reached at.
-   */
-  @IsOptional()
-  @IsUrl({ require_protocol: true })
-    url?: string;
 
   /** The status of the treaty. */
   @IsOptional()

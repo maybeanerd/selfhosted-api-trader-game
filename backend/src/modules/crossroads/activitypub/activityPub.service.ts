@@ -41,6 +41,7 @@ import {
 } from '@/modules/crossroads/activitypub/dto/Inbox.dto';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { z } from 'zod';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -186,6 +187,63 @@ export class ActivityPubService {
     return remoteActor;
   }
 
+  async importActorFromWebfinger(
+    instanceBaseUrl: string,
+  ): Promise<ActivityPubActor | null> {
+    const instanceUrl = new URL(instanceBaseUrl);
+    const instanceHost = instanceUrl.host;
+    const actorName = `${instanceActorUsername}@${instanceHost}`;
+
+    const webfingerUrl = new URL('.well-known/webfinger', instanceBaseUrl);
+
+    const foundActor = (
+      await lastValueFrom(
+        this.httpService.get(webfingerUrl.toString(), {
+          params: { resource: `acct:${actorName}` },
+        }),
+      )
+    ).data;
+
+    const foundActorValidation = await z
+      .object({
+        subject: z.string(),
+        links: z.array(
+          z.object({
+            rel: z.string(),
+            type: z.string(),
+            href: z.string(),
+          }),
+        ),
+      })
+      .safeParseAsync(foundActor);
+
+    if (!foundActorValidation.success) {
+      console.error('Failed to find actor of instance. (webfinger failed)');
+      return null;
+    }
+
+    const actor = foundActorValidation.data.links.find(
+      (link) =>
+        link.rel === 'self' && link.type === 'application/activity+json',
+    );
+
+    if (actor === undefined) {
+      console.error(
+        'Failed to find actor of instance. (webfinger doesnt contain self ref)',
+      );
+      return null;
+    }
+
+    const knownActor = await this.ensureRemoteActor(actor.href);
+
+    if (knownActor === null) {
+      console.error('Failed to find actor of instance. (actor not found)');
+      return null;
+    }
+
+    return knownActor;
+  }
+
   async findActorById(id: string): Promise<ActivityPubActorObject | null> {
     const { actor, internalId } = await getInstanceActor();
     if (internalId !== id) {
@@ -216,6 +274,75 @@ export class ActivityPubService {
     }
 
     return mapActivityPubObjectToDto(apObject);
+  }
+
+  async followActor(actorId: string): Promise<void> {
+    await drizz.transaction(async (transaction) => {
+      const receivedOn = new Date();
+
+      const newActivityPubActivity: NewActivityPubActivity = {
+        id: randomUUID(),
+        receivedOn,
+        type: SupportedActivityType.Follow,
+        actor: (await getInstanceActor()).actor.id,
+        object: actorId,
+      };
+
+      await transaction
+        .insert(activityPubActivity)
+        .values(newActivityPubActivity);
+
+      await transaction.insert(activityPubActivityQueue).values({
+        id: newActivityPubActivity.id,
+        type: ActivityPubActivityQueueType.Outgoing,
+        objectWasStored: true,
+      });
+    });
+  }
+
+  async unfollowActor(actorId: string): Promise<void> {
+    await drizz.transaction(async (transaction) => {
+      const receivedOn = new Date();
+
+      const instanceActorId = (await getInstanceActor()).actor.id;
+
+      const followActivity =
+        await transaction.query.activityPubActivity.findFirst({
+          where: (activity) =>
+            and(
+              eq(activity.actor, instanceActorId),
+              eq(activity.object, actorId),
+              eq(activity.type, SupportedActivityType.Follow),
+            ),
+        });
+
+      if (followActivity === undefined) {
+        throw new Error('Cant unfollow actor that was not followed before.');
+      }
+
+      const newActivityPubActivity: NewActivityPubActivity = {
+        id: randomUUID(),
+        receivedOn,
+        type: SupportedActivityType.Undo,
+        actor: instanceActorId,
+        object: followActivity.id,
+        /** This allows us to send the activity to their inbox
+         * without needing to re-calculate the target actor
+         * based on the original activity
+         */
+        target: actorId,
+      };
+
+      await transaction
+        .insert(activityPubActivity)
+        .values(newActivityPubActivity);
+
+      await transaction.insert(activityPubActivityQueue).values({
+        id: newActivityPubActivity.id,
+        type: ActivityPubActivityQueueType.Outgoing,
+        objectWasStored: true,
+      });
+    });
   }
 
   async createNoteObject(

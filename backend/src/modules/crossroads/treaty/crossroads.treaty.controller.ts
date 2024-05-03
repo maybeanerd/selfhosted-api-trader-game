@@ -20,14 +20,17 @@ export class TreatyController {
 
   @Post()
   async proposeTreaty(@Body() body: ProposeTreatyDto): Promise<TreatyDto> {
-    return this.treatyService.createTreaty(body.instanceId, body.url);
+    return this.treatyService.createTreaty(
+      body.instanceId,
+      body.activityPubActorId,
+    );
   }
 
   @Put()
   async updateTreaty(@Body() body: UpdateTreatyDto): Promise<TreatyDto> {
     const updatedTreaty = await this.treatyService.updateTreaty(
       body.instanceId,
-      { url: body.url, status: body.status },
+      { status: body.status },
     );
     if (updatedTreaty === null) {
       throw new HttpException('Treaty not found.', HttpStatus.NOT_FOUND);

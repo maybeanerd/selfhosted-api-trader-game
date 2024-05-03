@@ -15,6 +15,7 @@ export enum SupportedActivityType {
   'Delete' = 'Delete',
   'Follow' = 'Follow',
   'Like' = 'Like',
+  'Undo' = 'Undo',
 }
 
 export function isSupportedActivityType(
