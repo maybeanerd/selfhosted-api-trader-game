@@ -79,14 +79,26 @@ export class ActivityPubService {
   async handleCron() {
     console.time('ap-cron');
 
-    const activitiesToProcess =
-      await drizz.query.activityPubActivityQueue.findMany({
-        where: (queue) => eq(queue.type, ActivityPubActivityQueueType.Incoming),
-        orderBy: (queue) => asc(queue.createdOn),
-      });
+    const incomingActivities = (
+      await drizz
+        .select()
+        .from(activityPubActivityQueue)
+        .where(
+          and(
+            eq(
+              activityPubActivityQueue.type,
+              ActivityPubActivityQueueType.Incoming,
+            ),
+          ),
+        )
+        .innerJoin(
+          activityPubActivity,
+          eq(activityPubActivity.id, activityPubActivityQueue.id),
+        )
+        .orderBy(asc(activityPubActivityQueue.createdOn))
+    ).map((result) => result.activityPubActivity);
 
-    // TODO process the activities (e.g. create or update game resources like trades or treaties)
-    console.log('Activities to process:', activitiesToProcess);
+    this.handleActivities(incomingActivities);
 
     const outgoingActivities = (
       await drizz
@@ -138,6 +150,36 @@ export class ActivityPubService {
     }
 
     console.timeEnd('ap-cron');
+  }
+
+  activityHandlers: Partial<
+  Record<
+  SupportedActivityType,
+  (activity: ActivityPubActivity) => Promise<void> | void
+  >
+  > = {};
+
+  async handleActivities(
+    activities: Array<ActivityPubActivity>,
+  ): Promise<void> {
+    console.log('Handling activities', activities);
+
+    for (const activity of activities) {
+      const handler = this.activityHandlers[activity.type];
+      if (handler === undefined) {
+        console.info('No handler for activity type', activity.type);
+        return;
+      }
+
+      await handler(activity);
+    }
+  }
+
+  addActivityHandler<Type extends SupportedActivityType>(
+    type: Type,
+    handler: (activity: ActivityPubActivity) => Promise<void> | void,
+  ) {
+    this.activityHandlers[type] = handler;
   }
 
   /**
