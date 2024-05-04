@@ -351,6 +351,26 @@ export class ActivityPubService {
     });
   }
 
+  async updateActorIsFollowing(
+    actorId: string,
+    isFollowingThisServer: boolean,
+  ): Promise<boolean> {
+    const updatedEntries = await drizz
+      .update(activityPubActor)
+      .set({ isFollowingThisServer })
+      .where(eq(activityPubActor.id, actorId));
+
+    return (updatedEntries.rowCount ?? 0) > 0;
+  }
+
+  async getFollowers(): Promise<Array<ActivityPubActor>> {
+    const followers = await drizz.query.activityPubActor.findMany({
+      where: (actor) => eq(actor.isFollowingThisServer, true),
+    });
+
+    return followers;
+  }
+
   async createNoteObject(
     actorId: string,
     content: string,
