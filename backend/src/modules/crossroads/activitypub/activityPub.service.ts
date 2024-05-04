@@ -413,6 +413,7 @@ export class ActivityPubService {
     });
   }
 
+  // TODO find out if we even need this. Unused atm.
   async updateNoteObject(
     actorId: string,
     objectId: string,
@@ -445,6 +446,102 @@ export class ActivityPubService {
         actorId,
         SupportedActivityType.Update,
         { id: objectId },
+      );
+      const newActivityPubActivity: NewActivityPubActivity = {
+        id: createdActivity.id,
+        receivedOn,
+        type: createdActivity.type,
+        actor: createdActivity.actor,
+        object: createdActivity.object.id,
+      };
+
+      await transaction
+        .insert(activityPubActivity)
+        .values(newActivityPubActivity);
+
+      await transaction.insert(activityPubActivityQueue).values({
+        id: newActivityPubActivity.id,
+        type: ActivityPubActivityQueueType.Outgoing,
+        objectWasStored: true,
+      });
+
+      return true;
+    });
+  }
+
+  async deleteNoteObject(objectId: string): Promise<boolean> {
+    return drizz.transaction(async (transaction) => {
+      const receivedOn = new Date();
+
+      const existingNote = await transaction.query.activityPubObject.findFirst({
+        where: (object) => eq(object.id, objectId),
+      });
+
+      if (existingNote === undefined) {
+        return false;
+      }
+
+      const actorId = existingNote.attributedTo;
+      const instanceActor = await getInstanceActor();
+      if (actorId !== instanceActor.actor.id) {
+        console.error(
+          'Attempted to delete a note that does come from this instance.',
+        );
+        return false;
+      }
+
+      const createdActivity = createActivity(
+        instanceActor.actor.id,
+        SupportedActivityType.Delete,
+        { id: existingNote.id },
+      );
+      const newActivityPubActivity: NewActivityPubActivity = {
+        id: createdActivity.id,
+        receivedOn,
+        type: createdActivity.type,
+        actor: createdActivity.actor,
+        object: createdActivity.object.id,
+      };
+
+      await transaction
+        .insert(activityPubActivity)
+        .values(newActivityPubActivity);
+
+      await transaction.insert(activityPubActivityQueue).values({
+        id: newActivityPubActivity.id,
+        type: ActivityPubActivityQueueType.Outgoing,
+        objectWasStored: true,
+      });
+
+      return true;
+    });
+  }
+
+  async likeNoteObject(objectId: string): Promise<boolean> {
+    return drizz.transaction(async (transaction) => {
+      const receivedOn = new Date();
+
+      const existingNote = await transaction.query.activityPubObject.findFirst({
+        where: (object) => eq(object.id, objectId),
+      });
+
+      if (existingNote === undefined) {
+        return false;
+      }
+
+      const noteCreatorId = existingNote.attributedTo;
+      const instanceActor = await getInstanceActor();
+      if (noteCreatorId === instanceActor.actor.id) {
+        console.error(
+          'Attempted to like a note that comes from this instance.',
+        );
+        return false;
+      }
+
+      const createdActivity = createActivity(
+        instanceActor.actor.id,
+        SupportedActivityType.Like,
+        { id: existingNote.id },
       );
       const newActivityPubActivity: NewActivityPubActivity = {
         id: createdActivity.id,

@@ -129,7 +129,13 @@ ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
           requestingUserId,
           transaction,
         );
+
+        // Only share deletion if the trade was created by a user on this instance
+        await this.activityPubService.deleteNoteObject(
+          tradeOfferToRemove.activityPubNoteId,
+        );
       }
+
       await transaction
         .delete(trade)
         .where(eq(trade.id, tradeOfferToRemove.id));
@@ -166,6 +172,11 @@ ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
           tradeOfferToRemove.offeredResources,
           acceptantId,
           transaction,
+        );
+
+        // Only share acceptance if the trade was accepted by a user on this instance
+        await this.activityPubService.likeNoteObject(
+          tradeOfferToRemove.activityPubNoteId,
         );
       }
 
