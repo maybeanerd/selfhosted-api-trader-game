@@ -1,0 +1,1 @@
+ALTER TABLE "activityPubActivity" ADD COLUMN "target" text;

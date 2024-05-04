@@ -453,6 +453,12 @@ export class ActivityPubService {
         type: SupportedActivityType.Undo,
         actor: instanceActorId,
         object: followActivity.id,
+        /**
+         * This allows us to send the activity to their inbox
+         * without needing to re-calculate the target actor
+         * based on the original activity
+         */
+        target: actorId,
       };
 
       await transaction

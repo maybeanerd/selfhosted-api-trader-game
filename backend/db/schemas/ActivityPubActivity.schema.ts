@@ -21,6 +21,12 @@ export const activityPubActivity = pgTable('activityPubActivity', {
     .notNull(),
   actor: text('actor').notNull(),
   object: text('object').notNull(),
+  /**
+   * The target of the activity.
+   * E.g. on unfollow, this is the user being unfollowed.
+   * The "object" is the original follow activity in that case.
+   */
+  target: text('target'),
 });
 
 export type ActivityPubActivity = typeof activityPubActivity.$inferSelect;

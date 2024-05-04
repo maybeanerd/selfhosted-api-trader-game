@@ -162,6 +162,13 @@
       "when": 1714859211782,
       "tag": "0022_icy_thunderbolts",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "5",
+      "when": 1714860400579,
+      "tag": "0023_ancient_madame_masque",
+      "breakpoints": true
     }
   ]
 }
