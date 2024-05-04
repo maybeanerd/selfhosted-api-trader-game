@@ -1,0 +1,1 @@
+ALTER TABLE "trade" ADD COLUMN "creatorId" uuid;

@@ -11,10 +11,10 @@ type ResourcesWithAmount = Array<ResourceWithAmount>;
 export const trade = pgTable('trade', {
   id: uuid('id').defaultRandom().primaryKey(),
   /**
-   * The activitypub actor id of the creator of this trade.
-   * Not used for anything right now, maybe later for filtering, statistics, or visualization.
+   * The id of the user who created the trade. Only needed for internal users,
+   * as the acceptance of the trade is done via the activity pub note.
    */
-  creatorId: text('creatorId').notNull(),
+  creatorId: uuid('creatorId'),
   offeredResources: jsonb('offeredResources')
     .$type<ResourcesWithAmount>()
     .notNull(),

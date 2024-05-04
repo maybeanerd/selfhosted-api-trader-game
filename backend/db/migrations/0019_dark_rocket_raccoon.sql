@@ -1,0 +1,1 @@
+ALTER TABLE "trade" DROP COLUMN IF EXISTS "creatorId";

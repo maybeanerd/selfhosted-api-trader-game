@@ -2,7 +2,13 @@ import { IdDto } from '@/dto/Id.dto';
 import { ResourceWithAmountDto } from '@/modules/resource/dto/ResourceWithAmount.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { ArrayMaxSize, IsArray, IsUUID, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsOptional,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 
 export class TradeOfferDto extends IdDto {
   @IsArray()
@@ -31,5 +37,6 @@ export class TradeOfferDto extends IdDto {
    * The id of the user who created the trade.
    */
   @IsUUID(4)
-    creatorId: string;
+  @IsOptional()
+    creatorId: string | null;
 }

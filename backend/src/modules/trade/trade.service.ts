@@ -48,7 +48,7 @@ export class TradeService {
         return null;
       }
 
-      const tradeMessageContent = `${creatorId} offers 
+      const tradeMessageContent = `A user (${creatorId}) offers 
 ${JSON.stringify(offeredTrade.offeredResources, null, 2)}
 for
 ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
