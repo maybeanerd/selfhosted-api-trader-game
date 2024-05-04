@@ -32,7 +32,6 @@ export class TreatyService {
   ) {
     this.ensureServerId();
 
-    console.log('Registering follow activity handler');
     addActivityHandler(
       SupportedActivityType.Follow,
       this.handleFollowActivity.bind(this),
@@ -40,11 +39,9 @@ export class TreatyService {
   }
 
   async handleFollowActivity(activity: ActivityPubActivity) {
-    console.log('Got follow activity', activity);
     if (activity.type !== SupportedActivityType.Follow) {
       return;
     }
-    console.log('Handling follow activity');
 
     // If the follow doesn't apply to the instance actor, ignore it
     const instanceActor = await getInstanceActor();

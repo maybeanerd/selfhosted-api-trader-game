@@ -162,7 +162,6 @@ export class ActivityPubService {
   }
 
   async handleFollowActivity(activity: ActivityPubActivity) {
-    console.log('Got follow activity in AP service');
     const instanceActor = await getInstanceActor();
     if (
       activity.type === SupportedActivityType.Follow &&
