@@ -12,7 +12,7 @@ import {
 } from '@/modules/crossroads/activitypub/webfinger';
 import type { APActivity, APObject, APRoot } from 'activitypub-types';
 import { drizz } from 'db';
-import { and, asc, eq } from 'drizzle-orm';
+import { and, asc, eq, isNotNull } from 'drizzle-orm';
 import {
   ActivityPubActivity,
   ActivityPubActor,
@@ -283,11 +283,11 @@ export class ActivityPubService {
     await drizz.transaction(async (transaction) => {
       const receivedOn = new Date();
 
-      const id = randomUUID();
+      const internalId = randomUUID();
 
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: getActivityUrl(id).toString(),
-        internalId: id,
+        id: getActivityUrl(internalId).toString(),
+        internalId,
         receivedOn,
         type: SupportedActivityType.Follow,
         actor: (await getInstanceActor()).actor.id,
@@ -326,11 +326,11 @@ export class ActivityPubService {
         throw new Error('Cant unfollow actor that was not followed before.');
       }
 
-      const id = randomUUID();
+      const internalId = randomUUID();
 
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: getActivityUrl(id).toString(),
-        internalId: id,
+        id: getActivityUrl(internalId).toString(),
+        internalId,
         receivedOn,
         type: SupportedActivityType.Undo,
         actor: instanceActorId,
@@ -366,7 +366,9 @@ export class ActivityPubService {
 
       const newActivityPubObject: NewActivityPubObject = {
         id: getNoteUrl(internalId).toString(),
-        internalId: internalId, // TODO use this to create the trade offer? Or pass the id of the trade offer into here instead
+        // TODO use this to create the trade offer?
+        // Probably best is for the trade offer to reference the AP id, as external notes will also create trades
+        internalId,
         type: SupportedObjectType.Note,
         published: receivedOn,
         attributedTo: actorId,
@@ -469,7 +471,7 @@ export class ActivityPubService {
 
   async findActivityById(id: string): Promise<APRoot<APActivity> | null> {
     const apActivity = await drizz.query.activityPubActivity.findFirst({
-      where: (activity) => eq(activity.id, id),
+      where: (activity) => eq(activity.internalId, id),
     });
 
     if (apActivity === undefined) {
@@ -483,7 +485,8 @@ export class ActivityPubService {
   async getOutbox(): Promise<Array<APRoot<APActivity>>> {
     const { actor } = await getInstanceActor();
     const activities = await drizz.query.activityPubActivity.findMany({
-      where: (activity) => eq(activity.actor, actor.id),
+      where: (activity) =>
+        and(eq(activity.actor, actor.id), isNotNull(activity.internalId)),
       orderBy: (activity) => asc(activity.receivedOn),
       limit: 100,
     });
@@ -551,7 +554,6 @@ export class ActivityPubService {
             objectWasStored = true; // We can't use this value for the if-clause, since type narrowing won't work
             const newObject: NewActivityPubObject = {
               id: validatedActivity.object.id,
-              internalId: randomUUID(),
               type: validatedActivity.object.type,
               published: new Date(validatedActivity.object.published),
               attributedTo:
