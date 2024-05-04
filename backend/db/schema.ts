@@ -1,10 +1,4 @@
 export {
-  storedEvent,
-  storedEventType,
-  StoredEvent,
-  NewStoredEvent as NewStoredEven,
-} from 'db/schemas/Event.schema';
-export {
   resource,
   resourceType,
   Resource,

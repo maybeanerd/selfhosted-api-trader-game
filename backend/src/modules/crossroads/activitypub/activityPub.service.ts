@@ -72,12 +72,7 @@ function mapActivityPubActivityToDto(
 
 @Injectable()
 export class ActivityPubService {
-  constructor(
-    private readonly httpService: HttpService,
-    /* private readonly treatyService: TreatyService,
-    private readonly httpService: HttpService,
-    private readonly tradeService: TradeService, */
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   // TODO at some point consider real workers to take care of this. for now, a cron job is enough
   @Cron(CronExpression.EVERY_MINUTE)
@@ -154,6 +149,7 @@ export class ActivityPubService {
           publicKeyId: validatePublicKey.data.id,
           publicKeyPem: validatePublicKey.data.publicKeyPem,
           isGameServer,
+          isFollowingThisServer: false,
         };
       }
 
@@ -162,6 +158,7 @@ export class ActivityPubService {
         publicKeyId: receivedPublicKey.id,
         publicKeyPem: receivedPublicKey.publicKeyPem,
         isGameServer,
+        isFollowingThisServer: false,
       };
     } catch {
       return null;
@@ -359,15 +356,15 @@ export class ActivityPubService {
     content: string,
     gameContent: unknown = {}, // TODO define this type
     inReplyTo?: string,
-  ): Promise<void> {
-    await drizz.transaction(async (transaction) => {
+  ): Promise<string> {
+    return drizz.transaction(async (transaction) => {
       const receivedOn = new Date();
       const internalId = randomUUID();
 
+      const noteId = getNoteUrl(internalId).toString();
+
       const newActivityPubObject: NewActivityPubObject = {
-        id: getNoteUrl(internalId).toString(),
-        // TODO use this to create the trade offer?
-        // Probably best is for the trade offer to reference the AP id, as external notes will also create trades
+        id: noteId,
         internalId,
         type: SupportedObjectType.Note,
         published: receivedOn,
@@ -411,6 +408,8 @@ export class ActivityPubService {
         type: ActivityPubActivityQueueType.Outgoing,
         objectWasStored: true,
       });
+
+      return noteId;
     });
   }
 

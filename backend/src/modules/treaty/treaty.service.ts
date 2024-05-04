@@ -8,11 +8,9 @@ import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { eq } from 'drizzle-orm';
 import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
-import { randomUUID } from 'crypto';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
-    instanceId: treaty.instanceId,
     activityPubActorId: treaty.activityPubActorId,
     status: treaty.status,
   };
@@ -59,24 +57,21 @@ export class TreatyService {
     return treaties.map(mapTreatyDocumentToTreatyDto);
   }
 
-  async hasActiveTreaty(instanceId: string): Promise<boolean> {
+  async hasActiveTreaty(activityPubActorId: string): Promise<boolean> {
     const treaty = await drizz.query.storedTreaty.findFirst({
-      where: (t) => eq(t.instanceId, instanceId),
+      where: (t) => eq(t.activityPubActorId, activityPubActorId),
     });
 
     return treaty !== undefined && treaty.status === TreatyStatus.Signed;
   }
 
   async createTreaty(
-    sourceInstanceId: string,
     activityPubActorId: string,
     status = TreatyStatus.Requested,
   ): Promise<TreatyDto> {
-    const serverId = await this.ensureServerId();
     const createdTreaties = await drizz
       .insert(storedTreaty)
       .values({
-        instanceId: sourceInstanceId,
         activityPubActorId,
         status,
       })
@@ -88,7 +83,6 @@ export class TreatyService {
     }
 
     return {
-      instanceId: serverId,
       activityPubActorId: createdTreaty.activityPubActorId,
       status: createdTreaty.status,
     };
@@ -107,7 +101,6 @@ export class TreatyService {
     await this.activityPubService.followActor(actor.id);
 
     const createdTreaty = await this.createTreaty(
-      randomUUID(),
       actor.id,
       TreatyStatus.Requested,
     );
@@ -116,14 +109,12 @@ export class TreatyService {
   }
 
   async updateTreaty(
-    sourceInstanceId: string,
+    activityPubActorId: string,
     update: { status?: TreatyStatus },
   ): Promise<TreatyDto | null> {
-    const serverId = await this.ensureServerId();
-
     return drizz.transaction(async (transaction) => {
       const existingTreaty = await transaction.query.storedTreaty.findFirst({
-        where: eq(storedTreaty.instanceId, sourceInstanceId),
+        where: eq(storedTreaty.activityPubActorId, activityPubActorId),
       });
 
       if (existingTreaty === undefined) {
@@ -134,11 +125,11 @@ export class TreatyService {
         existingTreaty.status = update.status;
       }
 
+      // TODO replace with AP stuff
       const url = existingTreaty.activityPubActorId + crossroadsTreatyPath;
       const body: TreatyDto = {
         status: existingTreaty.status,
-        activityPubActorId: this.ownURL,
-        instanceId: serverId,
+        activityPubActorId: activityPubActorId,
       };
       try {
         await this.httpService.put<TreatyDto>(url, body).toPromise();
@@ -149,33 +140,22 @@ export class TreatyService {
       await transaction
         .update(storedTreaty)
         .set(existingTreaty)
-        .where(eq(storedTreaty.instanceId, sourceInstanceId));
+        .where(eq(storedTreaty.activityPubActorId, activityPubActorId));
 
       return {
-        instanceId: serverId,
         activityPubActorId: existingTreaty.activityPubActorId,
         status: existingTreaty.status,
       };
     });
   }
 
-  async removeTreaty(sourceInstanceId: string): Promise<boolean> {
+  async removeTreaty(activityPubActorId: string): Promise<boolean> {
     return drizz.transaction(async (transaction) => {
-      const existingTreaty = await transaction.query.storedTreaty.findFirst({
-        where: eq(storedTreaty.instanceId, sourceInstanceId),
-      });
-
-      if (existingTreaty === undefined) {
-        return false;
-      }
-
-      const { activityPubActorId } = existingTreaty;
-
       await this.activityPubService.unfollowActor(activityPubActorId);
 
       await transaction
         .delete(storedTreaty)
-        .where(eq(storedTreaty.instanceId, sourceInstanceId));
+        .where(eq(storedTreaty.activityPubActorId, activityPubActorId));
 
       return true;
     });

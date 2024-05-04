@@ -11,13 +11,7 @@ export class TreatyOfferDto {
 
 export class ProposeTreatyDto {
   /**
-   * The Id of the instance that wants to sign a treaty.
-   */
-  @IsUUID(4)
-    instanceId: string;
-
-  /**
-   * The URL this instance can be reached at.
+   * The id of the actor that this treaty is proposed to.
    */
   @IsUrl({ require_protocol: true })
     activityPubActorId: string;

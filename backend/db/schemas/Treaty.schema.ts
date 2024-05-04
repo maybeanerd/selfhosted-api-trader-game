@@ -1,5 +1,5 @@
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
-import { pgTable, uuid, pgEnum, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, pgEnum, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const treatyStatus = pgEnum(
   'treatyStatus',
@@ -8,13 +8,9 @@ export const treatyStatus = pgEnum(
 
 export const storedTreaty = pgTable('storedTreaty', {
   /**
-   * The Id of the instance this treaty was made with.
-   */
-  instanceId: uuid('instanceId').defaultRandom().primaryKey(),
-  /**
-   * The AP Actor this instance can be reached at.
+   * The AP Actor this treaty was made with.
    * */
-  activityPubActorId: text('activityPubActorId').unique().notNull(),
+  activityPubActorId: text('activityPubActorId').primaryKey(),
   /**
    * The state of the treaty. A treaty is a request at first, and then either gets accepted or denied by the other instance.
    */

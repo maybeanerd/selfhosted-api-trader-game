@@ -5,6 +5,7 @@ import { TradeOfferDto } from './dto/TradeOffer.dto';
 import { NewTrade, Trade, trade } from 'db/schema';
 import { drizz } from 'db';
 import { and, eq } from 'drizzle-orm';
+import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
 
 function mapTradeDocumentToTradeOfferDto(t: Trade): TradeOfferDto {
   return {
@@ -12,13 +13,15 @@ function mapTradeDocumentToTradeOfferDto(t: Trade): TradeOfferDto {
     offeredResources: t.offeredResources,
     requestedResources: t.requestedResources,
     creatorId: t.creatorId,
-    isLocal: t.remoteInstanceId === null,
   };
 }
 
 @Injectable()
 export class TradeService {
-  constructor(private readonly resourceService: ResourceService) {}
+  constructor(
+    private readonly resourceService: ResourceService,
+    private readonly activityPubService: ActivityPubService,
+  ) {}
 
   async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {
     const trades = await drizz.query.trade.findMany();
@@ -45,7 +48,25 @@ export class TradeService {
         return null;
       }
 
-      const newTradeOffer: NewTrade = { ...offeredTrade, creatorId };
+      const tradeMessageContent = `${creatorId} offers 
+${JSON.stringify(offeredTrade.offeredResources, null, 2)}
+for
+${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
+
+      const noteId = await this.activityPubService.createNoteObject(
+        creatorId,
+        tradeMessageContent,
+        {
+          requestedResources: offeredTrade.requestedResources,
+          offeredResources: offeredTrade.offeredResources,
+        },
+      );
+
+      const newTradeOffer: NewTrade = {
+        ...offeredTrade,
+        creatorId,
+        activityPubNoteId: noteId,
+      };
 
       const createdTrades = await transaction
         .insert(trade)
@@ -62,17 +83,17 @@ export class TradeService {
   }
 
   async receiveTradeOffer(
+    activityPubNoteId: string,
     receivedTrade: {
       id: string;
       creatorId: string;
       requestedResources: Array<{ type: ResourceType; amount: number }>;
       offeredResources: Array<{ type: ResourceType; amount: number }>;
     },
-    remoteInstanceId: string | null,
   ): Promise<void> {
     const newTradeOffer: NewTrade = {
       ...receivedTrade,
-      remoteInstanceId,
+      activityPubNoteId,
     };
 
     await drizz.insert(trade).values(newTradeOffer);

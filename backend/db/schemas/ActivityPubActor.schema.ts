@@ -15,6 +15,7 @@ export const activityPubActor = pgTable('activityPubActor', {
   publicKeyId: text('publicKeyId').notNull(),
   publicKeyPem: text('publicKeyPem').notNull(),
   isGameServer: boolean('isGameServer').notNull(),
+  isFollowingThisServer: boolean('isFollowingThisServer').notNull(),
 });
 
 export type ActivityPubActor = typeof activityPubActor.$inferSelect;

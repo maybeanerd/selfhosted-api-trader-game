@@ -4,5 +4,4 @@ import { OmitType } from '@nestjs/swagger';
 export class TradeOfferInputDto extends OmitType(TradeOfferDto, [
   'id',
   'creatorId',
-  'isLocal',
 ]) {}

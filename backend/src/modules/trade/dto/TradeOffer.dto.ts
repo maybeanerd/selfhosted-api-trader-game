@@ -28,11 +28,6 @@ export class TradeOfferDto extends IdDto {
     offeredResources: Array<ResourceWithAmountDto>;
 
   /**
-   * If the trade comes from this local instance or from a remote one.
-   */
-  isLocal: boolean;
-
-  /**
    * The id of the user who created the trade.
    */
   @IsUUID(4)
