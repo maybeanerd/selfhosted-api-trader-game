@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.0.89",
+  "version": "0.0.90",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@9.0.6",
@@ -58,7 +58,7 @@
     "@types/express": "4.17.21",
     "@types/jest": "29.5.12",
     "@types/node": "20.12.8",
-    "@types/pg": "8.11.5",
+    "@types/pg": "8.11.6",
     "@types/supertest": "6.0.2",
     "@typescript-eslint/eslint-plugin": "7.8.0",
     "@typescript-eslint/parser": "7.8.0",
