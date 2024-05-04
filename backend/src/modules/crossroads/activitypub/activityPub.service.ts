@@ -84,7 +84,7 @@ export class ActivityPubService {
   }
 
   // TODO at some point consider real workers to take care of this. for now, a cron job is enough
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async handleCron() {
     console.time('ap-cron');
 
@@ -107,7 +107,19 @@ export class ActivityPubService {
         .orderBy(asc(activityPubActivityQueue.createdOn))
     ).map((result) => result.activityPubActivity);
 
-    handleActivities(incomingActivities);
+    if (incomingActivities.length > 0) {
+      await handleActivities(incomingActivities);
+
+      const handledIncomingActivityIds = incomingActivities.map(({ id }) => id);
+
+      await drizz
+        .delete(activityPubActivityQueue)
+        .where(
+          inArray(activityPubActivityQueue.id, handledIncomingActivityIds),
+        );
+    }
+
+    // TODO start second cronjob for outgoing activities?
 
     const outgoingActivities = (
       await drizz
@@ -151,11 +163,13 @@ export class ActivityPubService {
         }),
       );
 
-      const handledActivityIds = outgoingActivities.map(({ id }) => id);
+      const handledOutgoingActivityIds = outgoingActivities.map(({ id }) => id);
 
       await drizz
         .delete(activityPubActivityQueue)
-        .where(inArray(activityPubActivityQueue.id, handledActivityIds));
+        .where(
+          inArray(activityPubActivityQueue.id, handledOutgoingActivityIds),
+        );
     }
 
     console.timeEnd('ap-cron');

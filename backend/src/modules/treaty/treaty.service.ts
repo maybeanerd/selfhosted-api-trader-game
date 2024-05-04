@@ -64,7 +64,7 @@ export class TreatyService {
         });
       } else {
         console.error(
-          'Treaty was already marked a signed, but we just got their follow activity.',
+          'Treaty was already marked a signed or proposed, but we just got their follow activity.',
           existingTreaty,
         );
       }
