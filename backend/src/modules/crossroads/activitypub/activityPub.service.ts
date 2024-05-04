@@ -12,7 +12,7 @@ import {
 } from '@/modules/crossroads/activitypub/webfinger';
 import type { APActivity, APObject, APRoot } from 'activitypub-types';
 import { drizz } from 'db';
-import { and, asc, eq, isNotNull } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull } from 'drizzle-orm';
 import {
   ActivityPubActivity,
   ActivityPubActor,
@@ -88,7 +88,7 @@ export class ActivityPubService {
     // TODO process the activities (e.g. create or update game resources like trades or treaties)
     console.log('Activities to process:', activitiesToProcess);
 
-    const activitiesToSend = (
+    const outgoingActivities = (
       await drizz
         .select()
         .from(activityPubActivityQueue)
@@ -104,30 +104,38 @@ export class ActivityPubService {
           activityPubActivity,
           eq(activityPubActivity.id, activityPubActivityQueue.id),
         )
-    )
-      // TODO in this map, already inline objects. Could speed up a lot
-      .map((joinResult) =>
-        mapActivityPubActivityToDto(joinResult.activityPubActivity),
+    ).map((result) => result.activityPubActivity);
+
+    if (outgoingActivities.length > 0) {
+      const activitiesToSend =
+        // TODO in this map, already inline objects. Could speed up a lot
+        outgoingActivities.map(mapActivityPubActivityToDto);
+
+      console.log('activitiesToSend:', activitiesToSend);
+
+      const followers = await this.getFollowers();
+
+      console.log('Followers:', followers);
+
+      await Promise.all(
+        followers.map(async (follower) => {
+          try {
+            const { inbox } = follower;
+
+            // TODO HTTP signature
+            await lastValueFrom(this.httpService.post(inbox, activitiesToSend));
+          } catch (e: unknown) {
+            console.error('Failed to send activities to follower', follower, e);
+          }
+        }),
       );
 
-    console.log('activitiesToSend:', activitiesToSend);
+      const handledActivityIds = outgoingActivities.map(({ id }) => id);
 
-    const followers = await this.getFollowers();
-
-    console.log('Followers:', followers);
-
-    await Promise.all(
-      followers.map(async (follower) => {
-        try {
-          const { inbox } = follower;
-
-          // TODO HTTP signature
-          await lastValueFrom(this.httpService.post(inbox, activitiesToSend));
-        } catch (e: unknown) {
-          console.error('Failed to send activities to follower', follower, e);
-        }
-      }),
-    );
+      await drizz
+        .delete(activityPubActivityQueue)
+        .where(inArray(activityPubActivityQueue.id, handledActivityIds));
+    }
 
     console.timeEnd('ap-cron');
   }
