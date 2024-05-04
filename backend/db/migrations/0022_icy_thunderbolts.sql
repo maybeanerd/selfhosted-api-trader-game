@@ -1,0 +1,1 @@
+ALTER TABLE "activityPubActivity" DROP COLUMN IF EXISTS "target";

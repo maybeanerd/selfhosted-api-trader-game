@@ -178,10 +178,46 @@ export class ActivityPubService {
   async handleFollowActivity(activity: ActivityPubActivity) {
     const instanceActor = await getInstanceActor();
     if (
-      activity.type === SupportedActivityType.Follow &&
-      activity.object === instanceActor.actor.id
+      activity.type !== SupportedActivityType.Follow ||
+      activity.object !== instanceActor.actor.id
     ) {
-      await this.updateActorIsFollowing(activity.actor, true);
+      return;
+    }
+
+    await this.updateActorIsFollowing(activity.actor, true);
+  }
+
+  async handleUndoActivity(activity: ActivityPubActivity) {
+    if (activity.type !== SupportedActivityType.Undo) {
+      return;
+    }
+
+    const activityToBeUndone = await drizz.query.activityPubActivity.findFirst({
+      where: (a) => and(eq(a.actor, activity.actor), eq(a.id, activity.object)),
+    });
+
+    if (activityToBeUndone === undefined) {
+      console.error('Failed to find activity to be undone');
+      return;
+    }
+
+    const instanceActor = await getInstanceActor();
+    const instanceActorId = instanceActor.actor.id;
+
+    // Case 1: Undoing a follow
+    if (
+      activityToBeUndone.type === SupportedActivityType.Follow &&
+      activityToBeUndone.object === instanceActorId
+    ) {
+      await this.updateActorIsFollowing(activity.actor, false);
+
+      return;
+    }
+
+    // Case 2: Undoing a like
+    if (activityToBeUndone.type === SupportedActivityType.Like) {
+      // TODO
+      return;
     }
   }
 
@@ -417,11 +453,6 @@ export class ActivityPubService {
         type: SupportedActivityType.Undo,
         actor: instanceActorId,
         object: followActivity.id,
-        /** This allows us to send the activity to their inbox
-         * without needing to re-calculate the target actor
-         * based on the original activity
-         */
-        target: actorId,
       };
 
       await transaction

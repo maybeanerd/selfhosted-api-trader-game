@@ -4,10 +4,9 @@
       <div v-if="treaties.length === 0">
         No treaties found.
       </div>
-      <div v-for="treaty in treaties" v-else :key="treaty.instanceId">
+      <div v-for="treaty in treaties" v-else :key="treaty.activityPubActorId">
+        <p>Actor: {{ treaty.activityPubActorId }}</p>
         <p>Status: {{ treaty.status }}</p>
-        <p>URL: {{ treaty.url }}</p>
-        <p>Instance ID: {{ treaty.instanceId }}</p>
         <br>
       </div>
     </template>
@@ -20,8 +19,7 @@
 <script setup lang="ts">
 const { data: treaties } = await useFetch<Array<{
   status: string;
-  url: string;
-  instanceId: string;
+  activityPubActorId: string;
 }>>(
   'http://localhost:8080/v1/treaty',
 );
