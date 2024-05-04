@@ -88,14 +88,46 @@ export class ActivityPubService {
     // TODO process the activities (e.g. create or update game resources like trades or treaties)
     console.log('Activities to process:', activitiesToProcess);
 
-    const activitiesToSend =
-      await drizz.query.activityPubActivityQueue.findMany({
-        where: (queue) => eq(queue.type, ActivityPubActivityQueueType.Outgoing),
-        orderBy: (queue) => asc(queue.createdOn),
-      });
+    const activitiesToSend = (
+      await drizz
+        .select()
+        .from(activityPubActivityQueue)
+        .where(
+          and(
+            eq(
+              activityPubActivityQueue.type,
+              ActivityPubActivityQueueType.Outgoing,
+            ),
+          ),
+        )
+        .innerJoin(
+          activityPubActivity,
+          eq(activityPubActivity.id, activityPubActivityQueue.id),
+        )
+    )
+      // TODO in this map, already inline objects. Could speed up a lot
+      .map((joinResult) =>
+        mapActivityPubActivityToDto(joinResult.activityPubActivity),
+      );
 
-    // TODO send the activities to the appropriate actors
-    console.log('Activities to send:', activitiesToSend);
+    console.log('activitiesToSend:', activitiesToSend);
+
+    const followers = await this.getFollowers();
+
+    console.log('Followers:', followers);
+
+    await Promise.all(
+      followers.map(async (follower) => {
+        try {
+          const { inbox } = follower;
+
+          // TODO HTTP signature
+          await lastValueFrom(this.httpService.post(inbox, activitiesToSend));
+        } catch (e: unknown) {
+          console.error('Failed to send activities to follower', follower, e);
+        }
+      }),
+    );
 
     console.timeEnd('ap-cron');
   }
