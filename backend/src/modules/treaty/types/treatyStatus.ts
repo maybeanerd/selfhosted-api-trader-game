@@ -1,5 +1,14 @@
 export enum TreatyStatus {
+  /**
+   * We requested a treaty
+   */
   Requested = 'requested',
-  Denied = 'denied',
+  /**
+   * Others proposed a treaty
+   */
+  Proposed = 'proposed',
+  /**
+   * Both parties agreed to the treaty.
+   */
   Signed = 'signed',
 }

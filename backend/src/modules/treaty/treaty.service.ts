@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { StoredTreaty, serverState, storedTreaty } from 'db/schema';
+import {
+  ActivityPubActivity,
+  StoredTreaty,
+  serverState,
+  storedTreaty,
+} from 'db/schema';
 import { TreatyDto } from './dto/Treaty.dto';
 import { HttpService } from '@nestjs/axios';
 import { crossroadsTreatyPath } from '@/config/apiPaths';
@@ -8,6 +13,9 @@ import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { eq } from 'drizzle-orm';
 import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
+import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
+import { getInstanceActor } from '@/modules/crossroads/activitypub/actor';
+import { addActivityHandler } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
@@ -23,6 +31,47 @@ export class TreatyService {
     private readonly activityPubService: ActivityPubService,
   ) {
     this.ensureServerId();
+
+    console.log('Registering follow activity handler');
+    addActivityHandler(
+      SupportedActivityType.Follow,
+      this.handleFollowActivity.bind(this),
+    );
+  }
+
+  async handleFollowActivity(activity: ActivityPubActivity) {
+    console.log('Got follow activity', activity);
+    if (activity.type !== SupportedActivityType.Follow) {
+      return;
+    }
+    console.log('Handling follow activity');
+
+    // If the follow doesn't apply to the instance actor, ignore it
+    const instanceActor = await getInstanceActor();
+    if (activity.object !== instanceActor.actor.id) {
+      return;
+    }
+
+    // TODO detect if it's a gameserver. If not, return early
+
+    const existingTreaty = await drizz.query.storedTreaty.findFirst({
+      where: eq(storedTreaty.activityPubActorId, activity.actor),
+    });
+
+    if (existingTreaty === undefined) {
+      await this.createTreaty(activity.actor, TreatyStatus.Proposed);
+    } else {
+      if (existingTreaty.status === TreatyStatus.Requested) {
+        await this.updateTreaty(activity.actor, {
+          status: TreatyStatus.Signed,
+        });
+      } else {
+        console.error(
+          'Treaty was already marked a signed, but we just got their follow activity.',
+          existingTreaty,
+        );
+      }
+    }
   }
 
   async ensureServerId(): Promise<string> {
@@ -67,7 +116,7 @@ export class TreatyService {
 
   async createTreaty(
     activityPubActorId: string,
-    status = TreatyStatus.Requested,
+    status: TreatyStatus,
   ): Promise<TreatyDto> {
     const createdTreaties = await drizz
       .insert(storedTreaty)

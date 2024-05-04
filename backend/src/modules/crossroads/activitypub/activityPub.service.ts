@@ -45,6 +45,10 @@ import {
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { z } from 'zod';
+import {
+  addActivityHandler,
+  handleActivities,
+} from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -72,7 +76,12 @@ function mapActivityPubActivityToDto(
 
 @Injectable()
 export class ActivityPubService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService) {
+    addActivityHandler(
+      SupportedActivityType.Follow,
+      this.handleFollowActivity.bind(this),
+    );
+  }
 
   // TODO at some point consider real workers to take care of this. for now, a cron job is enough
   @Cron(CronExpression.EVERY_MINUTE)
@@ -98,7 +107,7 @@ export class ActivityPubService {
         .orderBy(asc(activityPubActivityQueue.createdOn))
     ).map((result) => result.activityPubActivity);
 
-    this.handleActivities(incomingActivities);
+    handleActivities(incomingActivities);
 
     const outgoingActivities = (
       await drizz
@@ -152,34 +161,15 @@ export class ActivityPubService {
     console.timeEnd('ap-cron');
   }
 
-  activityHandlers: Partial<
-  Record<
-  SupportedActivityType,
-  (activity: ActivityPubActivity) => Promise<void> | void
-  >
-  > = {};
-
-  async handleActivities(
-    activities: Array<ActivityPubActivity>,
-  ): Promise<void> {
-    console.log('Handling activities', activities);
-
-    for (const activity of activities) {
-      const handler = this.activityHandlers[activity.type];
-      if (handler === undefined) {
-        console.info('No handler for activity type', activity.type);
-        return;
-      }
-
-      await handler(activity);
+  async handleFollowActivity(activity: ActivityPubActivity) {
+    console.log('Got follow activity in AP service');
+    const instanceActor = await getInstanceActor();
+    if (
+      activity.type === SupportedActivityType.Follow &&
+      activity.object === instanceActor.actor.id
+    ) {
+      await this.updateActorIsFollowing(activity.actor, true);
     }
-  }
-
-  addActivityHandler<Type extends SupportedActivityType>(
-    type: Type,
-    handler: (activity: ActivityPubActivity) => Promise<void> | void,
-  ) {
-    this.activityHandlers[type] = handler;
   }
 
   /**
@@ -734,6 +724,8 @@ export class ActivityPubService {
           }
 
           // TODO validate the original inbox request with the actor's public key
+
+          // TODO handle duplicate IDs gracefully, e.g. ignore them
 
           await transaction
             .insert(activityPubActivity)
