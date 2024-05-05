@@ -9,8 +9,12 @@ import {
   Put,
 } from '@nestjs/common';
 import { TreatyService } from './treaty.service';
-import { TreatyDto, TreatyOfferDto, UpdateTreatyDto } from './dto/Treaty.dto';
-import { IdDto } from '@/dto/Id.dto';
+import {
+  ProposeTreatyDto,
+  TreatyDto,
+  TreatyOfferDto,
+  UpdateTreatyDto,
+} from './dto/Treaty.dto';
 
 @Controller({ path: 'treaty', version: '1' })
 export class TreatyController {
@@ -31,10 +35,14 @@ export class TreatyController {
   }
 
   @Put()
-  async updateTreaty(@Body() body: UpdateTreatyDto): Promise<TreatyDto> {
-    const updatedTreaty = await this.treatyService.updateTreaty(
-      body.instanceId,
-      { status: body.status },
+  async acceptTreaty(@Body() body: UpdateTreatyDto): Promise<TreatyDto> {
+    const isAcceptRequest = body.status === 'signed';
+    if (!isAcceptRequest) {
+      throw new HttpException('Invalid status.', HttpStatus.BAD_REQUEST);
+    }
+
+    const updatedTreaty = await this.treatyService.acceptTreaty(
+      body.activityPubActorId,
     );
     if (updatedTreaty === null) {
       throw new HttpException('Treaty not found.', HttpStatus.NOT_FOUND);
@@ -43,7 +51,7 @@ export class TreatyController {
   }
 
   @Delete()
-  async removeTreaty(@Body() body: IdDto): Promise<boolean> {
-    return this.treatyService.removeTreaty(body.id);
+  async removeTreaty(@Body() body: ProposeTreatyDto): Promise<boolean> {
+    return this.treatyService.removeTreaty(body.activityPubActorId);
   }
 }

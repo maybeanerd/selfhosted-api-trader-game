@@ -206,15 +206,23 @@ export class TreatyService {
     });
   }
 
-  async removeTreaty(activityPubActorId: string): Promise<boolean> {
-    return drizz.transaction(async (transaction) => {
-      await this.activityPubService.unfollowActor(activityPubActorId);
+  async acceptTreaty(activityPubActorId: string): Promise<TreatyDto | null> {
+    await this.activityPubService.followActor(activityPubActorId);
 
-      await transaction
-        .delete(storedTreaty)
-        .where(eq(storedTreaty.activityPubActorId, activityPubActorId));
-
-      return true;
+    const updatedTreaty = await this.updateTreaty(activityPubActorId, {
+      status: TreatyStatus.Signed,
     });
+
+    return updatedTreaty;
+  }
+
+  async removeTreaty(activityPubActorId: string): Promise<boolean> {
+    await this.activityPubService.unfollowActor(activityPubActorId);
+
+    await drizz
+      .delete(storedTreaty)
+      .where(eq(storedTreaty.activityPubActorId, activityPubActorId));
+
+    return true;
   }
 }

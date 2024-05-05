@@ -1,5 +1,5 @@
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
-import { IsEnum, IsOptional, IsUUID, IsUrl } from 'class-validator';
+import { IsEnum, IsOptional, IsUrl } from 'class-validator';
 
 export class TreatyOfferDto {
   /**
@@ -24,10 +24,10 @@ export class TreatyDto extends ProposeTreatyDto {
 }
 export class UpdateTreatyDto {
   /**
-   * The Id of the instance that wants to sign a treaty.
+   * The id of the actor that this treaty is related to.
    */
-  @IsUUID(4)
-    instanceId: string;
+  @IsUrl({ require_protocol: true })
+    activityPubActorId: string;
 
   /** The status of the treaty. */
   @IsOptional()
