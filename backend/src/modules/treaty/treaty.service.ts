@@ -8,7 +8,7 @@ import {
 import { TreatyDto } from './dto/Treaty.dto';
 import { drizz } from 'db';
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
-import { eq } from 'drizzle-orm';
+import { eq, not } from 'drizzle-orm';
 import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
 import {
@@ -60,7 +60,7 @@ export class TreatyService {
     }
 
     console.error(
-      'Treaty was already marked a signed or proposed, but we just got their follow activity.',
+      'Treaty was already marked a signed, removed, or proposed, but we got their follow activity.',
       existingTreaty,
     );
   }
@@ -126,7 +126,9 @@ export class TreatyService {
 
   async getAllTreaties(): Promise<Array<TreatyDto>> {
     // TODO pagination
-    const treaties = await drizz.query.storedTreaty.findMany();
+    const treaties = await drizz.query.storedTreaty.findMany({
+      where: (t) => not(eq(t.status, TreatyStatus.Removed)),
+    });
 
     return treaties.map(mapTreatyDocumentToTreatyDto);
   }
@@ -171,6 +173,16 @@ export class TreatyService {
     }
 
     await this.activityPubService.followActor(actor.id);
+
+    const existingTreaty = await drizz.query.storedTreaty.findFirst({
+      where: eq(storedTreaty.activityPubActorId, actor.id),
+    });
+    // When offering a treaty, if we have a treaty that was removed, we revive it.
+    if (existingTreaty?.status === TreatyStatus.Removed) {
+      return this.updateTreaty(actor.id, {
+        status: TreatyStatus.Signed,
+      });
+    }
 
     const createdTreaty = await this.createTreaty(
       actor.id,
@@ -221,6 +233,23 @@ export class TreatyService {
 
   async removeTreaty(activityPubActorId: string): Promise<boolean> {
     await this.activityPubService.unfollowActor(activityPubActorId);
+
+    const treaty = await drizz.query.storedTreaty.findFirst({
+      where: eq(storedTreaty.activityPubActorId, activityPubActorId),
+    });
+
+    if (
+      treaty?.status === TreatyStatus.Signed ||
+      treaty?.status === TreatyStatus.Proposed
+    ) {
+      // Instead of deleting the treaty, we mark it as removed.
+      // This way we know the other party still offers a treaty
+      // and can revive it as an immediately signed treaty.
+      await this.updateTreaty(activityPubActorId, {
+        status: TreatyStatus.Removed,
+      });
+      return true;
+    }
 
     await drizz
       .delete(storedTreaty)

@@ -1,0 +1,1 @@
+ALTER TYPE "treatyStatus" ADD VALUE 'removed';
