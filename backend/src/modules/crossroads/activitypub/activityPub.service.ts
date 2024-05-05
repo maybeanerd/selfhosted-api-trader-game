@@ -46,6 +46,7 @@ import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { z } from 'zod';
 import {
+  HandlerActivityType,
   addActivityHandler,
   handleActivities,
 } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
@@ -78,8 +79,13 @@ function mapActivityPubActivityToDto(
 export class ActivityPubService {
   constructor(private readonly httpService: HttpService) {
     addActivityHandler(
-      SupportedActivityType.Follow,
+      HandlerActivityType.Follow,
       this.handleFollowActivity.bind(this),
+    );
+
+    addActivityHandler(
+      HandlerActivityType.Unfollow,
+      this.handleUnfollowActivity.bind(this),
     );
   }
 
@@ -176,49 +182,11 @@ export class ActivityPubService {
   }
 
   async handleFollowActivity(activity: ActivityPubActivity) {
-    const instanceActor = await getInstanceActor();
-    if (
-      activity.type !== SupportedActivityType.Follow ||
-      activity.object !== instanceActor.actor.id
-    ) {
-      return;
-    }
-
     await this.updateActorIsFollowing(activity.actor, true);
   }
 
-  async handleUndoActivity(activity: ActivityPubActivity) {
-    if (activity.type !== SupportedActivityType.Undo) {
-      return;
-    }
-
-    const activityToBeUndone = await drizz.query.activityPubActivity.findFirst({
-      where: (a) => and(eq(a.actor, activity.actor), eq(a.id, activity.object)),
-    });
-
-    if (activityToBeUndone === undefined) {
-      console.error('Failed to find activity to be undone');
-      return;
-    }
-
-    const instanceActor = await getInstanceActor();
-    const instanceActorId = instanceActor.actor.id;
-
-    // Case 1: Undoing a follow
-    if (
-      activityToBeUndone.type === SupportedActivityType.Follow &&
-      activityToBeUndone.object === instanceActorId
-    ) {
-      await this.updateActorIsFollowing(activity.actor, false);
-
-      return;
-    }
-
-    // Case 2: Undoing a like
-    if (activityToBeUndone.type === SupportedActivityType.Like) {
-      // TODO
-      return;
-    }
+  async handleUnfollowActivity(activity: ActivityPubActivity) {
+    await this.updateActorIsFollowing(activity.actor, false);
   }
 
   /**

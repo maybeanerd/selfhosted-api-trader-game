@@ -13,9 +13,10 @@ import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { eq } from 'drizzle-orm';
 import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
-import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
-import { getInstanceActor } from '@/modules/crossroads/activitypub/actor';
-import { addActivityHandler } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
+import {
+  HandlerActivityType,
+  addActivityHandler,
+} from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
   return {
@@ -33,22 +34,12 @@ export class TreatyService {
     this.ensureServerId();
 
     addActivityHandler(
-      SupportedActivityType.Follow,
+      HandlerActivityType.Follow,
       this.handleFollowActivity.bind(this),
     );
   }
 
   async handleFollowActivity(activity: ActivityPubActivity) {
-    if (activity.type !== SupportedActivityType.Follow) {
-      return;
-    }
-
-    // If the follow doesn't apply to the instance actor, ignore it
-    const instanceActor = await getInstanceActor();
-    if (activity.object !== instanceActor.actor.id) {
-      return;
-    }
-
     // TODO detect if it's a gameserver. If not, return early
 
     const existingTreaty = await drizz.query.storedTreaty.findFirst({
