@@ -169,6 +169,13 @@
       "when": 1714860400579,
       "tag": "0023_ancient_madame_masque",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1714910196134,
+      "tag": "0024_round_spacker_dave",
+      "breakpoints": true
     }
   ]
 }

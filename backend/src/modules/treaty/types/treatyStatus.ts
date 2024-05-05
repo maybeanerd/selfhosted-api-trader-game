@@ -11,4 +11,8 @@ export enum TreatyStatus {
    * Both parties agreed to the treaty.
    */
   Signed = 'signed',
+  /**
+   * The treaty was rejected (by the other party).
+   */
+  Rejected = 'rejected',
 }

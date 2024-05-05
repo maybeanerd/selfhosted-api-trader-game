@@ -37,6 +37,11 @@ export class TreatyService {
       HandlerActivityType.Follow,
       this.handleFollowActivity.bind(this),
     );
+
+    addActivityHandler(
+      HandlerActivityType.Unfollow,
+      this.handleUnFollowActivity.bind(this),
+    );
   }
 
   async handleFollowActivity(activity: ActivityPubActivity) {
@@ -48,18 +53,56 @@ export class TreatyService {
 
     if (existingTreaty === undefined) {
       await this.createTreaty(activity.actor, TreatyStatus.Proposed);
-    } else {
-      if (existingTreaty.status === TreatyStatus.Requested) {
-        await this.updateTreaty(activity.actor, {
-          status: TreatyStatus.Signed,
-        });
-      } else {
-        console.error(
-          'Treaty was already marked a signed or proposed, but we just got their follow activity.',
-          existingTreaty,
-        );
-      }
+      return;
     }
+
+    if (existingTreaty.status === TreatyStatus.Requested) {
+      await this.updateTreaty(activity.actor, {
+        status: TreatyStatus.Signed,
+      });
+      return;
+    }
+
+    console.error(
+      'Treaty was already marked a signed or proposed, but we just got their follow activity.',
+      existingTreaty,
+    );
+  }
+
+  async handleUnFollowActivity(activity: ActivityPubActivity) {
+    // TODO detect if it's a gameserver. If not, return early
+
+    const existingTreaty = await drizz.query.storedTreaty.findFirst({
+      where: eq(storedTreaty.activityPubActorId, activity.actor),
+    });
+
+    if (existingTreaty === undefined) {
+      console.error(
+        'Treaty did not exist in the first place, but we received an unfollow.',
+        existingTreaty,
+      );
+      return;
+    }
+
+    if (existingTreaty.status === TreatyStatus.Proposed) {
+      await this.removeTreaty(activity.actor);
+      return;
+    }
+
+    if (
+      existingTreaty.status === TreatyStatus.Requested ||
+      existingTreaty.status === TreatyStatus.Signed
+    ) {
+      await this.updateTreaty(activity.actor, {
+        status: TreatyStatus.Rejected,
+      });
+      return;
+    }
+
+    console.error(
+      'Treaty was already marked a rejected, but we just got their unfollow activity.',
+      existingTreaty,
+    );
   }
 
   async ensureServerId(): Promise<string> {
