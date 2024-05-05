@@ -9,7 +9,7 @@ RUN pnpm i
 
 # Build
 COPY . .
-RUN pnpm run build
+RUN pnpm build
 
 # Start service
-CMD ["pnpm", "run", "start:prod"]
+CMD ["pnpm", "start:prod"]
