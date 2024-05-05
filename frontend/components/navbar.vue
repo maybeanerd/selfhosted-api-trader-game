@@ -8,6 +8,10 @@ const links = [{
   icon: 'i-heroicons-archive-box-arrow-down-20-solid',
   to: '/resources',
 }, {
+  label: 'Trades',
+  icon: 'i-heroicons:arrows-up-down-solid',
+  to: '/trades',
+}, {
   label: 'Treaties',
   icon: 'i-heroicons-link',
   to: '/treaties',
