@@ -78,7 +78,10 @@ export class TreatyService {
       return;
     }
 
-    if (existingTreaty.status === TreatyStatus.Proposed) {
+    if (
+      existingTreaty.status === TreatyStatus.Proposed ||
+      existingTreaty.status === TreatyStatus.Removed
+    ) {
       await drizz
         .delete(storedTreaty)
         .where(eq(storedTreaty.activityPubActorId, activity.actor));
