@@ -46,7 +46,7 @@ export const activityPubObjectDto = z.object({
   attributedTo: inboxActivityActor,
   content: z.string(),
   gameContent: inboxActivityGameObject,
-  to: z.string(),
+  to: z.string().or(z.array(z.string()).min(1)),
   inReplyTo: inboxActivityActor.optional(),
 });
 

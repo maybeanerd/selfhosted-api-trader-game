@@ -775,12 +775,23 @@ export class ActivityPubService {
     objectId: string,
   ): Promise<ActivityPubObject | undefined> {
     const object = (
-      await lastValueFrom(this.httpService.get<APObject>(objectId))
+      await lastValueFrom(
+        this.httpService.get<APObject>(objectId, {
+          headers: {
+            Accept: 'application/activity+json',
+          },
+        }),
+      )
     ).data;
 
     const validation = await activityPubObjectDto.safeParseAsync(object);
     if (validation.success === false) {
-      console.error('Failed to validate object', validation.error);
+      console.error(
+        'Failed to validate object\n',
+        object,
+        '\nwith error\n',
+        validation.error,
+      );
       return;
     }
     const validatedObject = validation.data;
@@ -799,7 +810,10 @@ export class ActivityPubService {
         typeof validatedObject.inReplyTo === 'string'
           ? validatedObject.inReplyTo
           : validatedObject.inReplyTo?.id,
-      to: validatedObject.to,
+      to:
+        typeof validatedObject.to === 'string'
+          ? validatedObject.to
+          : validatedObject.to[0],
     };
 
     const createdObjects = await drizz
@@ -884,7 +898,10 @@ export class ActivityPubService {
                 typeof validatedActivity.object.inReplyTo === 'string'
                   ? validatedActivity.object.inReplyTo
                   : validatedActivity.object.inReplyTo?.id,
-              to: validatedActivity.object.to,
+              to:
+                typeof validatedActivity.object.to === 'string'
+                  ? validatedActivity.object.to
+                  : validatedActivity.object.to[0],
             };
             await transaction.insert(activityPubObject).values(newObject);
           }
