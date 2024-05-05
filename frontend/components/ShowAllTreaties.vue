@@ -35,12 +35,23 @@
 </template>
 
 <script setup lang="ts">
-const { data: treaties } = await useFetch<Array<{
+const { data: treaties, refresh } = await useFetch<Array<{
   status: string;
   activityPubActorId: string;
 }>>(
   'http://localhost:8080/v1/treaty',
 );
+
+let stopInterval: NodeJS.Timeout;
+
+onMounted(() => {
+  // Refresh data every 2.5 seconds
+  stopInterval = setInterval(refresh, 2500);
+});
+
+onUnmounted(() => {
+  clearInterval(stopInterval);
+});
 
 const activeTreaties = computed(() => treaties.value?.filter(treaty => treaty.status !== 'removed'));
 

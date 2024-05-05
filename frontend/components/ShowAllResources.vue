@@ -18,9 +18,20 @@
 </template>
 
 <script setup lang="ts">
-const { data: resources } = await useFetch<Array<{
+const { data: resources, refresh } = await useFetch<Array<{
   ownerId: string, type: string, amount: number, 'upgradeLevel': number
 }>>(
   'http://localhost:8080/v1/resource',
 );
+
+let stopInterval: NodeJS.Timeout;
+
+onMounted(() => {
+  // Refresh data every 2.5 seconds
+  stopInterval = setInterval(refresh, 2500);
+});
+
+onUnmounted(() => {
+  clearInterval(stopInterval);
+});
 </script>
