@@ -6,7 +6,6 @@ import {
   storedTreaty,
 } from 'db/schema';
 import { TreatyDto } from './dto/Treaty.dto';
-import { HttpService } from '@nestjs/axios';
 import { drizz } from 'db';
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { eq } from 'drizzle-orm';
@@ -27,10 +26,7 @@ function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
 
 @Injectable()
 export class TreatyService {
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly activityPubService: ActivityPubService,
-  ) {
+  constructor(private readonly activityPubService: ActivityPubService) {
     this.ensureServerId();
 
     addActivityHandler(
@@ -179,8 +175,6 @@ export class TreatyService {
     };
   }
 
-  ownURL = 'http://7.22.217.133:8080'; // TODO get own URL
-
   async offerTreaty(instanceBaseUrl: string): Promise<TreatyDto | null> {
     const actor =
       await this.activityPubService.importActorFromWebfinger(instanceBaseUrl);
@@ -214,18 +208,6 @@ export class TreatyService {
 
       if (update.status) {
         existingTreaty.status = update.status;
-      }
-
-      // TODO replace with AP stuff
-      const url = existingTreaty.activityPubActorId;
-      const body: TreatyDto = {
-        status: existingTreaty.status,
-        activityPubActorId: activityPubActorId,
-      };
-      try {
-        await this.httpService.put<TreatyDto>(url, body).toPromise();
-      } catch {
-        return null;
       }
 
       await transaction
