@@ -39,18 +39,18 @@ export const inboxActivityGameObject = z.object({
   ),
 });
 
-export const inboxActivityObject = activityPubId.or(
-  z.object({
-    id: activityPubId,
-    type: z.nativeEnum(SupportedObjectType),
-    published: z.string().datetime(),
-    attributedTo: inboxActivityActor,
-    content: z.string(),
-    gameContent: inboxActivityGameObject,
-    to: z.string(),
-    inReplyTo: inboxActivityActor.optional(),
-  }),
-);
+export const activityPubObjectDto = z.object({
+  id: activityPubId,
+  type: z.nativeEnum(SupportedObjectType),
+  published: z.string().datetime(),
+  attributedTo: inboxActivityActor,
+  content: z.string(),
+  gameContent: inboxActivityGameObject,
+  to: z.string(),
+  inReplyTo: inboxActivityActor.optional(),
+});
+
+export const inboxActivityObject = activityPubId.or(activityPubObjectDto);
 
 export const inboxActivity = z.object({
   id: activityPubId,

@@ -41,6 +41,7 @@ import {
   inboxActivity,
   activityPubActorDto,
   publicKeyDto,
+  activityPubObjectDto,
 } from '@/modules/crossroads/activitypub/dto/Inbox.dto';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
@@ -102,7 +103,10 @@ export class ActivityPubService {
       this.handleUnfollowActivity.bind(this),
     );
 
-    // TODO handle create and pass down the pulled object
+    addActivityFederationHandler(
+      HandlerActivityType.Create,
+      this.handleCreateActivity.bind(this),
+    );
   }
 
   // TODO at some point consider real workers to take care of this. for now, a cron job is enough
@@ -243,6 +247,18 @@ export class ActivityPubService {
 
   async handleUnfollowActivity(activity: ActivityPubActivity) {
     await this.updateActorIsFollowing(activity.actor, false);
+  }
+
+  async handleCreateActivity(activity: ActivityPubActivity) {
+    const existingNote = await drizz.query.activityPubObject.findFirst({
+      where: (object) => eq(object.id, activity.object),
+    });
+
+    if (existingNote !== undefined) {
+      return existingNote;
+    }
+
+    return this.fetchAndStoreObject(activity.object);
   }
 
   /**
@@ -742,7 +758,7 @@ export class ActivityPubService {
     return mapActivityPubActivityToDto(apActivity);
   }
 
-  // TODO paginationand start date
+  // TODO pagination and start date
   async getOutbox(): Promise<Array<APRoot<APActivity>>> {
     const { actor } = await getInstanceActor();
     const activities = await drizz.query.activityPubActivity.findMany({
@@ -755,10 +771,44 @@ export class ActivityPubService {
     return activities.map(mapActivityPubActivityToDto);
   }
 
-  // TODO
-  /* async storeObject(object: APObject): Promise<void> {
+  async fetchAndStoreObject(
+    objectId: string,
+  ): Promise<ActivityPubObject | undefined> {
+    const object = (
+      await lastValueFrom(this.httpService.get<APObject>(objectId))
+    ).data;
 
-  } */
+    const validation = await activityPubObjectDto.safeParseAsync(object);
+    if (validation.success === false) {
+      console.error('Failed to validate object', validation.error);
+      return;
+    }
+    const validatedObject = validation.data;
+
+    const newObject: NewActivityPubObject = {
+      id: validatedObject.id,
+      type: validatedObject.type,
+      published: new Date(validatedObject.published),
+      attributedTo:
+        typeof validatedObject.attributedTo === 'string'
+          ? validatedObject.attributedTo
+          : validatedObject.attributedTo.id,
+      content: validatedObject.content,
+      gameContent: validatedObject.gameContent,
+      inReplyTo:
+        typeof validatedObject.inReplyTo === 'string'
+          ? validatedObject.inReplyTo
+          : validatedObject.inReplyTo?.id,
+      to: validatedObject.to,
+    };
+
+    const createdObjects = await drizz
+      .insert(activityPubObject)
+      .values(newObject)
+      .returning();
+
+    return createdObjects.at(0);
+  }
 
   async handleInbox(activities: Array<unknown>): Promise<void> {
     await drizz.transaction(async (transaction) => {
