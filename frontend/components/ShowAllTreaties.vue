@@ -4,7 +4,7 @@
       <div v-if="treaties.length === 0">
         No treaties found.
       </div>
-      <div v-for="treaty in treaties" v-else :key="treaty.activityPubActorId" class="border-2 p-2">
+      <div v-for="treaty in activeTreaties" v-else :key="treaty.activityPubActorId" class="border-2 p-2">
         <p>Actor: {{ treaty.activityPubActorId }}</p>
         <p>Status: {{ treaty.status }}</p>
         <br>
@@ -15,6 +15,18 @@
           Remove
         </Ubutton>
       </div>
+      <br>
+
+      <template v-if="removedTreaties">
+        <h2>Removed Treaties:</h2>
+        <div v-for="treaty in removedTreaties" :key="treaty.activityPubActorId" class="border-2 p-2">
+          <p>Actor: {{ treaty.activityPubActorId }}</p>
+          <p>Status: {{ treaty.status }}</p>
+          <UButton @click="acceptTreaty(treaty.activityPubActorId)">
+            Revive
+          </Ubutton>
+        </div>
+      </template>
     </template>
     <div v-else>
       Loading treaties...
@@ -30,7 +42,11 @@ const { data: treaties } = await useFetch<Array<{
   'http://localhost:8080/v1/treaty',
 );
 
-async function acceptTreaty (
+const activeTreaties = computed(() => treaties.value?.filter(treaty => treaty.status !== 'removed'));
+
+const removedTreaties = computed(() => treaties.value?.filter(treaty => treaty.status === 'removed'));
+
+async function acceptTreaty(
   activityPubActorId: string,
 ) {
   await fetch('http://localhost:8080/v1/treaty', {
@@ -45,7 +61,7 @@ async function acceptTreaty (
   });
 }
 
-async function removeTreaty (
+async function removeTreaty(
   activityPubActorId: string,
 ) {
   await fetch('http://localhost:8080/v1/treaty', {

@@ -8,7 +8,7 @@ import {
 import { TreatyDto } from './dto/Treaty.dto';
 import { drizz } from 'db';
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
-import { eq, not } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
 import {
@@ -128,9 +128,7 @@ export class TreatyService {
 
   async getAllTreaties(): Promise<Array<TreatyDto>> {
     // TODO pagination
-    const treaties = await drizz.query.storedTreaty.findMany({
-      where: (t) => not(eq(t.status, TreatyStatus.Removed)),
-    });
+    const treaties = await drizz.query.storedTreaty.findMany();
 
     return treaties.map(mapTreatyDocumentToTreatyDto);
   }
