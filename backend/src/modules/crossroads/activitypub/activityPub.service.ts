@@ -50,6 +50,10 @@ import {
   addActivityHandler,
   handleActivities,
 } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
+import {
+  activityPubGameServerExtension,
+  comesFromGameServer,
+} from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 
 function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
   return {
@@ -67,7 +71,10 @@ function mapActivityPubActivityToDto(
   activity: ActivityPubActivity,
 ): APRoot<APActivity> {
   return {
-    '@context': 'https://www.w3.org/ns/activitystreams',
+    '@context': [
+      'https://www.w3.org/ns/activitystreams',
+      activityPubGameServerExtension,
+    ],
     id: activity.id,
     type: activity.type,
     actor: activity.actor,
@@ -96,7 +103,17 @@ export class ActivityPubService {
 
     const incomingActivities = (
       await drizz
-        .select()
+        .select({
+          id: activityPubActivity.id,
+          type: activityPubActivity.type,
+          actor: activityPubActivity.actor,
+          object: activityPubActivity.object,
+          internalId: activityPubActivity.internalId,
+          receivedOn: activityPubActivity.receivedOn,
+          target: activityPubActivity.target,
+
+          isGameServer: activityPubActor.isGameServer,
+        })
         .from(activityPubActivityQueue)
         .where(
           and(
@@ -110,13 +127,43 @@ export class ActivityPubService {
           activityPubActivity,
           eq(activityPubActivity.id, activityPubActivityQueue.id),
         )
+        .innerJoin(
+          activityPubActor,
+          eq(activityPubActor.id, activityPubActivity.actor),
+        )
         .orderBy(asc(activityPubActivityQueue.createdOn))
-    ).map((result) => result.activityPubActivity);
+    ).map(
+      ({
+        id,
+        type,
+        actor,
+        object,
+        internalId,
+        receivedOn,
+        target,
+        isGameServer,
+      }) => ({
+        activity: {
+          type,
+          id,
+          actor,
+          object,
+          internalId,
+          receivedOn,
+          target,
+        },
+        context: {
+          isGameServer,
+        },
+      }),
+    );
 
     if (incomingActivities.length > 0) {
       await handleActivities(incomingActivities);
 
-      const handledIncomingActivityIds = incomingActivities.map(({ id }) => id);
+      const handledIncomingActivityIds = incomingActivities.map(
+        ({ activity }) => activity.id,
+      );
 
       await drizz
         .delete(activityPubActivityQueue)
@@ -209,10 +256,9 @@ export class ActivityPubService {
         return null;
       }
 
-      // TODO figure this out baesed on either actor context or game server API (server info)
-      const isGameServer = false;
-
       const receivedActor = validation.data;
+
+      const isGameServer = comesFromGameServer(receivedActor);
 
       const receivedPublicKey = receivedActor.publicKey;
 

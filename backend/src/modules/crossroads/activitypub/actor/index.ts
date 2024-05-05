@@ -9,6 +9,7 @@ import {
   getInboxUrl,
   getOutboxUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
+import { activityPubGameServerExtension } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { drizz } from 'db';
 
 async function getActorFromId(
@@ -22,6 +23,7 @@ async function getActorFromId(
     '@context': [
       'https://www.w3.org/ns/activitystreams',
       'https://w3id.org/security/v1',
+      activityPubGameServerExtension,
     ],
 
     id: actorId,

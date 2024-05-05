@@ -12,6 +12,7 @@ export const publicKeyDto = z.object({
 });
 
 export const activityPubActorDto = z.object({
+  '@context': z.string().or(z.array(z.string())).optional(),
   id: activityPubId,
   type: z.nativeEnum(SupportedActorType),
   preferredUsername: z.string().default('noname'),

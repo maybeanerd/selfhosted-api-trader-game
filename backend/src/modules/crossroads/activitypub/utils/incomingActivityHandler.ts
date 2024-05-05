@@ -23,10 +23,19 @@ export enum HandlerActivityType {
   'Delete' = 'Delete',
 }
 
+export type HandlerContext = {
+  isGameServer: boolean;
+};
+
 const activityHandlers: Partial<
 Record<
 HandlerActivityType,
-Array<(activity: ActivityPubActivity) => Promise<void> | void>
+Array<
+(
+  activity: ActivityPubActivity,
+  context: HandlerContext,
+) => Promise<void> | void
+>
 >
 > = {};
 
@@ -107,11 +116,14 @@ async function validateHandlerTypeOfActivity(
 }
 
 export async function handleActivities(
-  activities: Array<ActivityPubActivity>,
+  activities: Array<{
+    activity: ActivityPubActivity;
+    context: HandlerContext;
+  }>,
 ): Promise<void> {
   console.log('Handling activities', activities);
 
-  for (const activity of activities) {
+  for (const { activity, context } of activities) {
     const handlerType = await validateHandlerTypeOfActivity(activity);
     if (handlerType === null) {
       console.info('Will not handle activity:', activity);
@@ -124,7 +136,7 @@ export async function handleActivities(
       continue;
     }
 
-    await Promise.all(handlers.map((handler) => handler(activity)));
+    await Promise.all(handlers.map((handler) => handler(activity, context)));
   }
 }
 

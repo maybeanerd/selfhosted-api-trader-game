@@ -15,6 +15,7 @@ import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
 import {
   HandlerActivityType,
+  HandlerContext,
   addActivityHandler,
 } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 
@@ -44,8 +45,14 @@ export class TreatyService {
     );
   }
 
-  async handleFollowActivity(activity: ActivityPubActivity) {
-    // TODO detect if it's a gameserver. If not, return early
+  async handleFollowActivity(
+    activity: ActivityPubActivity,
+    context: HandlerContext,
+  ) {
+    // Only handle follow activities from game servers
+    if (!context.isGameServer) {
+      return;
+    }
 
     const existingTreaty = await drizz.query.storedTreaty.findFirst({
       where: eq(storedTreaty.activityPubActorId, activity.actor),
@@ -69,9 +76,14 @@ export class TreatyService {
     );
   }
 
-  async handleUnFollowActivity(activity: ActivityPubActivity) {
-    // TODO detect if it's a gameserver. If not, return early
-
+  async handleUnFollowActivity(
+    activity: ActivityPubActivity,
+    context: HandlerContext,
+  ) {
+    // Only handle unfollow activities from game servers
+    if (!context.isGameServer) {
+      return;
+    }
     const existingTreaty = await drizz.query.storedTreaty.findFirst({
       where: eq(storedTreaty.activityPubActorId, activity.actor),
     });
