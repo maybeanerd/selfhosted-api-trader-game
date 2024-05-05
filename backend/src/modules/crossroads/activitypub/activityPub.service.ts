@@ -276,8 +276,17 @@ export class ActivityPubService {
           }),
         )
       ).data;
+
       const validation = await activityPubActorDto.safeParseAsync(remoteActor);
+
       if (validation.success === false) {
+        console.error(
+          'Failed to validate actor\n',
+          remoteActor,
+          '\nwith error\n',
+          validation.error,
+        );
+
         return null;
       }
 
@@ -320,7 +329,8 @@ export class ActivityPubService {
         isGameServer,
         isFollowingThisServer: false,
       };
-    } catch {
+    } catch (e: unknown) {
+      console.error('Failed to fetch remote actor', e);
       return null;
     }
   }
