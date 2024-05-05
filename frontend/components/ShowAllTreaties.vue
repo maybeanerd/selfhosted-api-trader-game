@@ -30,7 +30,7 @@ const { data: treaties } = await useFetch<Array<{
   'http://localhost:8080/v1/treaty',
 );
 
-async function acceptTreaty(
+async function acceptTreaty (
   activityPubActorId: string,
 ) {
   await fetch('http://localhost:8080/v1/treaty', {
@@ -45,7 +45,7 @@ async function acceptTreaty(
   });
 }
 
-async function deleteTreaty(
+async function deleteTreaty (
   activityPubActorId: string,
 ) {
   await fetch('http://localhost:8080/v1/treaty', {

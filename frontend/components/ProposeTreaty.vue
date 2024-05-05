@@ -10,7 +10,7 @@
 <script setup lang="ts">
 const instanceUrl = ref('');
 
-async function submitTreaty() {
+async function submitTreaty () {
   const treaty = {
     url: instanceUrl.value,
   };
