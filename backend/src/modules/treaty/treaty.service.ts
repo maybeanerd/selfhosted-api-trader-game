@@ -79,7 +79,9 @@ export class TreatyService {
     }
 
     if (existingTreaty.status === TreatyStatus.Proposed) {
-      await this.removeTreaty(activity.actor);
+      await drizz
+        .delete(storedTreaty)
+        .where(eq(storedTreaty.activityPubActorId, activity.actor));
       return;
     }
 
