@@ -4,22 +4,28 @@
       <div v-if="trades.length === 0">
         No trades found.
       </div>
-      <div v-for="trade in ownTrades" :key="trade.id" class="border-2 p-2">
-        <p>Offered: {{ trade.offeredResources }}</p> <br>
-        <p>Requested: {{ trade.requestedResources }}</p>
-        <br>
-        <UButton>
-          Accept
-        </Ubutton>
-      </div>
-      <div v-for="trade in activeTrades" :key="trade.id" class="border-2 p-2">
-        <p>Offered: {{ trade.offeredResources }}</p> <br>
-        <p>Requested: {{ trade.requestedResources }}</p>
-        <br>
-        <UButton>
-          Take Back
-        </Ubutton>
-      </div>
+      <template v-if="ownTrades && ownTrades.length > 0">
+        <h1>Own Trades:</h1>
+        <div v-for="trade in ownTrades" :key="trade.id" class="border-2 p-2">
+          <p>Offered: {{ trade.offeredResources }}</p> <br>
+          <p>Requested: {{ trade.requestedResources }}</p>
+          <br>
+          <UButton>
+            Take Back
+          </Ubutton>
+        </div>
+      </template>
+      <template v-if="activeTrades && activeTrades.length > 0">
+        <h1>Active Trades:</h1>
+        <div v-for="trade in activeTrades" :key="trade.id" class="border-2 p-2">
+          <p>Offered: {{ trade.offeredResources }}</p> <br>
+          <p>Requested: {{ trade.requestedResources }}</p>
+          <br>
+          <UButton>
+            Accept
+          </Ubutton>
+        </div>
+      </template>
     </template>
     <div v-else>
       Loading trades...

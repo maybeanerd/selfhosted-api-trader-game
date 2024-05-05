@@ -1,6 +1,13 @@
 <template>
   <div>
-    TODO
+    <h1>Requested Resources:</h1>
+    <UInputMenu v-model="requestedResources.type" :options="resourceOptions" />
+    <UInput v-model="requestedResources.amount" type="number" />
+    <br>
+    <h1>Offered Resources:</h1>
+    <UInputMenu v-model="offeredResources.type" :options="resourceOptions" />
+    <UInput v-model="offeredResources.amount" type="number" />
+    <br>
     <UButton class="p-2" @click="submitTrade">
       Submit Trade
     </UButton>
@@ -8,11 +15,25 @@
 </template>
 
 <script setup lang="ts">
-const instanceUrl = ref('');
+const resourceOptions = [
+  'wood',
+  'stone',
+];
+
+const requestedResources = ref<{
+  type?: string,
+  amount?: number,
+}>({});
+
+const offeredResources = ref<{
+  type?: string,
+  amount?: number,
+}>({});
 
 async function submitTrade () {
   const trade = {
-
+    requestedResources: [requestedResources.value],
+    offeredResources: [offeredResources.value],
   };
 
   await fetch('http://localhost:8080/v1/trade', {
@@ -23,7 +44,8 @@ async function submitTrade () {
     body: JSON.stringify(trade),
   });
 
-  instanceUrl.value = '';
+  requestedResources.value = {};
+  offeredResources.value = {};
 }
 
 </script>
