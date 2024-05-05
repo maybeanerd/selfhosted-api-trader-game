@@ -1,6 +1,7 @@
 import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
 import { SupportedActorType } from '@/modules/crossroads/activitypub/actor/types';
 import { SupportedObjectType } from '@/modules/crossroads/activitypub/object';
+import { ResourceType } from '@/modules/resource/types';
 import { z } from 'zod';
 
 const activityPubId = z.string().url();
@@ -23,6 +24,21 @@ export const activityPubActorDto = z.object({
 
 export const inboxActivityActor = activityPubId.or(activityPubActorDto);
 
+export const inboxActivityGameObject = z.object({
+  requestedResources: z.array(
+    z.object({
+      type: z.nativeEnum(ResourceType),
+      amount: z.number(),
+    }),
+  ),
+  offeredResources: z.array(
+    z.object({
+      type: z.nativeEnum(ResourceType),
+      amount: z.number(),
+    }),
+  ),
+});
+
 export const inboxActivityObject = activityPubId.or(
   z.object({
     id: activityPubId,
@@ -30,7 +46,7 @@ export const inboxActivityObject = activityPubId.or(
     published: z.string().datetime(),
     attributedTo: inboxActivityActor,
     content: z.string(),
-    gameContent: z.object({}), // TODO define gameContent
+    gameContent: inboxActivityGameObject,
     to: z.string(),
     inReplyTo: inboxActivityActor.optional(),
   }),

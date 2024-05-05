@@ -1,7 +1,11 @@
 import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
 import { getInstanceActor } from '@/modules/crossroads/activitypub/actor';
 import { drizz } from 'db';
-import { ActivityPubActivity } from 'db/schema';
+import {
+  ActivityPubActivity,
+  ActivityPubObject,
+  activityPubObject,
+} from 'db/schema';
 import { and, eq } from 'drizzle-orm';
 
 // TODO move this entire logic back into the activity service?
@@ -25,17 +29,26 @@ export enum HandlerActivityType {
 
 export type HandlerContext = {
   isGameServer: boolean;
+  objectDetails?: ActivityPubObject;
 };
 
 const activityHandlers: Partial<
 Record<
 HandlerActivityType,
-Array<
-(
-  activity: ActivityPubActivity,
-  context: HandlerContext,
-) => Promise<void> | void
->
+{
+  federationHandler?: (
+    activity: ActivityPubActivity,
+    context: HandlerContext,
+  ) =>
+  | Promise<HandlerContext['objectDetails']>
+  | HandlerContext['objectDetails'];
+  gameLogicHandlers?: Array<
+  (
+    activity: ActivityPubActivity,
+    context: HandlerContext,
+  ) => Promise<void> | void
+  >;
+}
 >
 > = {};
 
@@ -46,6 +59,18 @@ async function validateHandlerTypeOfActivity(
     return HandlerActivityType.Create;
   }
   if (activity.type === SupportedActivityType.Delete) {
+    const objectToDelete = await drizz.query.activityPubObject.findFirst({
+      where: and(
+        eq(activityPubObject.id, activity.object),
+        eq(activityPubObject.attributedTo, activity.actor),
+      ),
+    });
+
+    if (objectToDelete === undefined) {
+      console.error('Failed to find object to be deleted.');
+      return null;
+    }
+
     return HandlerActivityType.Delete;
   }
 
@@ -135,17 +160,63 @@ export async function handleActivities(
       console.info('No handlers for handler type', activity.type);
       continue;
     }
+    const { federationHandler, gameLogicHandlers } = handlers;
 
-    await Promise.all(handlers.map((handler) => handler(activity, context)));
+    const objectDetails = federationHandler
+      ? await federationHandler(activity, context)
+      : undefined;
+
+    // Only run game logic handlers on activities from game servers
+    if (context.isGameServer && gameLogicHandlers !== undefined) {
+      await Promise.all(
+        gameLogicHandlers.map((handler) =>
+          handler(activity, { ...context, objectDetails }),
+        ),
+      );
+    }
   }
 }
 
-export function addActivityHandler<Type extends HandlerActivityType>(
-  type: Type,
-  handler: (activity: ActivityPubActivity) => Promise<void> | void,
+export function addActivityFederationHandler<Type extends HandlerActivityType>(
+  activityType: Type,
+  handler: (
+    activity: ActivityPubActivity,
+    context: HandlerContext,
+  ) =>
+  | Promise<HandlerContext['objectDetails']>
+  | HandlerContext['objectDetails'],
 ) {
-  if (activityHandlers[type] === undefined) {
-    activityHandlers[type] = [];
+  if (activityHandlers[activityType] === undefined) {
+    activityHandlers[activityType] = {};
   }
-  activityHandlers[type]?.push(handler);
+  const existingHandler = activityHandlers[activityType];
+  if (existingHandler === undefined) {
+    console.error('existingHandler is undefined, but it should not be');
+    return;
+  }
+
+  existingHandler.federationHandler = handler;
+}
+
+export function addActivityGameLogicHandler<Type extends HandlerActivityType>(
+  activityType: Type,
+  handler: (
+    activity: ActivityPubActivity,
+    context: HandlerContext,
+  ) => Promise<void> | void,
+) {
+  if (activityHandlers[activityType] === undefined) {
+    activityHandlers[activityType] = {};
+  }
+  const existingHandler = activityHandlers[activityType];
+  if (existingHandler === undefined) {
+    console.error('existingHandler is undefined, but it should not be');
+    return;
+  }
+
+  if (existingHandler.gameLogicHandlers === undefined) {
+    existingHandler.gameLogicHandlers = [];
+  }
+
+  existingHandler.gameLogicHandlers?.push(handler);
 }

@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { ResourceType } from '@/modules/resource/types';
 import { ResourceService } from '@/modules/resource/resource.service';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
-import { NewTrade, Trade, trade } from 'db/schema';
+import { ActivityPubActivity, NewTrade, Trade, trade } from 'db/schema';
 import { drizz } from 'db';
 import { and, eq } from 'drizzle-orm';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
+import {
+  HandlerActivityType,
+  HandlerContext,
+  addActivityGameLogicHandler,
+} from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 
 function mapTradeDocumentToTradeOfferDto(t: Trade): TradeOfferDto {
   return {
@@ -21,7 +26,55 @@ export class TradeService {
   constructor(
     private readonly resourceService: ResourceService,
     private readonly activityPubService: ActivityPubService,
-  ) {}
+  ) {
+    addActivityGameLogicHandler(
+      HandlerActivityType.Like,
+      this.handleLikeActivity.bind(this),
+    );
+
+    addActivityGameLogicHandler(
+      HandlerActivityType.Create,
+      this.handleCreateActivity.bind(this),
+    );
+
+    addActivityGameLogicHandler(
+      HandlerActivityType.Delete,
+      this.handleDeleteActivity.bind(this),
+    );
+  }
+
+  async handleLikeActivity(activity: ActivityPubActivity) {
+    const tradeOffer = await drizz.query.trade.findFirst({
+      where: eq(trade.activityPubNoteId, activity.object),
+    });
+
+    if (tradeOffer === undefined) {
+      console.error('Could not find trade offer for like activity');
+      return;
+    }
+
+    await this.acceptTradeOffer(tradeOffer.id);
+  }
+
+  async handleCreateActivity(
+    activity: ActivityPubActivity,
+    context: HandlerContext,
+  ) {
+    if (!context.objectDetails) {
+      console.error('No object details found in context');
+      return;
+    }
+
+    const { gameContent } = context.objectDetails;
+
+    await this.receiveTradeOffer(activity.object, gameContent);
+  }
+
+  async handleDeleteActivity(activity: ActivityPubActivity) {
+    await drizz
+      .delete(trade)
+      .where(eq(trade.activityPubNoteId, activity.object));
+  }
 
   async getAllTradeOffers(): Promise<Array<TradeOfferDto>> {
     const trades = await drizz.query.trade.findMany();
@@ -85,8 +138,6 @@ ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
   async receiveTradeOffer(
     activityPubNoteId: string,
     receivedTrade: {
-      id: string;
-      creatorId: string;
       requestedResources: Array<{ type: ResourceType; amount: number }>;
       offeredResources: Array<{ type: ResourceType; amount: number }>;
     },

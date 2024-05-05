@@ -47,16 +47,23 @@ import { lastValueFrom } from 'rxjs';
 import { z } from 'zod';
 import {
   HandlerActivityType,
-  addActivityHandler,
+  addActivityFederationHandler,
   handleActivities,
 } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 import {
   activityPubGameServerExtension,
   comesFromGameServer,
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
+import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 
-function mapActivityPubObjectToDto(object: ActivityPubObject): APObject {
+function mapActivityPubObjectToDto(
+  object: ActivityPubObject,
+): APRoot<APObject> {
   return {
+    '@context': [
+      'https://www.w3.org/ns/activitystreams',
+      activityPubGameServerExtension,
+    ],
     id: object.id,
     type: object.type,
     published: object.published,
@@ -85,15 +92,17 @@ function mapActivityPubActivityToDto(
 @Injectable()
 export class ActivityPubService {
   constructor(private readonly httpService: HttpService) {
-    addActivityHandler(
+    addActivityFederationHandler(
       HandlerActivityType.Follow,
       this.handleFollowActivity.bind(this),
     );
 
-    addActivityHandler(
+    addActivityFederationHandler(
       HandlerActivityType.Unfollow,
       this.handleUnfollowActivity.bind(this),
     );
+
+    // TODO handle create and pass down the pulled object
   }
 
   // TODO at some point consider real workers to take care of this. for now, a cron job is enough
@@ -510,7 +519,7 @@ export class ActivityPubService {
   async createNoteObject(
     actorId: string,
     content: string,
-    gameContent: unknown = {}, // TODO define this type
+    gameContent: GameContent,
     inReplyTo?: string,
   ): Promise<string> {
     return drizz.transaction(async (transaction) => {
@@ -745,6 +754,11 @@ export class ActivityPubService {
 
     return activities.map(mapActivityPubActivityToDto);
   }
+
+  // TODO
+  /* async storeObject(object: APObject): Promise<void> {
+
+  } */
 
   async handleInbox(activities: Array<unknown>): Promise<void> {
     await drizz.transaction(async (transaction) => {

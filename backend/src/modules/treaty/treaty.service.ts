@@ -13,8 +13,7 @@ import { generateKeys } from '@/modules/crossroads/activitypub/utils/signing';
 import { ActivityPubService } from '@/modules/crossroads/activitypub/activityPub.service';
 import {
   HandlerActivityType,
-  HandlerContext,
-  addActivityHandler,
+  addActivityGameLogicHandler,
 } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 
 function mapTreatyDocumentToTreatyDto(treaty: StoredTreaty): TreatyDto {
@@ -29,26 +28,18 @@ export class TreatyService {
   constructor(private readonly activityPubService: ActivityPubService) {
     this.ensureServerId();
 
-    addActivityHandler(
+    addActivityGameLogicHandler(
       HandlerActivityType.Follow,
       this.handleFollowActivity.bind(this),
     );
 
-    addActivityHandler(
+    addActivityGameLogicHandler(
       HandlerActivityType.Unfollow,
       this.handleUnFollowActivity.bind(this),
     );
   }
 
-  async handleFollowActivity(
-    activity: ActivityPubActivity,
-    context: HandlerContext,
-  ) {
-    // Only handle follow activities from game servers
-    if (!context.isGameServer) {
-      return;
-    }
-
+  async handleFollowActivity(activity: ActivityPubActivity) {
     const existingTreaty = await drizz.query.storedTreaty.findFirst({
       where: eq(storedTreaty.activityPubActorId, activity.actor),
     });
@@ -71,14 +62,7 @@ export class TreatyService {
     );
   }
 
-  async handleUnFollowActivity(
-    activity: ActivityPubActivity,
-    context: HandlerContext,
-  ) {
-    // Only handle unfollow activities from game servers
-    if (!context.isGameServer) {
-      return;
-    }
+  async handleUnFollowActivity(activity: ActivityPubActivity) {
     const existingTreaty = await drizz.query.storedTreaty.findFirst({
       where: eq(storedTreaty.activityPubActorId, activity.actor),
     });
