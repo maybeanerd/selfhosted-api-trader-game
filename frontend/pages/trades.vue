@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import ShowAllTrades from '~/components/ShowAllTrades.vue';
 import { useHeader } from '~/composables/useHeader';
 
 const { title } = useHeader();
