@@ -230,31 +230,32 @@ export class ActivityPubService {
         }),
       );
 
-      const treatyTargets = (await Promise.all(
-        outgoingActivities
-          .filter((activityToSend) => {
-            // Find follows that we created
-            return activityToSend.type === SupportedActivityType.Follow;
-          })
-          .map(async (activityToSend) => {
-            const actor = await this.findActorByAPId(activityToSend.object);
-            if (actor === null) {
-              return null;
-            }
+      const treatyTargets = (
+        await Promise.all(
+          outgoingActivities
+            .filter((activityToSend) => {
+              // Find follows that we created
+              return activityToSend.type === SupportedActivityType.Follow;
+            })
+            .map(async (activityToSend) => {
+              const actor = await this.findActorByAPId(activityToSend.object);
+              if (actor === null) {
+                return null;
+              }
 
-            // Don't send activities to followers that already got them earlier
-            if (
-              followers.some((follower) => {
-                return follower.id === actor.id;
-              })
-            ) {
-              return null;
-            }
-            // Get their target actors
-            return actor.inbox.toString();
-          })
-          .filter(Boolean),
-      )) as Array<string>;
+              // Don't send activities to followers that already got them earlier
+              if (
+                followers.some((follower) => {
+                  return follower.id === actor.id;
+                })
+              ) {
+                return null;
+              }
+              // Get their target actors
+              return actor.inbox.toString();
+            }),
+        )
+      ).filter(Boolean) as Array<string>;
 
       // TODO don't send all activities to all treaty partners.
       await Promise.all(
