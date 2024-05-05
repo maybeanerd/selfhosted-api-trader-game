@@ -1,11 +1,11 @@
-import { crossroadsActivityPubBasePath } from '@/config/apiPaths';
+import { crossroadsBasePath } from '@/config/apiPaths';
 import { serverInfo } from '@/config/serverInfo';
 
 export const apiVersion = '1';
 
 const { baseUrl } = serverInfo;
 
-const activityPubBaseUrl = `${baseUrl}/v${apiVersion}/${crossroadsActivityPubBasePath}`;
+const activityPubBaseUrl = `${baseUrl}/v${apiVersion}/${crossroadsBasePath}`;
 
 export function getBaseUrl(): string {
   return baseUrl;

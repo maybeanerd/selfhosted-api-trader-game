@@ -7,7 +7,6 @@ import {
 } from 'db/schema';
 import { TreatyDto } from './dto/Treaty.dto';
 import { HttpService } from '@nestjs/axios';
-import { crossroadsTreatyPath } from '@/config/apiPaths';
 import { drizz } from 'db';
 import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 import { eq } from 'drizzle-orm';
@@ -218,7 +217,7 @@ export class TreatyService {
       }
 
       // TODO replace with AP stuff
-      const url = existingTreaty.activityPubActorId + crossroadsTreatyPath;
+      const url = existingTreaty.activityPubActorId;
       const body: TreatyDto = {
         status: existingTreaty.status,
         activityPubActorId: activityPubActorId,

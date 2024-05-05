@@ -8,7 +8,6 @@ import {
   Post,
 } from '@nestjs/common';
 import { ActivityPubService } from './activityPub.service';
-import { crossroadsActivityPubBasePath } from '@/config/apiPaths';
 import { getPublicKeyOfActor } from '@/modules/crossroads/activitypub/actor';
 import type {
   ActivityPubActorObject,
@@ -17,8 +16,9 @@ import type {
 import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
 import type { APActivity, APRoot } from 'activitypub-types';
 import { z } from 'zod';
+import { crossroadsBasePath } from '@/config/apiPaths';
 
-@Controller({ path: crossroadsActivityPubBasePath, version: apiVersion })
+@Controller({ path: crossroadsBasePath, version: apiVersion })
 export class ActivityPubController {
   constructor(private readonly activityPubService: ActivityPubService) {}
 
