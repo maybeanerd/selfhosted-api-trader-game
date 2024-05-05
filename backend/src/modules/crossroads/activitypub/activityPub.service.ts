@@ -238,9 +238,16 @@ export class ActivityPubService {
           })
           .map(async (activityToSend) => {
             const actor = await this.findActorByAPId(activityToSend.object);
-
-            console.log('actor:', actor);
             if (actor === null) {
+              return null;
+            }
+
+            // Don't send activities to followers that already got them earlier
+            if (
+              followers.some((follower) => {
+                return follower.id === actor.id;
+              })
+            ) {
               return null;
             }
             // Get their target actors
