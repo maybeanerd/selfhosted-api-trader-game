@@ -242,9 +242,11 @@ export class TreatyService {
       treaty?.status === TreatyStatus.Signed ||
       treaty?.status === TreatyStatus.Proposed
     ) {
-      // Instead of deleting the treaty, we mark it as removed.
-      // This way we know the other party still offers a treaty
-      // and can revive it as an immediately signed treaty.
+      /**
+       * Instead of deleting the treaty, we mark it as removed.
+       * This way we know the other party still offers a treaty
+       * and can revive it as an immediately signed treaty.
+       */
       await this.updateTreaty(activityPubActorId, {
         status: TreatyStatus.Removed,
       });

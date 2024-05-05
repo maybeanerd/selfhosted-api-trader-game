@@ -536,8 +536,9 @@ export class ActivityPubService {
             ),
         });
 
+      // Was never following this actor
       if (followActivity === undefined) {
-        throw new Error('Cant unfollow actor that was not followed before.');
+        return;
       }
 
       const internalId = randomUUID();
