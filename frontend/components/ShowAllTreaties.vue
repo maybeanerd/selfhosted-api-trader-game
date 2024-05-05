@@ -11,8 +11,8 @@
         <UButton v-if="treaty.status === 'proposed'" @click="acceptTreaty(treaty.activityPubActorId)">
           Accept
         </Ubutton>
-        <UButton v-else-if="treaty.status === 'signed'" @click="deleteTreaty(treaty.activityPubActorId)">
-          Delete
+        <UButton @click="removeTreaty(treaty.activityPubActorId)">
+          Remove
         </Ubutton>
       </div>
     </template>
@@ -45,7 +45,7 @@ async function acceptTreaty (
   });
 }
 
-async function deleteTreaty (
+async function removeTreaty (
   activityPubActorId: string,
 ) {
   await fetch('http://localhost:8080/v1/treaty', {

@@ -49,7 +49,10 @@ export class TreatyService {
       return;
     }
 
-    if (existingTreaty.status === TreatyStatus.Requested) {
+    if (
+      existingTreaty.status === TreatyStatus.Requested ||
+      existingTreaty.status === TreatyStatus.Rejected
+    ) {
       await this.updateTreaty(activity.actor, {
         status: TreatyStatus.Signed,
       });

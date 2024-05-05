@@ -216,6 +216,7 @@ export class ActivityPubService {
 
       console.log('Followers:', followers);
 
+      // TODO don't send all activities to all followers.
       await Promise.all(
         followers.map(async (follower) => {
           try {
@@ -225,6 +226,44 @@ export class ActivityPubService {
             await lastValueFrom(this.httpService.post(inbox, activitiesToSend));
           } catch (e: unknown) {
             console.error('Failed to send activities to follower', follower, e);
+          }
+        }),
+      );
+
+      const treatyTargets = (await Promise.all(
+        outgoingActivities
+          .filter((activityToSend) => {
+            // Find follows that we created
+            return activityToSend.type === SupportedActivityType.Follow;
+          })
+          .map(async (activityToSend) => {
+            const actor = await this.findActorByAPId(activityToSend.object);
+
+            console.log('actor:', actor);
+            if (actor === null) {
+              return null;
+            }
+            // Get their target actors
+            return actor.inbox.toString();
+          })
+          .filter(Boolean),
+      )) as Array<string>;
+
+      // TODO don't send all activities to all treaty partners.
+      await Promise.all(
+        treatyTargets.map(async (targetInbox) => {
+          console.log('targetInbox:', targetInbox);
+          try {
+            // TODO HTTP signature
+            await lastValueFrom(
+              this.httpService.post(targetInbox, activitiesToSend),
+            );
+          } catch (e: unknown) {
+            console.error(
+              'Failed to send activities to targetInbox',
+              targetInbox,
+              e,
+            );
           }
         }),
       );
@@ -420,6 +459,14 @@ export class ActivityPubService {
       return null;
     }
     return actor;
+  }
+
+  async findActorByAPId(id: string): Promise<ActivityPubActor | null> {
+    const actor = await drizz.query.activityPubActor.findFirst({
+      where: (a) => eq(a.id, id),
+    });
+
+    return actor ?? null;
   }
 
   async findActorWithWebfinger(
