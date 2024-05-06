@@ -1,9 +1,9 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.0.90",
+  "version": "0.0.91",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
-  "packageManager": "pnpm@9.0.6",
+  "packageManager": "pnpm@9.1.0",
   "private": true,
   "license": "",
   "repository": {

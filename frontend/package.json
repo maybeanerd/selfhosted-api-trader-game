@@ -1,9 +1,9 @@
 {
   "name": "selfhosted-api-trader-game-frontend",
-  "version": "0.0.68",
+  "version": "0.0.69",
   "description": "A WIP example client for the game.",
   "author": "Sebastian Di Luzio",
-  "packageManager": "pnpm@9.0.6",
+  "packageManager": "pnpm@9.1.0",
   "private": true,
   "repository": {
     "type": "git",
