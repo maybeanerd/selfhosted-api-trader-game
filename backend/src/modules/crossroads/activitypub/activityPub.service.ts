@@ -33,6 +33,7 @@ import {
 import { randomUUID } from 'crypto';
 import {
   getActivityUrl,
+  getActorUrl,
   getNoteUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
@@ -599,7 +600,7 @@ export class ActivityPubService {
   }
 
   async createNoteObject(
-    actorId: string,
+    userId: string,
     content: string,
     gameContent: GameContent,
     inReplyTo?: string,
@@ -609,6 +610,7 @@ export class ActivityPubService {
       const internalId = randomUUID();
 
       const noteId = getNoteUrl(internalId).toString();
+      const actorId = getActorUrl(userId).toString();
 
       const newActivityPubObject: NewActivityPubObject = {
         id: noteId,
