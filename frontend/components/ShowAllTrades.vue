@@ -10,7 +10,7 @@
           <p>Offered: {{ trade.offeredResources }}</p> <br>
           <p>Requested: {{ trade.requestedResources }}</p>
           <br>
-          <UButton>
+          <UButton @click="takeBackTrade(trade.id)">
             Take Back
           </Ubutton>
         </div>
@@ -22,7 +22,7 @@
           <p>Offered: {{ trade.offeredResources }}</p> <br>
           <p>Requested: {{ trade.requestedResources }}</p>
           <br>
-          <UButton>
+          <UButton @click="acceptTrade(trade.id)">
             Accept
           </Ubutton>
         </div>
@@ -68,5 +68,31 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(stopInterval);
 });
+
+async function acceptTrade (tradeId: string) {
+  await fetch('http://localhost:8080/v1/trade', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: tradeId,
+    }),
+  });
+  refresh();
+}
+
+async function takeBackTrade (tradeId: string) {
+  await fetch('http://localhost:8080/v1/trade', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: tradeId,
+    }),
+  });
+  refresh();
+}
 
 </script>
