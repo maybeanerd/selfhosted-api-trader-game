@@ -4,7 +4,7 @@
     <br>
     <ProposeTrade />
     <br>
-    <h1>Available Trades:</h1>
+    <h1>Trades:</h1>
     <br>
     <ShowAllTrades />
   </div>

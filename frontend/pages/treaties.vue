@@ -4,7 +4,7 @@
     <br>
     <ProposeTreaty />
     <br>
-    <h1>Available Treaties:</h1>
+    <h1>Treaties:</h1>
     <br>
     <ShowAllTreaties />
   </div>

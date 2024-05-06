@@ -4,7 +4,8 @@
       <div v-if="treaties.length === 0">
         No treaties found.
       </div>
-      <div v-for="treaty in activeTreaties" v-else :key="treaty.activityPubActorId" class="border-2 p-2">
+      <h2>Available Treaties:</h2>
+      <div v-for="treaty in availableTreaties" :key="treaty.activityPubActorId" class="border-2 p-2">
         <p>Actor: {{ treaty.activityPubActorId }}</p>
         <p>Status: {{ treaty.status }}</p>
         <br>
@@ -16,7 +17,16 @@
         </Ubutton>
       </div>
       <br>
-
+      <h2>Active Treaties:</h2>
+      <div v-for="treaty in activeTreaties" :key="treaty.activityPubActorId" class="border-2 p-2">
+        <p>Actor: {{ treaty.activityPubActorId }}</p>
+        <p>Status: {{ treaty.status }}</p>
+        <br>
+        <UButton @click="removeTreaty(treaty.activityPubActorId)">
+          Remove
+        </Ubutton>
+      </div>
+      <br>
       <template v-if="removedTreaties">
         <h2>Removed Treaties:</h2>
         <div v-for="treaty in removedTreaties" :key="treaty.activityPubActorId" class="border-2 p-2">
@@ -53,7 +63,10 @@ onUnmounted(() => {
   clearInterval(stopInterval);
 });
 
-const activeTreaties = computed(() => treaties.value?.filter(treaty => treaty.status !== 'removed'));
+const availableTreaties = computed(() => treaties.value?.filter(treaty => treaty.status !== 'removed' &&
+  treaty.status !== 'signed'));
+
+const activeTreaties = computed(() => treaties.value?.filter(treaty => treaty.status === 'signed'));
 
 const removedTreaties = computed(() => treaties.value?.filter(treaty => treaty.status === 'removed'));
 
