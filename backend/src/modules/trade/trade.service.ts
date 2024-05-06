@@ -107,7 +107,6 @@ for
 ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
 
       const noteId = await this.activityPubService.createNoteObject(
-        creatorId,
         tradeMessageContent,
         {
           requestedResources: offeredTrade.requestedResources,

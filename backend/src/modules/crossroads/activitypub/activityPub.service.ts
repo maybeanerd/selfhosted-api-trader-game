@@ -33,7 +33,6 @@ import {
 import { randomUUID } from 'crypto';
 import {
   getActivityUrl,
-  getActorUrl,
   getNoteUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
@@ -58,9 +57,13 @@ import {
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 
+type GameActivityObject = APRoot<APObject> & {
+  gameContent: GameContent;
+};
+
 function mapActivityPubObjectToDto(
   object: ActivityPubObject,
-): APRoot<APObject> {
+): GameActivityObject {
   return {
     '@context': [
       'https://www.w3.org/ns/activitystreams',
@@ -71,6 +74,7 @@ function mapActivityPubObjectToDto(
     published: object.published,
     attributedTo: object.attributedTo,
     content: object.content,
+    gameContent: object.gameContent,
     inReplyTo: object.inReplyTo ?? undefined,
     to: object.to,
   };
@@ -600,7 +604,6 @@ export class ActivityPubService {
   }
 
   async createNoteObject(
-    userId: string,
     content: string,
     gameContent: GameContent,
     inReplyTo?: string,
@@ -610,14 +613,14 @@ export class ActivityPubService {
       const internalId = randomUUID();
 
       const noteId = getNoteUrl(internalId).toString();
-      const actorId = getActorUrl(userId).toString();
+      const { actor } = await getInstanceActor();
 
       const newActivityPubObject: NewActivityPubObject = {
         id: noteId,
         internalId,
         type: SupportedObjectType.Note,
         published: receivedOn,
-        attributedTo: actorId,
+        attributedTo: actor.id,
         content: content,
         gameContent,
         inReplyTo: inReplyTo,
@@ -636,7 +639,7 @@ export class ActivityPubService {
 
       const objectId = createdObject.id;
       const createdActivity = createActivity(
-        actorId,
+        actor.id,
         SupportedActivityType.Create,
         { id: objectId },
       );
