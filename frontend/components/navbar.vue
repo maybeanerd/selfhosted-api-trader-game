@@ -9,7 +9,7 @@ const links = [{
   to: '/resources',
 }, {
   label: 'Trades',
-  icon: 'i-heroicons:arrows-up-down-solid',
+  icon: 'i-heroicons-arrows-up-down-20-solid',
   to: '/trades',
 }, {
   label: 'Treaties',

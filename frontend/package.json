@@ -27,6 +27,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxt/image": "1.7.0",
+    "@nuxt/ui": "2.15.2",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/i18n": "8.3.1",
     "@types/node": "20.12.10",
@@ -37,7 +38,6 @@
     "git-commit-info": "2.0.2",
     "nuxt": "3.11.2",
     "prettier": "3.2.5",
-    "typescript": "5.4.5",
-    "@nuxt/ui": "2.15.2"
+    "typescript": "5.4.5"
   }
 }
