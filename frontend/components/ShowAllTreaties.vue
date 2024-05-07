@@ -45,11 +45,13 @@
 </template>
 
 <script setup lang="ts">
+import { basePath } from '~/utils/api';
+
 const { data: treaties, refresh } = await useFetch<Array<{
   status: string;
   activityPubActorId: string;
 }>>(
-  'http://localhost:8080/v1/treaty',
+  basePath + 'treaty',
 );
 
 let stopInterval: NodeJS.Timeout;
@@ -73,7 +75,7 @@ const removedTreaties = computed(() => treaties.value?.filter(treaty => treaty.s
 async function acceptTreaty (
   activityPubActorId: string,
 ) {
-  await fetch('http://localhost:8080/v1/treaty', {
+  await fetch(basePath + 'treaty', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -88,7 +90,7 @@ async function acceptTreaty (
 async function removeTreaty (
   activityPubActorId: string,
 ) {
-  await fetch('http://localhost:8080/v1/treaty', {
+  await fetch(basePath + 'treaty', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

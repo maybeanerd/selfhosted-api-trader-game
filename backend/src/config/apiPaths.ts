@@ -1,3 +1,2 @@
-export const pathVersionPrefix = '/v1/';
-
+export const apiBasePath = 'api';
 export const crossroadsBasePath = 'crossroads';

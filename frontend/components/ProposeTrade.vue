@@ -15,6 +15,8 @@
 </template>
 
 <script setup lang="ts">
+import { basePath } from '~/utils/api';
+
 const resourceOptions = [
   'wood',
   'stone',
@@ -36,7 +38,7 @@ async function submitTrade () {
     offeredResources: [offeredResources.value],
   };
 
-  await fetch('http://localhost:8080/v1/trade', {
+  await fetch(basePath + 'trade', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

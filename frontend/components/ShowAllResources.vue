@@ -18,10 +18,12 @@
 </template>
 
 <script setup lang="ts">
+import { basePath } from '~/utils/api';
+
 const { data: resources, refresh } = await useFetch<Array<{
   ownerId: string, type: string, amount: number, 'upgradeLevel': number
 }>>(
-  'http://localhost:8080/v1/resource',
+  basePath + 'resource',
 );
 
 let stopInterval: NodeJS.Timeout;

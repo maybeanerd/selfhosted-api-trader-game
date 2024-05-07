@@ -8,6 +8,8 @@
 </template>
 
 <script setup lang="ts">
+import { basePath } from '~/utils/api';
+
 const instanceUrl = ref('');
 
 async function submitTreaty () {
@@ -15,7 +17,7 @@ async function submitTreaty () {
     url: instanceUrl.value,
   };
 
-  await fetch('http://localhost:8080/v1/treaty', {
+  await fetch(basePath + 'treaty', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

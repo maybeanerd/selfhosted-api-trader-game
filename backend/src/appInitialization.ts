@@ -5,8 +5,12 @@ import {
 } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { serverInfo } from './config/serverInfo';
+import { apiBasePath } from '@/config/apiPaths';
 
 export function initializeApp(app: INestApplication) {
+  // Set up global /api prefix
+  app.setGlobalPrefix(apiBasePath);
+
   // Set up versioning
   app.enableVersioning({
     type: VersioningType.URI,

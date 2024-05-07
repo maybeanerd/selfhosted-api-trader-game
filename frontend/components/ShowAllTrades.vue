@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { basePath } from '~/utils/api';
+
 const { data: trades, refresh } = await useFetch<Array<{
   id: string,
   creatorId: string | null,
@@ -51,7 +53,7 @@ const { data: trades, refresh } = await useFetch<Array<{
     }
   >
 }>>(
-  'http://localhost:8080/v1/trade',
+  basePath + 'trade',
 );
 
 const ownTrades = computed(() => trades.value?.filter(trade => trade.creatorId !== null));
@@ -70,7 +72,7 @@ onUnmounted(() => {
 });
 
 async function acceptTrade (tradeId: string) {
-  await fetch('http://localhost:8080/v1/trade', {
+  await fetch(basePath + 'trade', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -83,7 +85,7 @@ async function acceptTrade (tradeId: string) {
 }
 
 async function takeBackTrade (tradeId: string) {
-  await fetch('http://localhost:8080/v1/trade', {
+  await fetch(basePath + 'trade', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
