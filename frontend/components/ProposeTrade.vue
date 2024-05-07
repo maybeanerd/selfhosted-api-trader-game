@@ -38,7 +38,7 @@ async function submitTrade () {
     offeredResources: [offeredResources.value],
   };
 
-  await fetch(basePath + 'trade', {
+  await fetch(basePath + 'trades', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -51,7 +51,7 @@ const { data: treaties, refresh } = await useFetch<Array<{
   status: string;
   activityPubActorId: string;
 }>>(
-  basePath + 'treaty',
+  basePath + 'treaties',
 );
 
 let stopInterval: NodeJS.Timeout;
@@ -75,7 +75,7 @@ const removedTreaties = computed(() => treaties.value?.filter(treaty => treaty.s
 async function acceptTreaty (
   activityPubActorId: string,
 ) {
-  await fetch(basePath + 'treaty', {
+  await fetch(basePath + 'treaties', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ async function acceptTreaty (
 async function removeTreaty (
   activityPubActorId: string,
 ) {
-  await fetch(basePath + 'treaty', {
+  await fetch(basePath + 'treaties', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

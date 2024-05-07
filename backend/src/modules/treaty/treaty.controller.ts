@@ -16,7 +16,7 @@ import {
   UpdateTreatyDto,
 } from './dto/Treaty.dto';
 
-@Controller({ path: 'treaty', version: '1' })
+@Controller({ path: 'treaties', version: '1' })
 export class TreatyController {
   constructor(private readonly treatyService: TreatyService) {}
 

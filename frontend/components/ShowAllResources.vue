@@ -23,7 +23,7 @@ import { basePath } from '~/utils/api';
 const { data: resources, refresh } = await useFetch<Array<{
   ownerId: string, type: string, amount: number, 'upgradeLevel': number
 }>>(
-  basePath + 'resource',
+  basePath + 'resources',
 );
 
 let stopInterval: NodeJS.Timeout;

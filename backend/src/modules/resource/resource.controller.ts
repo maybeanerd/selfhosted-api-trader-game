@@ -11,7 +11,7 @@ import { ResourceTypeDto } from './dto/ResourceType.dto';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { getUserId } from '@/modules/resource/utils/testUser';
 
-@Controller({ path: 'resource', version: '1' })
+@Controller({ path: 'resources', version: '1' })
 export class ResourceController {
   constructor(private readonly resourceService: ResourceService) {}
 

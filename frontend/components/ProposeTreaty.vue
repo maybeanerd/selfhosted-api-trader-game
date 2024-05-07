@@ -17,7 +17,7 @@ async function submitTreaty () {
     url: instanceUrl.value,
   };
 
-  await fetch(basePath + 'treaty', {
+  await fetch(basePath + 'treaties', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

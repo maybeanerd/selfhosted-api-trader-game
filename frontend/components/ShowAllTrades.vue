@@ -53,7 +53,7 @@ const { data: trades, refresh } = await useFetch<Array<{
     }
   >
 }>>(
-  basePath + 'trade',
+  basePath + 'trades',
 );
 
 const ownTrades = computed(() => trades.value?.filter(trade => trade.creatorId !== null));
@@ -72,27 +72,21 @@ onUnmounted(() => {
 });
 
 async function acceptTrade (tradeId: string) {
-  await fetch(basePath + 'trade', {
+  await fetch(basePath + 'trades/' + tradeId, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      id: tradeId,
-    }),
   });
   refresh();
 }
 
 async function takeBackTrade (tradeId: string) {
-  await fetch(basePath + 'trade', {
+  await fetch(basePath + 'trades/' + tradeId, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      id: tradeId,
-    }),
   });
   refresh();
 }

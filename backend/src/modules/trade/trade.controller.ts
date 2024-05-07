@@ -7,14 +7,14 @@ import {
   Put,
   HttpException,
   HttpStatus,
+  Param,
 } from '@nestjs/common';
 import { TradeService } from '@/modules/trade/trade.service';
 import { TradeOfferInputDto } from './dto/TradeOfferInput.dto';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
-import { IdDto } from '@/dto/Id.dto';
 import { getUserId } from '@/modules/resource/utils/testUser';
 
-@Controller({ path: 'trade', version: '1' })
+@Controller({ path: 'trades', version: '1' })
 export class TradeController {
   constructor(private readonly tradeService: TradeService) {}
 
@@ -39,15 +39,12 @@ export class TradeController {
     return createdTrade;
   }
 
-  @Put()
-  async acceptTradeOffer(@Body() body: IdDto): Promise<TradeOfferDto> {
+  @Put('/:id')
+  async acceptTradeOffer(@Param('id') id: string): Promise<TradeOfferDto> {
     let acceptedTradeOffer: TradeOfferDto | null;
     const userId = await getUserId(); // TODO get the user id from the request
     try {
-      acceptedTradeOffer = await this.tradeService.acceptTradeOffer(
-        body.id,
-        userId,
-      );
+      acceptedTradeOffer = await this.tradeService.acceptTradeOffer(id, userId);
     } catch (e) {
       throw new HttpException(
         'Failed to accept trade offer: ' + e,
@@ -60,14 +57,11 @@ export class TradeController {
     return acceptedTradeOffer;
   }
 
-  @Delete()
-  async removeTradeOffer(@Body() body: IdDto): Promise<TradeOfferDto> {
+  @Delete('/:id')
+  async removeTradeOffer(@Param('id') id: string): Promise<TradeOfferDto> {
     const userId = await getUserId(); // TODO get the user id from the request
 
-    const removedTrade = await this.tradeService.removeTradeOffer(
-      body.id,
-      userId,
-    );
+    const removedTrade = await this.tradeService.removeTradeOffer(id, userId);
     if (removedTrade === null) {
       throw new HttpException('Trade offer not found.', HttpStatus.NOT_FOUND);
     }
