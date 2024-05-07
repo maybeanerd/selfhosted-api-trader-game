@@ -7,5 +7,6 @@ export const serverInfo = {
   name: serverName,
   baseUrl,
   version: packageJson.version,
-  desciption: packageJson.description,
+  description: packageJson.description,
+  sourceUrl: packageJson.homepage,
 };

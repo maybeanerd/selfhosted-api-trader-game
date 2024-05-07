@@ -4,6 +4,7 @@ import { TradeModule } from '@/modules/trade/trade.module';
 import { ResourceModule } from '@/modules/resource/resource.module';
 import { TreatyModule } from '@/modules/treaty/treaty.module';
 import { CrossroadsModule } from '@/modules/crossroads/crossroads.module';
+import { InstanceInfoModule } from '@/modules/instanceInfo/instanceInfo.module';
 
 @Module({
   imports: [
@@ -15,8 +16,9 @@ import { CrossroadsModule } from '@/modules/crossroads/crossroads.module';
     ResourceModule,
     TreatyModule,
 
-    // Module for inter instance communication
+    // Modules for inter instance communication
     CrossroadsModule,
+    InstanceInfoModule,
   ],
   controllers: [],
   providers: [],

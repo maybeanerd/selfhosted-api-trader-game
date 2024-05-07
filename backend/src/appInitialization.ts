@@ -31,7 +31,7 @@ export function initializeApp(app: INestApplication) {
   // Set up open api spec generation
   const config = new DocumentBuilder()
     .setTitle(serverInfo.name)
-    .setDescription(serverInfo.desciption)
+    .setDescription(serverInfo.description)
     .setVersion(serverInfo.version)
     .build();
 
