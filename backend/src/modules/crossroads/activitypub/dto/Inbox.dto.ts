@@ -6,6 +6,10 @@ import { z } from 'zod';
 
 const activityPubId = z.string().url();
 
+const jsonLdContext = z
+  .string()
+  .or(z.array(z.string().or(z.record(z.string(), z.string()))));
+
 export const publicKeyDto = z.object({
   id: activityPubId,
   owner: activityPubId,
@@ -13,7 +17,7 @@ export const publicKeyDto = z.object({
 });
 
 export const activityPubActorDto = z.object({
-  '@context': z.string().or(z.array(z.string())).optional(),
+  '@context': jsonLdContext.optional(),
   id: activityPubId,
   type: z.nativeEnum(SupportedActorType),
   preferredUsername: z.string().default('noname'),
@@ -40,6 +44,7 @@ export const inboxActivityGameObject = z.object({
 });
 
 export const activityPubObjectDto = z.object({
+  '@context': jsonLdContext.optional(),
   id: activityPubId,
   type: z.nativeEnum(SupportedObjectType),
   published: z.string().datetime(),
@@ -53,6 +58,7 @@ export const activityPubObjectDto = z.object({
 export const inboxActivityObject = activityPubId.or(activityPubObjectDto);
 
 export const inboxActivity = z.object({
+  '@context': jsonLdContext.optional(),
   id: activityPubId,
   type: z.nativeEnum(SupportedActivityType),
   actor: inboxActivityActor,

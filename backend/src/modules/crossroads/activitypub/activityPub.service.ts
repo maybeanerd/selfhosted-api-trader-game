@@ -52,7 +52,8 @@ import {
   handleActivities,
 } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
 import {
-  activityPubGameServerExtension,
+  activityPubGameContentExtension,
+  activityPubIsGameServerExtension,
   comesFromGameServer,
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
@@ -67,7 +68,8 @@ function mapActivityPubObjectToDto(
   return {
     '@context': [
       'https://www.w3.org/ns/activitystreams',
-      activityPubGameServerExtension,
+      activityPubIsGameServerExtension,
+      activityPubGameContentExtension,
     ],
     id: object.id,
     type: object.type,
@@ -86,7 +88,7 @@ function mapActivityPubActivityToDto(
   return {
     '@context': [
       'https://www.w3.org/ns/activitystreams',
-      activityPubGameServerExtension,
+      activityPubIsGameServerExtension,
     ],
     id: activity.id,
     type: activity.type,
