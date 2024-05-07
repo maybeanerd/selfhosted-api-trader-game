@@ -9,7 +9,9 @@ import { apiBasePath } from '@/config/apiPaths';
 
 export function initializeApp(app: INestApplication) {
   // Set up global /api prefix
-  app.setGlobalPrefix(apiBasePath);
+  app.setGlobalPrefix(apiBasePath, {
+    exclude: ['.well-known(.*)'],
+  });
 
   // Set up versioning
   app.enableVersioning({

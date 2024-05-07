@@ -5,6 +5,24 @@ version: '3.9'
 name: ${INSTANCE_NAME:-self-hosted-api-trader-game}
 
 services:
+  traefik:
+    image: 'traefik:2.11.0'
+    container_name: 'Reverse-Proxy'
+    command:
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    networks:
+      - internal
+
   backend:
     build: ./backend
     image: ${IMAGE_NAME}
@@ -12,8 +30,11 @@ services:
       - database
     networks:
       - internal
-    ports:
-      - 8080:8080
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.backend.rule=PathPrefix(`/api`)'
+      - 'traefik.http.services.backend.loadbalancer.server.port=8080'
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
       - DATABASE_HOST=database
@@ -27,11 +48,14 @@ services:
       - backend
     networks:
       - internal
-    ports:
-      - 80:3000
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
       - DATABASE_HOST=database
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.frontend.rule=PathPrefix(`/`)'
+      - 'traefik.http.services.frontend.loadbalancer.server.port=3000'
 
   database:
     image: postgres:16.2
@@ -42,24 +66,11 @@ services:
     restart: always
     networks:
       - internal
-    ports:
-      - 5432:5432
     volumes:
       - db-data:/var/lib/postgresql/data
 
-  # proxy:
-  # TODO use traefik
-
-#  authserver:
-#    image: oryd/kratos:v0.11
-#    restart: always
-#    networks:
-#      - default
-
 volumes:
   db-data:
-  caddy_data:
-  caddy_config:
 
 networks:
   internal:
