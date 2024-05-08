@@ -34,7 +34,10 @@
 
 ## Description
 
-A self hostable instance of a yet unnamed city building and resource trading game.
+A self hostable game server that can connect to others instances using the [ActivityPub federation protocol](https://www.w3.org/TR/activitypub/) and offers a client API to play a city building and resource trading game.
+
+This project is still in it's early stages, but feel free to try it out or contribute!
+(Contributions don't need to be code. They can be bug reports, feature requests or general feedback)
 
 ## Running it
 
