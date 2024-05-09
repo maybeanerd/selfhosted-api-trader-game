@@ -6,6 +6,7 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { serverInfo } from './config/serverInfo';
 import { apiBasePath } from '@/config/apiPaths';
+import { Logger } from 'nestjs-pino';
 
 export function initializeApp(app: INestApplication) {
   // Set up global /api prefix
@@ -17,6 +18,8 @@ export function initializeApp(app: INestApplication) {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+
+  app.useLogger(app.get(Logger));
 
   // Set up validation
   app.useGlobalPipes(
