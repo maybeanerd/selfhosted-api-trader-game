@@ -1,14 +1,12 @@
 import gitCommitInfo from 'git-commit-info';
 
+// When built in GitHub Actions, the commit hash is available in the environment, and gitCommitInfo won't find it.
+const commitHash = gitCommitInfo().shortHash ?? process.env.COMMIT_HASH;
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: [
-    '@nuxt/image',
-    '@nuxtjs/i18n',
-    '@vite-pwa/nuxt',
-    '@nuxt/ui',
-  ],
+  modules: ['@nuxt/image', '@nuxtjs/i18n', '@vite-pwa/nuxt', '@nuxt/ui'],
   pwa: {},
   nitro: {
     prerender: {
@@ -19,7 +17,7 @@ export default defineNuxtConfig({
   vite: {},
   runtimeConfig: {
     public: {
-      commitHash: gitCommitInfo().shortHash,
+      commitHash,
       buildDate: new Date().toISOString(),
     },
   },

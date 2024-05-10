@@ -27,6 +27,10 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository }}-${{ matrix.context }}
+      - name: Load commit sha (short) into environment
+        run: |
+            COMMIT_HASH=$(git rev-parse --short HEAD)
+            echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -48,3 +52,4 @@ jobs:
           labels: ${{ steps.metal.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: COMMIT_HASH=${{ env.COMMIT_HASH }}
