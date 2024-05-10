@@ -1,10 +1,8 @@
 {
-  "id": "da56e924-ea6e-4bb6-9bf1-bc6ab3dba35e",
-  "prevId": "5fb1a1cb-7d67-443f-bcf4-da1eabba531c",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "activityPubActivity": {
+    "public.activityPubActivity": {
       "name": "activityPubActivity",
       "schema": "",
       "columns": {
@@ -44,21 +42,21 @@
         "activityPubActivity_object_activityPubObject_id_fk": {
           "name": "activityPubActivity_object_activityPubObject_id_fk",
           "tableFrom": "activityPubActivity",
-          "tableTo": "activityPubObject",
           "columnsFrom": [
             "object"
           ],
+          "tableTo": "activityPubObject",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "activityPubObject": {
+    "public.activityPubObject": {
       "name": "activityPubObject",
       "schema": "",
       "columns": {
@@ -117,7 +115,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "resource": {
+    "public.resource": {
       "name": "resource",
       "schema": "",
       "columns": {
@@ -159,15 +157,15 @@
       "uniqueConstraints": {
         "resource_ownerId_type_unique": {
           "name": "resource_ownerId_type_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "ownerId",
             "type"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "serverState": {
+    "public.serverState": {
       "name": "serverState",
       "schema": "",
       "columns": {
@@ -196,7 +194,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "storedEvent": {
+    "public.storedEvent": {
       "name": "storedEvent",
       "schema": "",
       "columns": {
@@ -243,7 +241,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "storedTreaty": {
+    "public.storedTreaty": {
       "name": "storedTreaty",
       "schema": "",
       "columns": {
@@ -280,14 +278,14 @@
       "uniqueConstraints": {
         "storedTreaty_instanceBaseUrl_unique": {
           "name": "storedTreaty_instanceBaseUrl_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "instanceBaseUrl"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "trade": {
+    "public.trade": {
       "name": "trade",
       "schema": "",
       "columns": {
@@ -328,7 +326,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -347,53 +345,60 @@
     }
   },
   "enums": {
-    "activityPubActivityType": {
+    "public.activityPubActivityType": {
       "name": "activityPubActivityType",
-      "values": {
-        "Create": "Create",
-        "Update": "Update",
-        "Delete": "Delete",
-        "Follow": "Follow",
-        "Like": "Like"
-      }
+      "schema": "public",
+      "values": [
+        "Create",
+        "Update",
+        "Delete",
+        "Follow",
+        "Like"
+      ]
     },
-    "activityPubObjectType": {
+    "public.activityPubObjectType": {
       "name": "activityPubObjectType",
-      "values": {
-        "Note": "Note"
-      }
+      "schema": "public",
+      "values": [
+        "Note"
+      ]
     },
-    "resourceType": {
+    "public.resourceType": {
       "name": "resourceType",
-      "values": {
-        "stone": "stone",
-        "wood": "wood",
-        "iron": "iron",
-        "gold": "gold",
-        "diamond": "diamond"
-      }
+      "schema": "public",
+      "values": [
+        "stone",
+        "wood",
+        "iron",
+        "gold",
+        "diamond"
+      ]
     },
-    "storedEventType": {
+    "public.storedEventType": {
       "name": "storedEventType",
-      "values": {
-        "TradeOfferCreated": "TradeOfferCreated",
-        "TradeOfferAccepted": "TradeOfferAccepted",
-        "TradeOfferRemoved": "TradeOfferRemoved"
-      }
+      "schema": "public",
+      "values": [
+        "TradeOfferCreated",
+        "TradeOfferAccepted",
+        "TradeOfferRemoved"
+      ]
     },
-    "treatyStatus": {
+    "public.treatyStatus": {
       "name": "treatyStatus",
-      "values": {
-        "requested": "requested",
-        "denied": "denied",
-        "signed": "signed"
-      }
+      "schema": "public",
+      "values": [
+        "requested",
+        "denied",
+        "signed"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "da56e924-ea6e-4bb6-9bf1-bc6ab3dba35e",
+  "prevId": "5fb1a1cb-7d67-443f-bcf4-da1eabba531c"
 }

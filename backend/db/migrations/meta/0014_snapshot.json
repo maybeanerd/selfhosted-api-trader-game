@@ -1,10 +1,8 @@
 {
-  "id": "5870d630-cf53-4b8c-97f4-64168e9347a9",
-  "prevId": "f282a433-d90e-4898-ab65-4c543f75196d",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "activityPubActivity": {
+    "public.activityPubActivity": {
       "name": "activityPubActivity",
       "schema": "",
       "columns": {
@@ -50,7 +48,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "activityPubActivityQueue": {
+    "public.activityPubActivityQueue": {
       "name": "activityPubActivityQueue",
       "schema": "",
       "columns": {
@@ -85,21 +83,21 @@
         "activityPubActivityQueue_id_activityPubActivity_id_fk": {
           "name": "activityPubActivityQueue_id_activityPubActivity_id_fk",
           "tableFrom": "activityPubActivityQueue",
-          "tableTo": "activityPubActivity",
           "columnsFrom": [
             "id"
           ],
+          "tableTo": "activityPubActivity",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "activityPubActor": {
+    "public.activityPubActor": {
       "name": "activityPubActor",
       "schema": "",
       "columns": {
@@ -157,7 +155,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "activityPubObject": {
+    "public.activityPubObject": {
       "name": "activityPubObject",
       "schema": "",
       "columns": {
@@ -222,14 +220,14 @@
       "uniqueConstraints": {
         "activityPubObject_internalId_unique": {
           "name": "activityPubObject_internalId_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "internalId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "resource": {
+    "public.resource": {
       "name": "resource",
       "schema": "",
       "columns": {
@@ -271,15 +269,15 @@
       "uniqueConstraints": {
         "resource_ownerId_type_unique": {
           "name": "resource_ownerId_type_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "ownerId",
             "type"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "serverState": {
+    "public.serverState": {
       "name": "serverState",
       "schema": "",
       "columns": {
@@ -308,7 +306,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "storedEvent": {
+    "public.storedEvent": {
       "name": "storedEvent",
       "schema": "",
       "columns": {
@@ -355,7 +353,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "storedTreaty": {
+    "public.storedTreaty": {
       "name": "storedTreaty",
       "schema": "",
       "columns": {
@@ -392,14 +390,14 @@
       "uniqueConstraints": {
         "storedTreaty_activityPubActorId_unique": {
           "name": "storedTreaty_activityPubActorId_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "activityPubActorId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "trade": {
+    "public.trade": {
       "name": "trade",
       "schema": "",
       "columns": {
@@ -440,7 +438,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -459,68 +457,77 @@
     }
   },
   "enums": {
-    "activityPubActivityQueueType": {
+    "public.activityPubActivityQueueType": {
       "name": "activityPubActivityQueueType",
-      "values": {
-        "Incoming": "Incoming",
-        "Outgoing": "Outgoing"
-      }
+      "schema": "public",
+      "values": [
+        "Incoming",
+        "Outgoing"
+      ]
     },
-    "activityPubActivityType": {
+    "public.activityPubActivityType": {
       "name": "activityPubActivityType",
-      "values": {
-        "Create": "Create",
-        "Update": "Update",
-        "Delete": "Delete",
-        "Follow": "Follow",
-        "Like": "Like",
-        "Undo": "Undo"
-      }
+      "schema": "public",
+      "values": [
+        "Create",
+        "Update",
+        "Delete",
+        "Follow",
+        "Like",
+        "Undo"
+      ]
     },
-    "activityPubActorType": {
+    "public.activityPubActorType": {
       "name": "activityPubActorType",
-      "values": {
-        "Person": "Person",
-        "Application": "Application"
-      }
+      "schema": "public",
+      "values": [
+        "Person",
+        "Application"
+      ]
     },
-    "activityPubObjectType": {
+    "public.activityPubObjectType": {
       "name": "activityPubObjectType",
-      "values": {
-        "Note": "Note"
-      }
+      "schema": "public",
+      "values": [
+        "Note"
+      ]
     },
-    "resourceType": {
+    "public.resourceType": {
       "name": "resourceType",
-      "values": {
-        "stone": "stone",
-        "wood": "wood",
-        "iron": "iron",
-        "gold": "gold",
-        "diamond": "diamond"
-      }
+      "schema": "public",
+      "values": [
+        "stone",
+        "wood",
+        "iron",
+        "gold",
+        "diamond"
+      ]
     },
-    "storedEventType": {
+    "public.storedEventType": {
       "name": "storedEventType",
-      "values": {
-        "TradeOfferCreated": "TradeOfferCreated",
-        "TradeOfferAccepted": "TradeOfferAccepted",
-        "TradeOfferRemoved": "TradeOfferRemoved"
-      }
+      "schema": "public",
+      "values": [
+        "TradeOfferCreated",
+        "TradeOfferAccepted",
+        "TradeOfferRemoved"
+      ]
     },
-    "treatyStatus": {
+    "public.treatyStatus": {
       "name": "treatyStatus",
-      "values": {
-        "requested": "requested",
-        "denied": "denied",
-        "signed": "signed"
-      }
+      "schema": "public",
+      "values": [
+        "requested",
+        "denied",
+        "signed"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "5870d630-cf53-4b8c-97f4-64168e9347a9",
+  "prevId": "f282a433-d90e-4898-ab65-4c543f75196d"
 }
