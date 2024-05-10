@@ -1,10 +1,8 @@
 {
-  "id": "cd5e07d6-7134-4e02-bee8-6c3f6ac19c1b",
-  "prevId": "9f6ea25f-2cff-4c3a-8ef9-c14de7037743",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "activityPubActivity": {
+    "public.activityPubActivity": {
       "name": "activityPubActivity",
       "schema": "",
       "columns": {
@@ -57,14 +55,14 @@
       "uniqueConstraints": {
         "activityPubActivity_internalId_unique": {
           "name": "activityPubActivity_internalId_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "internalId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "activityPubActivityQueue": {
+    "public.activityPubActivityQueue": {
       "name": "activityPubActivityQueue",
       "schema": "",
       "columns": {
@@ -99,21 +97,21 @@
         "activityPubActivityQueue_id_activityPubActivity_id_fk": {
           "name": "activityPubActivityQueue_id_activityPubActivity_id_fk",
           "tableFrom": "activityPubActivityQueue",
-          "tableTo": "activityPubActivity",
           "columnsFrom": [
             "id"
           ],
+          "tableTo": "activityPubActivity",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "activityPubActor": {
+    "public.activityPubActor": {
       "name": "activityPubActor",
       "schema": "",
       "columns": {
@@ -177,7 +175,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "activityPubObject": {
+    "public.activityPubObject": {
       "name": "activityPubObject",
       "schema": "",
       "columns": {
@@ -242,14 +240,14 @@
       "uniqueConstraints": {
         "activityPubObject_internalId_unique": {
           "name": "activityPubObject_internalId_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "internalId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "resource": {
+    "public.resource": {
       "name": "resource",
       "schema": "",
       "columns": {
@@ -291,15 +289,15 @@
       "uniqueConstraints": {
         "resource_ownerId_type_unique": {
           "name": "resource_ownerId_type_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "ownerId",
             "type"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "serverState": {
+    "public.serverState": {
       "name": "serverState",
       "schema": "",
       "columns": {
@@ -328,7 +326,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "storedTreaty": {
+    "public.storedTreaty": {
       "name": "storedTreaty",
       "schema": "",
       "columns": {
@@ -357,7 +355,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "trade": {
+    "public.trade": {
       "name": "trade",
       "schema": "",
       "columns": {
@@ -399,14 +397,14 @@
       "uniqueConstraints": {
         "trade_activityPubNoteId_unique": {
           "name": "trade_activityPubNoteId_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "activityPubNoteId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -425,60 +423,68 @@
     }
   },
   "enums": {
-    "activityPubActivityQueueType": {
+    "public.activityPubActivityQueueType": {
       "name": "activityPubActivityQueueType",
-      "values": {
-        "Incoming": "Incoming",
-        "Outgoing": "Outgoing"
-      }
+      "schema": "public",
+      "values": [
+        "Incoming",
+        "Outgoing"
+      ]
     },
-    "activityPubActivityType": {
+    "public.activityPubActivityType": {
       "name": "activityPubActivityType",
-      "values": {
-        "Create": "Create",
-        "Update": "Update",
-        "Delete": "Delete",
-        "Follow": "Follow",
-        "Like": "Like",
-        "Undo": "Undo"
-      }
+      "schema": "public",
+      "values": [
+        "Create",
+        "Update",
+        "Delete",
+        "Follow",
+        "Like",
+        "Undo"
+      ]
     },
-    "activityPubActorType": {
+    "public.activityPubActorType": {
       "name": "activityPubActorType",
-      "values": {
-        "Person": "Person",
-        "Application": "Application"
-      }
+      "schema": "public",
+      "values": [
+        "Person",
+        "Application"
+      ]
     },
-    "activityPubObjectType": {
+    "public.activityPubObjectType": {
       "name": "activityPubObjectType",
-      "values": {
-        "Note": "Note"
-      }
+      "schema": "public",
+      "values": [
+        "Note"
+      ]
     },
-    "resourceType": {
+    "public.resourceType": {
       "name": "resourceType",
-      "values": {
-        "stone": "stone",
-        "wood": "wood",
-        "iron": "iron",
-        "gold": "gold",
-        "diamond": "diamond"
-      }
+      "schema": "public",
+      "values": [
+        "stone",
+        "wood",
+        "iron",
+        "gold",
+        "diamond"
+      ]
     },
-    "treatyStatus": {
+    "public.treatyStatus": {
       "name": "treatyStatus",
-      "values": {
-        "requested": "requested",
-        "proposed": "proposed",
-        "signed": "signed"
-      }
+      "schema": "public",
+      "values": [
+        "requested",
+        "proposed",
+        "signed"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "cd5e07d6-7134-4e02-bee8-6c3f6ac19c1b",
+  "prevId": "9f6ea25f-2cff-4c3a-8ef9-c14de7037743"
 }
