@@ -41,7 +41,10 @@ services:
       - BASE_URL=http://localhost:8080
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        - COMMIT_HASH=abcdefg
     image: ${IMAGE_NAME_FRONTEND}
     depends_on:
       - backend

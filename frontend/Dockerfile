@@ -1,6 +1,9 @@
 FROM node:20.13.1
 WORKDIR /app
 
+ARG COMMIT_HASH
+ENV COMMIT_HASH=$COMMIT_HASH
+
 COPY ["package.json", ".npmrc", "./"]
 # Install pnpm
 RUN corepack enable pnpm
