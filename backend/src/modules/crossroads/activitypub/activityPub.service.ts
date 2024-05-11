@@ -54,6 +54,7 @@ import {
   comesFromGameServer,
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
+import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
 
 type GameActivityObject = APRoot<APObject> & {
   gameContent: GameContent;
@@ -268,7 +269,11 @@ export class ActivityPubService {
           try {
             // TODO HTTP signature
             await lastValueFrom(
-              this.httpService.post(targetInbox, activitiesToSend),
+              this.httpService.post(targetInbox, activitiesToSend, {
+                headers: {
+                  'Content-Type': contentType,
+                },
+              }),
             );
           } catch (e: unknown) {
             console.error(
@@ -322,7 +327,7 @@ export class ActivityPubService {
         await lastValueFrom(
           this.httpService.get(url.toString(), {
             headers: {
-              Accept: 'application/activity+json',
+              Accept: contentType,
             },
           }),
         )
@@ -353,7 +358,7 @@ export class ActivityPubService {
           await lastValueFrom(
             this.httpService.get(publicKeyUrl.toString(), {
               headers: {
-                Accept: 'application/activity+json',
+                Accept: contentType,
               },
             }),
           )
@@ -444,8 +449,7 @@ export class ActivityPubService {
     }
 
     const actor = foundActorValidation.data.links.find(
-      (link) =>
-        link.rel === 'self' && link.type === 'application/activity+json',
+      (link) => link.rel === 'self' && link.type === contentType,
     );
 
     if (actor === undefined) {
@@ -842,7 +846,7 @@ export class ActivityPubService {
       await lastValueFrom(
         this.httpService.get<APObject>(objectId, {
           headers: {
-            Accept: 'application/activity+json',
+            Accept: contentType,
           },
         }),
       )

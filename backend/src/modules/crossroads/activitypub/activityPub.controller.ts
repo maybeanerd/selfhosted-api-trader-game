@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   HttpException,
   HttpStatus,
   Param,
@@ -17,6 +18,7 @@ import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
 import type { APActivity, APRoot } from 'activitypub-types';
 import { z } from 'zod';
 import { crossroadsBasePath } from '@/config/apiPaths';
+import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
 
 @Controller({ path: crossroadsBasePath, version: apiVersion })
 export class ActivityPubController {
@@ -68,6 +70,7 @@ export class ActivityPubController {
   }
 
   @Post('/inbox')
+  @Header('content-type', contentType)
   async postToInbox(@Body() body: Array<APRoot<APActivity>>): Promise<void> {
     try {
       const validatedBody = await z.array(z.unknown()).parseAsync(body);

@@ -1,4 +1,5 @@
 import { getBaseUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
+import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
 import type { APActor } from 'activitypub-types';
 
 export type WebfingerResponse = {
@@ -19,7 +20,7 @@ export function mapActorToWebfingerResponse(actor: APActor): WebfingerResponse {
     links: [
       {
         rel: 'self',
-        type: 'application/activity+json',
+        type: contentType,
         href: actor.id,
       },
     ],
