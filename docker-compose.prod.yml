@@ -39,7 +39,7 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.services.backend.loadbalancer.server.port=8080'
       # The domain and path the service will respond on, change this to your domain
-      - 'traefik.http.routers.backend.rule=Host(`your-domain.com`) && Path(`/{regex:(api|\.well-known).*}`)'
+      - 'traefik.http.routers.backend.rule=Host(`your-domain.com`) && PathRegexp(`\/(api|\.well-known).*`)'
       - 'traefik.http.routers.backend.entrypoints=websecure'
       - 'traefik.http.routers.backend.tls.certresolver=trader-game'
     environment:

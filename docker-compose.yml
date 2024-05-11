@@ -32,7 +32,7 @@ services:
       - internal
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.backend.rule=Path(`/{regex:(api|\.well-known).*}`)'
+      - 'traefik.http.routers.backend.rule=PathRegexp(`\/(api|\.well-known).*`)'
       - 'traefik.http.services.backend.loadbalancer.server.port=8080'
     environment:
       - INSTANCE_NAME=${INSTANCE_NAME}
