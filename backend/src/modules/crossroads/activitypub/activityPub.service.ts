@@ -55,6 +55,7 @@ import {
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
+import { signRequest } from '@/modules/crossroads/activitypub/utils/signing';
 
 type GameActivityObject = APRoot<APObject> & {
   gameContent: GameContent;
@@ -227,8 +228,16 @@ export class ActivityPubService {
           try {
             const { inbox } = follower;
 
-            // TODO HTTP signature
-            await lastValueFrom(this.httpService.post(inbox, activitiesToSend));
+            await lastValueFrom(
+              this.httpService.post(
+                inbox,
+                await signRequest({
+                  body: activitiesToSend,
+                  type: 'post',
+                  url: inbox,
+                }),
+              ),
+            );
           } catch (e: unknown) {
             console.error('Failed to send activities to follower', follower, e);
           }
@@ -269,11 +278,14 @@ export class ActivityPubService {
           try {
             // TODO HTTP signature
             await lastValueFrom(
-              this.httpService.post(targetInbox, activitiesToSend, {
-                headers: {
-                  'Content-Type': contentType,
-                },
-              }),
+              this.httpService.post(
+                targetInbox,
+                await signRequest({
+                  body: activitiesToSend,
+                  type: 'post',
+                  url: targetInbox,
+                }),
+              ),
             );
           } catch (e: unknown) {
             console.error(
@@ -325,11 +337,13 @@ export class ActivityPubService {
       const url = new URL(actorId);
       const remoteActor = (
         await lastValueFrom(
-          this.httpService.get(url.toString(), {
-            headers: {
-              Accept: contentType,
-            },
-          }),
+          this.httpService.get(
+            url.toString(),
+            await signRequest({
+              type: 'get',
+              url,
+            }),
+          ),
         )
       ).data;
 
@@ -356,11 +370,13 @@ export class ActivityPubService {
         const publicKeyUrl = new URL(receivedPublicKey);
         const publicKey = (
           await lastValueFrom(
-            this.httpService.get(publicKeyUrl.toString(), {
-              headers: {
-                Accept: contentType,
-              },
-            }),
+            this.httpService.get(
+              publicKeyUrl.toString(),
+              await signRequest({
+                type: 'get',
+                url: publicKeyUrl,
+              }),
+            ),
           )
         ).data;
 
@@ -424,9 +440,16 @@ export class ActivityPubService {
 
     const foundActor = (
       await lastValueFrom(
-        this.httpService.get(webfingerUrl.toString(), {
-          params: { resource: `acct:${actorName}` },
-        }),
+        this.httpService.get(
+          webfingerUrl.toString(),
+          await signRequest({
+            type: 'get',
+            url: webfingerUrl,
+            config: {
+              params: { resource: `acct:${actorName}` },
+            },
+          }),
+        ),
       )
     ).data;
 
@@ -844,11 +867,13 @@ export class ActivityPubService {
   ): Promise<ActivityPubObject | undefined> {
     const object = (
       await lastValueFrom(
-        this.httpService.get<APObject>(objectId, {
-          headers: {
-            Accept: contentType,
-          },
-        }),
+        this.httpService.get<APObject>(
+          objectId,
+          await signRequest({
+            type: 'get',
+            url: objectId,
+          }),
+        ),
       )
     ).data;
 

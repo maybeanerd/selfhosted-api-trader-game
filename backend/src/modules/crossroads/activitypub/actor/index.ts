@@ -65,7 +65,7 @@ export async function getInstanceActor() {
     throw new Error('Server state not found.');
   }
 
-  const { instanceId, publicKey } = serverState;
+  const { instanceId, publicKey, privateKey } = serverState;
 
   const actor = await getActorFromId(
     { id: instanceId, publicKey },
@@ -76,5 +76,6 @@ export async function getInstanceActor() {
   return {
     actor,
     internalId: instanceId,
+    privateKey,
   };
 }

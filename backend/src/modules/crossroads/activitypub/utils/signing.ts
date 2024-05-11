@@ -1,4 +1,7 @@
 import { serverInfo } from '@/config/serverInfo';
+import { getInstanceActor } from '@/modules/crossroads/activitypub/actor';
+import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
+import type { AxiosRequestConfig } from 'axios';
 import { createHash, createSign, generateKeyPair } from 'crypto';
 
 export async function generateKeys(): Promise<{
@@ -34,34 +37,43 @@ export async function generateKeys(): Promise<{
   });
 }
 
-export async function signRequest(
-  body: Record<string, unknown>,
-  privateKey: string,
-  keyId: string,
-): Promise<{
-  headers: {
-    Signature: string;
-    Date: string;
-    Host: string;
-  };
-}> {
+export async function signRequest({
+  body,
+  type,
+  url,
+  config,
+}: {
+  body?: unknown;
+  type: 'post' | 'get';
+  url: string | URL;
+  config?: AxiosRequestConfig;
+}): Promise<AxiosRequestConfig> {
   const base64Hash = createHash('sha256')
-    .update(JSON.stringify(body))
+    .update(body ? JSON.stringify(body) : '')
     .digest('base64');
 
   const digestHeader = `SHA-256=${base64Hash}`;
   const date = new Date().toUTCString();
   const { host } = serverInfo.baseUrl;
 
+  const requestPath = new URL(url).pathname;
+
+  const { actor, privateKey } = await getInstanceActor();
+  const keyId = actor.publicKey.id;
+
+  const stringToSign = `(request-target): ${type} ${requestPath}\nhost: ${host}\ndate: ${date}\ndigest: ${digestHeader}`;
+  console.log('signing', stringToSign);
   const sign = createSign('RSA-SHA256');
-  sign.update(digestHeader); // TODO include everything we want to sign
+  sign.update(stringToSign);
   const signature = sign.sign(privateKey, 'base64');
+  console.log('signature', signature);
 
   const headers = {
+    Accept: contentType,
     Date: date,
     Host: host,
     Signature: `keyId="${keyId}",headers="(request-target) host date digest",signature="${signature}"`,
   };
 
-  return { headers };
+  return { ...config, headers: { ...config?.headers, ...headers } };
 }
