@@ -50,7 +50,7 @@ export class WellKnownController {
     return {
       version: '2.1',
       software: {
-        name: serverInfo.name,
+        name: serverInfo.softwareName,
         version: serverInfo.version,
         repository: serverInfo.sourceUrl,
         homepage: serverInfo.sourceUrl,
