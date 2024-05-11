@@ -76,5 +76,5 @@ export async function signRequest({
 
   console.log('headers', JSON.stringify(headers, null, 2));
 
-  return { ...config, headers: { ...config?.headers, ...headers } };
+  return { ...config, headers: { ...config?.headers, ...headers }, data: body };
 }
