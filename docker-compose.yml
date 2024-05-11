@@ -65,6 +65,8 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: nest
     restart: always
+    ports:
+      - 5432:5432
     networks:
       - internal
     volumes:
