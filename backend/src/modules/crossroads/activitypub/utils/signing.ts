@@ -37,7 +37,7 @@ export async function generateKeys(): Promise<{
   });
 }
 
-export async function signRequest({
+export async function createSignedRequestConfig({
   body,
   type,
   url,
@@ -76,5 +76,5 @@ export async function signRequest({
 
   console.log('headers', JSON.stringify(headers, null, 2));
 
-  return { ...config, headers: { ...config?.headers, ...headers }, data: body };
+  return { ...config, headers: { ...config?.headers, ...headers } };
 }

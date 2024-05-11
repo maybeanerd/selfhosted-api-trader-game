@@ -55,7 +55,7 @@ import {
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
-import { signRequest } from '@/modules/crossroads/activitypub/utils/signing';
+import { createSignedRequestConfig } from '@/modules/crossroads/activitypub/utils/signing';
 
 type GameActivityObject = APRoot<APObject> & {
   gameContent: GameContent;
@@ -231,7 +231,8 @@ export class ActivityPubService {
             await lastValueFrom(
               this.httpService.post(
                 inbox,
-                await signRequest({
+                activitiesToSend,
+                await createSignedRequestConfig({
                   body: activitiesToSend,
                   type: 'post',
                   url: inbox,
@@ -250,6 +251,7 @@ export class ActivityPubService {
             .filter((activityToSend) => {
               // Find follows that we created
               return activityToSend.type === SupportedActivityType.Follow;
+              // TODO also send undo follows here?
             })
             .map(async (activityToSend) => {
               const actor = await this.findActorByAPId(activityToSend.object);
@@ -276,11 +278,11 @@ export class ActivityPubService {
         treatyTargets.map(async (targetInbox) => {
           console.log('targetInbox:', targetInbox);
           try {
-            // TODO HTTP signature
             await lastValueFrom(
               this.httpService.post(
                 targetInbox,
-                await signRequest({
+                activitiesToSend,
+                await createSignedRequestConfig({
                   body: activitiesToSend,
                   type: 'post',
                   url: targetInbox,
@@ -339,7 +341,7 @@ export class ActivityPubService {
         await lastValueFrom(
           this.httpService.get(
             url.toString(),
-            await signRequest({
+            await createSignedRequestConfig({
               type: 'get',
               url,
             }),
@@ -372,7 +374,7 @@ export class ActivityPubService {
           await lastValueFrom(
             this.httpService.get(
               publicKeyUrl.toString(),
-              await signRequest({
+              await createSignedRequestConfig({
                 type: 'get',
                 url: publicKeyUrl,
               }),
@@ -442,7 +444,7 @@ export class ActivityPubService {
       await lastValueFrom(
         this.httpService.get(
           webfingerUrl.toString(),
-          await signRequest({
+          await createSignedRequestConfig({
             type: 'get',
             url: webfingerUrl,
             config: {
@@ -869,7 +871,7 @@ export class ActivityPubService {
       await lastValueFrom(
         this.httpService.get<APObject>(
           objectId,
-          await signRequest({
+          await createSignedRequestConfig({
             type: 'get',
             url: objectId,
           }),
