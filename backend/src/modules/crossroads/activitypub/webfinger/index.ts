@@ -1,4 +1,4 @@
-import { getBaseUrl } from '@/modules/crossroads/activitypub/utils/apUrl';
+import { getHost } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
 import type { APActor } from 'activitypub-types';
 
@@ -16,7 +16,7 @@ export function mapActorToWebfingerResponse(actor: APActor): WebfingerResponse {
     throw new Error('Actor ID is undefined');
   }
   return {
-    subject: `acct:${actor.preferredUsername}@${getBaseUrl()}`,
+    subject: `acct:${actor.preferredUsername}@${getHost()}`,
     links: [
       {
         rel: 'self',

@@ -5,10 +5,10 @@ export const apiVersion = '1';
 
 const { baseUrl } = serverInfo;
 
-const activityPubBaseUrl = `${baseUrl}/${apiBasePath}/v${apiVersion}/${crossroadsBasePath}`;
+const activityPubBaseUrl = `${baseUrl.toString()}${apiBasePath}/v${apiVersion}/${crossroadsBasePath}`;
 
-export function getBaseUrl(): string {
-  return baseUrl;
+export function getHost(): string {
+  return baseUrl.host;
 }
 
 export function getActorUrl(actorId: string): URL {

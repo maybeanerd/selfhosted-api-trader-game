@@ -55,6 +55,7 @@ import {
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
+import { createSignedRequestConfig } from '@/modules/crossroads/activitypub/utils/signing';
 
 type GameActivityObject = APRoot<APObject> & {
   gameContent: GameContent;
@@ -227,8 +228,17 @@ export class ActivityPubService {
           try {
             const { inbox } = follower;
 
-            // TODO HTTP signature
-            await lastValueFrom(this.httpService.post(inbox, activitiesToSend));
+            await lastValueFrom(
+              this.httpService.post(
+                inbox,
+                activitiesToSend,
+                await createSignedRequestConfig({
+                  body: activitiesToSend,
+                  type: 'post',
+                  url: inbox,
+                }),
+              ),
+            );
           } catch (e: unknown) {
             console.error('Failed to send activities to follower', follower, e);
           }
@@ -241,6 +251,7 @@ export class ActivityPubService {
             .filter((activityToSend) => {
               // Find follows that we created
               return activityToSend.type === SupportedActivityType.Follow;
+              // TODO also send undo follows here?
             })
             .map(async (activityToSend) => {
               const actor = await this.findActorByAPId(activityToSend.object);
@@ -267,13 +278,16 @@ export class ActivityPubService {
         treatyTargets.map(async (targetInbox) => {
           console.log('targetInbox:', targetInbox);
           try {
-            // TODO HTTP signature
             await lastValueFrom(
-              this.httpService.post(targetInbox, activitiesToSend, {
-                headers: {
-                  'Content-Type': contentType,
-                },
-              }),
+              this.httpService.post(
+                targetInbox,
+                activitiesToSend,
+                await createSignedRequestConfig({
+                  body: activitiesToSend,
+                  type: 'post',
+                  url: targetInbox,
+                }),
+              ),
             );
           } catch (e: unknown) {
             console.error(
@@ -325,11 +339,13 @@ export class ActivityPubService {
       const url = new URL(actorId);
       const remoteActor = (
         await lastValueFrom(
-          this.httpService.get(url.toString(), {
-            headers: {
-              Accept: contentType,
-            },
-          }),
+          this.httpService.get(
+            url.toString(),
+            await createSignedRequestConfig({
+              type: 'get',
+              url,
+            }),
+          ),
         )
       ).data;
 
@@ -356,11 +372,13 @@ export class ActivityPubService {
         const publicKeyUrl = new URL(receivedPublicKey);
         const publicKey = (
           await lastValueFrom(
-            this.httpService.get(publicKeyUrl.toString(), {
-              headers: {
-                Accept: contentType,
-              },
-            }),
+            this.httpService.get(
+              publicKeyUrl.toString(),
+              await createSignedRequestConfig({
+                type: 'get',
+                url: publicKeyUrl,
+              }),
+            ),
           )
         ).data;
 
@@ -424,9 +442,16 @@ export class ActivityPubService {
 
     const foundActor = (
       await lastValueFrom(
-        this.httpService.get(webfingerUrl.toString(), {
-          params: { resource: `acct:${actorName}` },
-        }),
+        this.httpService.get(
+          webfingerUrl.toString(),
+          await createSignedRequestConfig({
+            type: 'get',
+            url: webfingerUrl,
+            config: {
+              params: { resource: `acct:${actorName}` },
+            },
+          }),
+        ),
       )
     ).data;
 
@@ -844,11 +869,13 @@ export class ActivityPubService {
   ): Promise<ActivityPubObject | undefined> {
     const object = (
       await lastValueFrom(
-        this.httpService.get<APObject>(objectId, {
-          headers: {
-            Accept: contentType,
-          },
-        }),
+        this.httpService.get<APObject>(
+          objectId,
+          await createSignedRequestConfig({
+            type: 'get',
+            url: objectId,
+          }),
+        ),
       )
     ).data;
 
