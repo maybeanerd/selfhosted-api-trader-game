@@ -66,7 +66,6 @@ export async function signRequest({
   const sign = createSign('RSA-SHA256');
   sign.update(stringToSign);
   const signature = sign.sign(privateKey, 'base64');
-  console.log('signature', signature);
 
   const headers = {
     Accept: contentType,
@@ -74,6 +73,8 @@ export async function signRequest({
     Host: host,
     Signature: `keyId="${keyId}",headers="(request-target) host date digest",signature="${signature}"`,
   };
+
+  console.log('headers', JSON.stringify(headers, null, 2));
 
   return { ...config, headers: { ...config?.headers, ...headers } };
 }

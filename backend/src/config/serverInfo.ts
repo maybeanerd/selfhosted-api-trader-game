@@ -1,7 +1,7 @@
 import packageJson from '@/../package.json';
 
 const serverName = process.env.INSTANCE_NAME ?? packageJson.name;
-const baseUrl = new URL(process.env.BASE_URL ?? 'http://localhost:8080');
+const baseUrl = new URL(process.env.BASE_URL ?? 'http://localhost');
 
 export const serverInfo = {
   name: serverName,
