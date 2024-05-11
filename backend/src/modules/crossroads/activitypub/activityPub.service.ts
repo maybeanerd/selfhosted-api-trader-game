@@ -26,10 +26,7 @@ import {
   activityPubObject,
 } from 'db/schema';
 import { SupportedObjectType } from '@/modules/crossroads/activitypub/object';
-import {
-  SupportedActivityType,
-  createActivity,
-} from '@/modules/crossroads/activitypub/activity';
+import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
 import { randomUUID } from 'crypto';
 import {
   getActivityUrl,
@@ -612,14 +609,14 @@ export class ActivityPubService {
   ): Promise<string> {
     return drizz.transaction(async (transaction) => {
       const receivedOn = new Date();
-      const internalId = randomUUID();
+      const internalNoteId = randomUUID();
 
-      const noteId = getNoteUrl(internalId).toString();
+      const noteId = getNoteUrl(internalNoteId).toString();
       const { actor } = await getInstanceActor();
 
       const newActivityPubObject: NewActivityPubObject = {
         id: noteId,
-        internalId,
+        internalId: internalNoteId,
         type: SupportedObjectType.Note,
         published: receivedOn,
         attributedTo: actor.id,
@@ -640,17 +637,15 @@ export class ActivityPubService {
       }
 
       const objectId = createdObject.id;
-      const createdActivity = createActivity(
-        actor.id,
-        SupportedActivityType.Create,
-        { id: objectId },
-      );
+      const internalActivityId = randomUUID();
+
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: createdActivity.id,
+        id: getActivityUrl(internalActivityId).toString(),
+        internalId: internalActivityId,
         receivedOn,
-        type: createdActivity.type,
-        actor: createdActivity.actor,
-        object: createdActivity.object.id,
+        type: SupportedActivityType.Create,
+        actor: actor.id,
+        object: objectId,
       };
 
       await transaction
@@ -669,12 +664,14 @@ export class ActivityPubService {
 
   // TODO find out if we even need this. Unused atm.
   async updateNoteObject(
-    actorId: string,
+    userId: string, // TODO use this to validate something?
     objectId: string,
     content: string,
   ): Promise<boolean> {
     return drizz.transaction(async (transaction) => {
       const receivedOn = new Date();
+
+      const { actor } = await getInstanceActor();
 
       const updatedActivityPubObject = {
         content: content,
@@ -686,7 +683,7 @@ export class ActivityPubService {
         .where(
           and(
             eq(activityPubObject.id, objectId),
-            eq(activityPubObject.attributedTo, actorId),
+            eq(activityPubObject.attributedTo, actor.id),
           ),
         )
         .returning();
@@ -696,17 +693,15 @@ export class ActivityPubService {
         return false;
       }
 
-      const createdActivity = createActivity(
-        actorId,
-        SupportedActivityType.Update,
-        { id: objectId },
-      );
+      const internalId = randomUUID();
+
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: createdActivity.id,
+        id: getActivityUrl(internalId).toString(),
+        internalId,
         receivedOn,
-        type: createdActivity.type,
-        actor: createdActivity.actor,
-        object: createdActivity.object.id,
+        type: SupportedActivityType.Update,
+        actor: actor.id,
+        object: objectId,
       };
 
       await transaction
@@ -736,25 +731,23 @@ export class ActivityPubService {
       }
 
       const actorId = existingNote.attributedTo;
-      const instanceActor = await getInstanceActor();
-      if (actorId !== instanceActor.actor.id) {
+      const { actor } = await getInstanceActor();
+      if (actorId !== actor.id) {
         console.error(
           'Attempted to delete a note that does come from this instance.',
         );
         return false;
       }
 
-      const createdActivity = createActivity(
-        instanceActor.actor.id,
-        SupportedActivityType.Delete,
-        { id: existingNote.id },
-      );
+      const internalId = randomUUID();
+
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: createdActivity.id,
+        id: getActivityUrl(internalId).toString(),
+        internalId,
         receivedOn,
-        type: createdActivity.type,
-        actor: createdActivity.actor,
-        object: createdActivity.object.id,
+        type: SupportedActivityType.Delete,
+        actor: actor.id,
+        object: existingNote.id,
       };
 
       await transaction
@@ -784,25 +777,23 @@ export class ActivityPubService {
       }
 
       const noteCreatorId = existingNote.attributedTo;
-      const instanceActor = await getInstanceActor();
-      if (noteCreatorId === instanceActor.actor.id) {
+      const { actor } = await getInstanceActor();
+      if (noteCreatorId === actor.id) {
         console.error(
           'Attempted to like a note that comes from this instance.',
         );
         return false;
       }
 
-      const createdActivity = createActivity(
-        instanceActor.actor.id,
-        SupportedActivityType.Like,
-        { id: existingNote.id },
-      );
+      const internalId = randomUUID();
+
       const newActivityPubActivity: NewActivityPubActivity = {
-        id: createdActivity.id,
+        id: getActivityUrl(internalId).toString(),
+        internalId,
         receivedOn,
-        type: createdActivity.type,
-        actor: createdActivity.actor,
-        object: createdActivity.object.id,
+        type: SupportedActivityType.Like,
+        actor: actor.id,
+        object: existingNote.id,
       };
 
       await transaction

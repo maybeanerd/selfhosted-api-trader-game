@@ -4,7 +4,6 @@ import { TradeModule } from '@/modules/trade/trade.module';
 import { ResourceModule } from '@/modules/resource/resource.module';
 import { TreatyModule } from '@/modules/treaty/treaty.module';
 import { CrossroadsModule } from '@/modules/crossroads/crossroads.module';
-import { InstanceInfoModule } from '@/modules/instanceInfo/instanceInfo.module';
 import { LoggerModule } from 'nestjs-pino';
 
 @Module({
@@ -20,9 +19,8 @@ import { LoggerModule } from 'nestjs-pino';
     ResourceModule,
     TreatyModule,
 
-    // Modules for inter instance communication
+    // Module for inter instance communication
     CrossroadsModule,
-    InstanceInfoModule,
   ],
   controllers: [],
   providers: [],
