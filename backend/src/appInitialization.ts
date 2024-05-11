@@ -39,5 +39,5 @@ export function initializeApp(app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('spec', app, document);
+  SwaggerModule.setup('api/spec', app, document);
 }
