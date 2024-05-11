@@ -8,7 +8,15 @@ const activityPubId = z.string().url();
 
 const jsonLdContext = z
   .string()
-  .or(z.array(z.string().or(z.record(z.string(), z.string()))));
+  .or(
+    z.array(
+      z
+        .string()
+        .or(
+          z.record(z.string(), z.string().or(z.record(z.string(), z.string()))),
+        ),
+    ),
+  );
 
 export const publicKeyDto = z.object({
   id: activityPubId,
