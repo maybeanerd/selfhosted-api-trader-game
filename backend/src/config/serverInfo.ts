@@ -5,6 +5,7 @@ const baseUrl = process.env.BASE_URL ?? 'http://localhost:8080';
 
 export const serverInfo = {
   name: serverName,
+  softwareName: packageJson.name,
   baseUrl,
   version: packageJson.version,
   description: packageJson.description,
