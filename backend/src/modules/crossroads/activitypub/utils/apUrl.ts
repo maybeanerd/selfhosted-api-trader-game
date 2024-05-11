@@ -7,8 +7,8 @@ const { baseUrl } = serverInfo;
 
 const activityPubBaseUrl = `${baseUrl.toString()}${apiBasePath}/v${apiVersion}/${crossroadsBasePath}`;
 
-export function getBaseUrl(): string {
-  return baseUrl.toString();
+export function getHost(): string {
+  return baseUrl.host;
 }
 
 export function getActorUrl(actorId: string): URL {
