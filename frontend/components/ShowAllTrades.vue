@@ -74,9 +74,6 @@ onUnmounted(() => {
 async function acceptTrade (tradeId: string) {
   await fetch(basePath + 'trades/' + tradeId, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
   refresh();
 }
@@ -84,9 +81,6 @@ async function acceptTrade (tradeId: string) {
 async function takeBackTrade (tradeId: string) {
   await fetch(basePath + 'trades/' + tradeId, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
   refresh();
 }

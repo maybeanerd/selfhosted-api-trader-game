@@ -19,9 +19,6 @@ async function submitTreaty () {
 
   await fetch(basePath + 'treaties', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(treaty),
   });
 

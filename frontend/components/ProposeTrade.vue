@@ -40,9 +40,6 @@ async function submitTrade () {
 
   await fetch(basePath + 'trades', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(trade),
   });
 

@@ -77,9 +77,6 @@ async function acceptTreaty (
 ) {
   await fetch(basePath + 'treaties', {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify({
       activityPubActorId,
       status: 'signed',
@@ -92,9 +89,6 @@ async function removeTreaty (
 ) {
   await fetch(basePath + 'treaties', {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify({
       activityPubActorId,
     }),
