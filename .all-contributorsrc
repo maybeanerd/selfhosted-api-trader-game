@@ -16,7 +16,8 @@
         "review",
         "business",
         "infra",
-        "maintenance"
+        "maintenance",
+        "projectManagement"
       ]
     }
   ],
@@ -25,5 +26,7 @@
   "projectOwner": "maybeanerd",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitType": "docs",
+  "commitConvention": "angular"
 }
