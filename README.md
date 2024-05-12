@@ -38,7 +38,7 @@ A self hostable game server that can connect to others instances using the [Acti
 
 This project is still in it's early stages, but feel free to try it out or contribute!
 
-[Contributions don't need to be code. They can be bug reports, feature requests or general feedback.](https://allcontributors.org/docs/en/emoji-key)
+Contributions don't need to be code. They can be [bug reports, feature requests or general feedback.](https://allcontributors.org/docs/en/emoji-key)
 
 ## Running it
 
