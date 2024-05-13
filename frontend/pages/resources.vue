@@ -1,5 +1,7 @@
 <template>
   <div>
+    <ShowOccupation />
+    <br>
     <h1>Available Resources:</h1>
     <ShowAllResources />
   </div>
