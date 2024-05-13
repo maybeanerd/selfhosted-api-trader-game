@@ -12,7 +12,7 @@ import {
 import { TradeService } from '@/modules/trade/trade.service';
 import { TradeOfferInputDto } from './dto/TradeOfferInput.dto';
 import { TradeOfferDto } from './dto/TradeOffer.dto';
-import { getUserId } from '@/modules/resource/utils/testUser';
+import { getUser } from '@/modules/resource/utils/testUser';
 
 @Controller({ path: 'trades', version: '1' })
 export class TradeController {
@@ -25,13 +25,13 @@ export class TradeController {
 
   @Post()
   async offerTrade(@Body() body: TradeOfferInputDto): Promise<TradeOfferDto> {
-    const userId = await getUserId(); // TODO get the user id from the request
+    const { id } = await getUser(); // TODO get the user id from the request
 
     const createdTrade = await this.tradeService.createTradeOffer(
       {
         ...body,
       },
-      userId,
+      id,
     );
     if (createdTrade === null) {
       throw new HttpException('Not enough resources.', HttpStatus.FORBIDDEN);
@@ -42,7 +42,7 @@ export class TradeController {
   @Put('/:id')
   async acceptTradeOffer(@Param('id') id: string): Promise<TradeOfferDto> {
     let acceptedTradeOffer: TradeOfferDto | null;
-    const userId = await getUserId(); // TODO get the user id from the request
+    const { id: userId } = await getUser(); // TODO get the user id from the request
     try {
       acceptedTradeOffer = await this.tradeService.acceptTradeOffer(id, userId);
     } catch (e) {
@@ -59,7 +59,7 @@ export class TradeController {
 
   @Delete('/:id')
   async removeTradeOffer(@Param('id') id: string): Promise<TradeOfferDto> {
-    const userId = await getUserId(); // TODO get the user id from the request
+    const { id: userId } = await getUser(); // TODO get the user id from the request
 
     const removedTrade = await this.tradeService.removeTradeOffer(id, userId);
     if (removedTrade === null) {

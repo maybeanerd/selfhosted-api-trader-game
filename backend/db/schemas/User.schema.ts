@@ -9,6 +9,7 @@ export const occupationType = pgEnum(
 export const user = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
   currentOccupation: occupationType('currentOccupation')
+    .$type<Occupation>()
     .notNull()
     .default(Occupation.MINER),
 });

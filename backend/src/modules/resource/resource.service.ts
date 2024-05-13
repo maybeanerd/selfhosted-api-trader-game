@@ -3,9 +3,10 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
 import { Resource, resource } from 'db/schema';
-import { getUserId } from '@/modules/resource/utils/testUser';
+import { getUser } from '@/modules/resource/utils/testUser';
 import { type DbTransaction, drizz } from 'db';
 import { and, eq, gte } from 'drizzle-orm';
+import { getOccupationalResources } from '@/modules/resource/utils/occupation';
 
 function mapResourceDocumentToResourceStatisticDto(
   res: Resource,
@@ -20,7 +21,7 @@ function mapResourceDocumentToResourceStatisticDto(
 
 // TODO make this logic more sophisticated
 function getResourceAccumulationPerTick(upgradeLevel: number) {
-  return upgradeLevel * 2;
+  return Math.floor(upgradeLevel * 1.5);
 }
 
 @Injectable()
@@ -30,19 +31,26 @@ export class ResourceService {
     console.log('Cron is running...');
     console.time('resource-cron');
 
+    const { currentOccupation } = await getUser();
+    const resourcesToWorkOn = getOccupationalResources(currentOccupation);
+
     const resources = await this.getStatisticOfAllResources();
-    // TODO this could probably be a dedicated function that uses mongoose directly, to limit the amount of requests we send
+    // TODO this could probably be a dedicated function that uses the DB directly, to limit the amount of requests we send
     await Promise.all(
-      resources.map((res) =>
-        this.addAmountOfResource(
-          res.type,
-          getResourceAccumulationPerTick(res.upgradeLevel),
-          res.ownerId,
-        ),
-      ),
+      resources.map((res) => {
+        // Only work on resources that are relevant to the user's occupation
+        if (resourcesToWorkOn.includes(res.type)) {
+          return this.addAmountOfResource(
+            res.type,
+            getResourceAccumulationPerTick(res.upgradeLevel),
+            res.ownerId,
+          );
+        }
+        return null;
+      }),
     );
 
-    const userIdForTestingResourceGeneration = await getUserId();
+    const { id: userIdForTestingResourceGeneration } = await getUser();
 
     // TODO remove this temporary solution to creating some initial resource growth
     const stone = await this.getStatisticOfResource(
@@ -67,6 +75,17 @@ export class ResourceService {
         userIdForTestingResourceGeneration,
       );
     }
+    const leather = await this.getStatisticOfResource(
+      ResourceType.LEATHER,
+      userIdForTestingResourceGeneration,
+    );
+    if (leather.upgradeLevel === 0) {
+      await this.addAmountOfResource(
+        ResourceType.LEATHER,
+        0,
+        userIdForTestingResourceGeneration,
+      );
+    }
     console.timeEnd('resource-cron');
   }
 
@@ -74,7 +93,7 @@ export class ResourceService {
     ownerId?: string,
   ): Promise<Array<ResourceStatisticDto>> {
     const resources = await drizz.query.resource.findMany({
-      where: (r) => eq(r.ownerId, ownerId ?? r.ownerId),
+      where: (r) => and(eq(r.ownerId, ownerId ?? r.ownerId)),
     });
 
     return resources.map(mapResourceDocumentToResourceStatisticDto);

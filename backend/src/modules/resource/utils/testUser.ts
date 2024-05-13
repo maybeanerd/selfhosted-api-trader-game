@@ -1,15 +1,16 @@
 import { drizz } from 'db';
-import { user } from 'db/schema';
+import { User, user } from 'db/schema';
 
-export async function getUserId() {
+export async function getUser(): Promise<User> {
   const foundUser = await drizz.query.user.findFirst();
   if (foundUser) {
-    return foundUser.id;
+    return foundUser;
   }
   const insertedUsers = await drizz.insert(user).values({}).returning();
-  const userId = insertedUsers.at(0)?.id;
-  if (!userId) {
+  const insertedUser = insertedUsers.at(0);
+  if (!insertedUser) {
     throw new Error('Failed to insert user');
   }
-  return userId;
+
+  return insertedUser;
 }
