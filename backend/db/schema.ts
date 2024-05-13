@@ -34,7 +34,7 @@ export {
   ActivityPubObject,
   NewActivityPubObject,
 } from 'db/schemas/ActivityPubObject.schema';
-export { user, User, NewUser } from 'db/schemas/User.schema';
+export { user, occupationType, User, NewUser } from 'db/schemas/User.schema';
 export {
   activityPubActor,
   activityPubActorType,
