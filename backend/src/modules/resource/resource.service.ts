@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ResourceType } from './types';
+import { Occupation, ResourceType } from './types';
 import { ResourceStatisticDto } from './dto/ResourceStatistic.dto';
-import { Resource, resource } from 'db/schema';
+import { Resource, resource, user } from 'db/schema';
 import { getUser } from '@/modules/resource/utils/testUser';
 import { type DbTransaction, drizz } from 'db';
 import { and, eq, gte } from 'drizzle-orm';
@@ -264,5 +264,19 @@ export class ResourceService {
 
       return mapResourceDocumentToResourceStatisticDto(updatedResource);
     });
+  }
+
+  async getCurrentOccupation(): Promise<Occupation> {
+    const { currentOccupation } = await getUser();
+
+    return currentOccupation;
+  }
+
+  async changeOccupation(userId: string, newOccupation: Occupation) {
+    await drizz
+      .update(user)
+      .set({ currentOccupation: newOccupation })
+      .where(eq(user.id, userId))
+      .returning();
   }
 }
