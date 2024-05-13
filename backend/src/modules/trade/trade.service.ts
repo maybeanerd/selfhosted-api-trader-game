@@ -207,10 +207,16 @@ ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
         return null;
       }
 
+      const { creatorId, requestedResources, offeredResources } =
+        tradeOfferToRemove;
+
+      if (acceptantId === creatorId) {
+        throw new Error('Cannot accept your own trade offer.');
+      }
+
       if (acceptantId) {
-        const resourcesToPay = tradeOfferToRemove.requestedResources;
         const wasAbleToPay = await this.resourceService.takeAmountsOfResources(
-          resourcesToPay,
+          requestedResources,
           acceptantId,
           transaction,
         );
@@ -219,13 +225,27 @@ ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
         }
 
         await this.resourceService.addAmountsOfResources(
-          tradeOfferToRemove.offeredResources,
+          offeredResources,
           acceptantId,
           transaction,
         );
 
-        // Only share acceptance if the trade was accepted by a user on this instance
+        // Share completion of the trade
         await this.activityPubService.likeNoteObject(
+          tradeOfferToRemove.activityPubNoteId,
+        );
+      }
+
+      // If the trade was created by a user on this instance, give them their gained resources
+      if (creatorId !== null) {
+        await this.resourceService.addAmountsOfResources(
+          offeredResources,
+          creatorId,
+          transaction,
+        );
+
+        // Share that the trade is not available anymore
+        await this.activityPubService.deleteNoteObject(
           tradeOfferToRemove.activityPubNoteId,
         );
       }
@@ -233,8 +253,6 @@ ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
       await transaction
         .delete(trade)
         .where(eq(trade.id, tradeOfferToRemove.id));
-
-      // TODO give resources that have been received to the originally offering player as well
 
       return mapTradeDocumentToTradeOfferDto(tradeOfferToRemove);
     });
