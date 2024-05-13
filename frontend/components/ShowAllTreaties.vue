@@ -75,29 +75,23 @@ const removedTreaties = computed(() => treaties.value?.filter(treaty => treaty.s
 async function acceptTreaty (
   activityPubActorId: string,
 ) {
-  await fetch(basePath + 'treaties', {
+  await useFetch(basePath + 'treaties', {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+    body: {
       activityPubActorId,
       status: 'signed',
-    }),
+    },
   });
 }
 
 async function removeTreaty (
   activityPubActorId: string,
 ) {
-  await fetch(basePath + 'treaties', {
+  await useFetch(basePath + 'treaties', {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+    body: {
       activityPubActorId,
-    }),
+    },
   });
 }
 </script>

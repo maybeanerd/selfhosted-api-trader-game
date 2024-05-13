@@ -72,14 +72,14 @@ onUnmounted(() => {
 });
 
 async function acceptTrade (tradeId: string) {
-  await fetch(basePath + 'trades/' + tradeId, {
+  await useFetch(basePath + 'trades/' + tradeId, {
     method: 'PUT',
   });
   refresh();
 }
 
 async function takeBackTrade (tradeId: string) {
-  await fetch(basePath + 'trades/' + tradeId, {
+  await useFetch(basePath + 'trades/' + tradeId, {
     method: 'DELETE',
   });
   refresh();
