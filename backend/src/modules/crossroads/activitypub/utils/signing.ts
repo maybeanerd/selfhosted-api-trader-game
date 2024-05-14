@@ -1,6 +1,6 @@
 import { serverInfo } from '@/config/serverInfo';
 import { getInstanceActor } from '@/modules/crossroads/activitypub/actor';
-import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
+import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import type { AxiosRequestConfig } from 'axios';
 import { createHash, createSign, generateKeyPair } from 'crypto';
 
@@ -68,7 +68,7 @@ export async function createSignedRequestConfig({
   const signature = sign.sign(privateKey, 'base64');
 
   const headers = {
-    Accept: contentType,
+    Accept: contentTypeActivityStreams,
     Date: date,
     Host: host,
     Signature: `keyId="${keyId}",headers="(request-target) host date digest",signature="${signature}"`,

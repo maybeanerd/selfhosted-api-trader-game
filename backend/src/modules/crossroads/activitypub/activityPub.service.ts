@@ -54,7 +54,7 @@ import {
   comesFromGameServer,
 } from '@/modules/crossroads/activitypub/utils/gameServerExtension';
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
-import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
+import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import { createSignedRequestConfig } from '@/modules/crossroads/activitypub/utils/signing';
 
 type GameActivityObject = APRoot<APObject> & {
@@ -474,7 +474,7 @@ export class ActivityPubService {
     }
 
     const actor = foundActorValidation.data.links.find(
-      (link) => link.rel === 'self' && link.type === contentType,
+      (link) => link.rel === 'self' && link.type === contentTypeActivityStreams,
     );
 
     if (actor === undefined) {

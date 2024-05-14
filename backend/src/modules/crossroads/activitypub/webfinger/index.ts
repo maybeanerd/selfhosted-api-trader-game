@@ -1,12 +1,15 @@
 import { getHost } from '@/modules/crossroads/activitypub/utils/apUrl';
-import { contentType } from '@/modules/crossroads/activitypub/utils/contentType';
+import {
+  contentTypeActivityJson,
+  contentTypeActivityStreams,
+} from '@/modules/crossroads/activitypub/utils/contentType';
 import type { APActor } from 'activitypub-types';
 
 export type WebfingerResponse = {
   subject: string;
   links: Array<{
     rel: 'self';
-    type: 'application/activity+json';
+    type: typeof contentTypeActivityJson | typeof contentTypeActivityStreams;
     href: string;
   }>;
 };
@@ -20,7 +23,12 @@ export function mapActorToWebfingerResponse(actor: APActor): WebfingerResponse {
     links: [
       {
         rel: 'self',
-        type: contentType,
+        type: contentTypeActivityJson,
+        href: actor.id,
+      },
+      {
+        rel: 'self',
+        type: contentTypeActivityStreams,
         href: actor.id,
       },
     ],
