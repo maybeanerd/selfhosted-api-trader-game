@@ -239,7 +239,7 @@ ${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
       // If the trade was created by a user on this instance, give them their gained resources
       if (creatorId !== null) {
         await this.resourceService.addAmountsOfResources(
-          offeredResources,
+          requestedResources,
           creatorId,
           transaction,
         );
