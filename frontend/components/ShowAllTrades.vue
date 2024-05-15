@@ -54,7 +54,10 @@ const { data: trades, refresh } = await useFetch<Array<{
   >
 }>>(
   basePath + 'trades',
-);
+  {
+    lazy: true,
+    server: false,
+  });
 
 const ownTrades = computed(() => trades.value?.filter(trade => trade.creatorId !== null));
 
@@ -74,6 +77,8 @@ onUnmounted(() => {
 async function acceptTrade (tradeId: string) {
   await useFetch(basePath + 'trades/' + tradeId, {
     method: 'PUT',
+    lazy: true,
+    server: false,
   });
   refresh();
 }
@@ -81,6 +86,8 @@ async function acceptTrade (tradeId: string) {
 async function takeBackTrade (tradeId: string) {
   await useFetch(basePath + 'trades/' + tradeId, {
     method: 'DELETE',
+    lazy: true,
+    server: false,
   });
   refresh();
 }

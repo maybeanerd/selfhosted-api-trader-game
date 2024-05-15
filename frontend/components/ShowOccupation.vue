@@ -25,6 +25,10 @@ function getOccupationIcon (occupation: Occupation) {
 
 const { data: occupation, refresh } = await useFetch<Occupation>(
   basePath + 'occupations',
+  {
+    lazy: true,
+    server: false,
+  },
 );
 
 let stopInterval: NodeJS.Timeout;

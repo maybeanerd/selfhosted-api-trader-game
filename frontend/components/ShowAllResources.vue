@@ -24,6 +24,10 @@ const { data: resources, refresh } = await useFetch<Array<{
   ownerId: string, type: string, amount: number, 'upgradeLevel': number
 }>>(
   basePath + 'resources',
+  {
+    lazy: true,
+    server: false,
+  },
 );
 
 let stopInterval: NodeJS.Timeout;

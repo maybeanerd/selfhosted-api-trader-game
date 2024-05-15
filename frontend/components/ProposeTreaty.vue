@@ -20,6 +20,8 @@ async function submitTreaty () {
   await useFetch(basePath + 'treaties', {
     method: 'POST',
     body: treaty,
+    lazy: true,
+    server: false,
   });
 
   instanceUrl.value = '';

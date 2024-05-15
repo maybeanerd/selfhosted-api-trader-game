@@ -52,7 +52,10 @@ const { data: treaties, refresh } = await useFetch<Array<{
   activityPubActorId: string;
 }>>(
   basePath + 'treaties',
-);
+  {
+    lazy: true,
+    server: false,
+  });
 
 let stopInterval: NodeJS.Timeout;
 
@@ -81,6 +84,8 @@ async function acceptTreaty (
       activityPubActorId,
       status: 'signed',
     },
+    lazy: true,
+    server: false,
   });
 }
 
@@ -92,6 +97,8 @@ async function removeTreaty (
     body: {
       activityPubActorId,
     },
+    lazy: true,
+    server: false,
   });
 }
 </script>

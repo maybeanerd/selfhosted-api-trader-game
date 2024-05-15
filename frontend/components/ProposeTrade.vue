@@ -41,6 +41,8 @@ async function submitTrade () {
   await useFetch(basePath + 'trades', {
     method: 'POST',
     body: trade,
+    lazy: true,
+    server: false,
   });
 
   requestedResources.value = {};

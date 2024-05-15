@@ -1,7 +1,10 @@
 import gitCommitInfo from 'git-commit-info';
+import packageJson from './package.json';
 
 // When built in GitHub Actions, the commit hash is available in the environment, and gitCommitInfo won't find it.
 const commitHash = gitCommitInfo().shortHash ?? process.env.COMMIT_HASH;
+
+const { version } = packageJson;
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -18,6 +21,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       commitHash,
+      version,
       buildDate: new Date().toISOString(),
     },
   },
