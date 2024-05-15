@@ -67,10 +67,17 @@ export async function createSignedRequestConfig({
   sign.update(stringToSign);
   const signature = sign.sign(privateKey, 'base64');
 
+  const contentTypeHeader = body
+    ? {
+      'Content-Type': contentTypeActivityStreams,
+    }
+    : {};
+
   const headers = {
     Accept: contentTypeActivityStreams,
     Date: date,
     Host: host,
+    ...contentTypeHeader,
     Signature: `keyId="${keyId}",headers="(request-target) host date digest",signature="${signature}"`,
   };
 
