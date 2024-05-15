@@ -1,4 +1,3 @@
-import { serverInfo } from '@/config/serverInfo';
 import { getInstanceActor } from '@/modules/crossroads/activitypub/actor';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import type { AxiosRequestConfig } from 'axios';
@@ -54,14 +53,15 @@ export async function createSignedRequestConfig({
 
   const digestHeader = `SHA-256=${base64Hash}`;
   const date = new Date().toUTCString();
-  const { host } = serverInfo.baseUrl;
 
-  const requestPath = new URL(url).pathname;
+  const requestUrl = new URL(url);
+
+  const { pathname, host } = requestUrl;
 
   const { actor, privateKey } = await getInstanceActor();
   const keyId = actor.publicKey.id;
 
-  const stringToSign = `(request-target): ${type} ${requestPath}\nhost: ${host}\ndate: ${date}\ndigest: ${digestHeader}`;
+  const stringToSign = `(request-target): ${type} ${pathname}\nhost: ${host}\ndate: ${date}\ndigest: ${digestHeader}`;
   console.log('signing', stringToSign);
   const sign = createSign('RSA-SHA256');
   sign.update(stringToSign);
