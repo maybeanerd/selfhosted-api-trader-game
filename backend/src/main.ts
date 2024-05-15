@@ -10,10 +10,29 @@ import {
 } from '@nestjs/platform-fastify';
 import { initializeApp } from '@/appInitialization';
 import { initializeDb } from 'db';
+import {
+  contentTypeActivityJson,
+  contentTypeActivityStreams,
+} from '@/modules/crossroads/activitypub/utils/contentType';
 
 async function bootstrap() {
   const fastifyAdapter = new FastifyAdapter();
   fastifyAdapter.enableCors({});
+
+  // Enable parsing activityStream related content-types as JSON
+  const fastifyInstance = fastifyAdapter.getInstance();
+
+  fastifyInstance.addContentTypeParser(
+    contentTypeActivityJson,
+    { parseAs: 'string' },
+    fastifyInstance.getDefaultJsonParser('error', 'ignore'),
+  );
+
+  fastifyInstance.addContentTypeParser(
+    contentTypeActivityStreams,
+    { parseAs: 'string' },
+    fastifyInstance.getDefaultJsonParser('error', 'ignore'),
+  );
 
   await initializeDb();
 
