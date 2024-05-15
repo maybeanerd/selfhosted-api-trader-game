@@ -74,5 +74,5 @@ export const inboxActivity = z.object({
 });
 export type InboxActivity = z.infer<typeof inboxActivity>;
 
-export const inboxActivities = z.array(inboxActivity).min(1);
+export const inboxActivities = inboxActivity.or(z.array(inboxActivity).min(1));
 export type InboxActivities = z.infer<typeof inboxActivities>;
