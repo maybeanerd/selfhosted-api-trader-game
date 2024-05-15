@@ -56,6 +56,7 @@ import {
 import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import { createSignedRequestConfig } from '@/modules/crossroads/activitypub/utils/signing';
+import { OutboxDto } from '@/modules/crossroads/activitypub/dto/outbox.dto';
 
 type GameActivityObject = APRoot<APObject> & {
   gameContent: GameContent;
@@ -852,7 +853,7 @@ export class ActivityPubService {
   }
 
   // TODO pagination and start date
-  async getOutbox(): Promise<Array<APRoot<APActivity>>> {
+  async getOutbox(): Promise<OutboxDto> {
     const { actor } = await getInstanceActor();
     const activities = await drizz.query.activityPubActivity.findMany({
       where: (activity) =>
@@ -861,7 +862,15 @@ export class ActivityPubService {
       limit: 100,
     });
 
-    return activities.map(mapActivityPubActivityToDto);
+    const orderedItems = activities.map(mapActivityPubActivityToDto);
+
+    return {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      summary: 'Outbox',
+      type: 'OrderedCollection',
+      totalItems: orderedItems.length,
+      orderedItems,
+    };
   }
 
   async fetchAndStoreObject(

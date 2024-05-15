@@ -19,6 +19,7 @@ import type { APActivity, APRoot } from 'activitypub-types';
 import { z } from 'zod';
 import { crossroadsBasePath } from '@/config/apiPaths';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
+import { OutboxDto } from '@/modules/crossroads/activitypub/dto/outbox.dto';
 
 @Controller({ path: crossroadsBasePath, version: apiVersion })
 export class ActivityPubController {
@@ -62,7 +63,7 @@ export class ActivityPubController {
   }
 
   @Get('/outbox')
-  async getOutbox(): Promise<Array<APRoot<APActivity>>> {
+  async getOutbox(): Promise<OutboxDto> {
     // TODO pagination
     const outbox = await this.activityPubService.getOutbox();
 
