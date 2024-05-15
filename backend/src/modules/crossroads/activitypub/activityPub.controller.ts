@@ -15,7 +15,6 @@ import type {
   PublicKeyObject,
 } from '@/modules/crossroads/activitypub/actor/types';
 import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
-import { z } from 'zod';
 import { crossroadsBasePath } from '@/config/apiPaths';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import { OutboxDto } from '@/modules/crossroads/activitypub/dto/outbox.dto';
