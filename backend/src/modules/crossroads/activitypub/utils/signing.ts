@@ -36,32 +36,37 @@ export async function generateKeys(): Promise<{
   });
 }
 
+type SigningInput = {
+  url: string | URL;
+  config?: AxiosRequestConfig;
+} & ({ body?: undefined; type: 'get' } | { body: unknown; type: 'post' });
+
 export async function createSignedRequestConfig({
   body,
   type,
   url,
   config,
-}: {
-  body?: unknown;
-  type: 'post' | 'get';
-  url: string | URL;
-  config?: AxiosRequestConfig;
-}): Promise<AxiosRequestConfig> {
-  const base64Hash = createHash('sha256')
-    .update(body ? JSON.stringify(body) : '')
-    .digest('base64');
-
-  const digestHeader = `SHA-256=${base64Hash}`;
+}: SigningInput): Promise<AxiosRequestConfig> {
   const date = new Date().toUTCString();
 
   const requestUrl = new URL(url);
-
   const { pathname, host } = requestUrl;
 
   const { actor, privateKey } = await getInstanceActor();
   const keyId = actor.publicKey.id;
 
-  const stringToSign = `(request-target): ${type} ${pathname}\nhost: ${host}\ndate: ${date}\ndigest: ${digestHeader}`;
+  let stringToSign = `(request-target): ${type} ${pathname}\nhost: ${host}\ndate: ${date}`;
+  let signedHeaders = '(request-target) host date';
+  // Only add and sign the digest header if there is a body
+  if (body) {
+    const base64Hash = createHash('sha256')
+      .update(JSON.stringify(body))
+      .digest('base64');
+    const digestHeader = `SHA-256=${base64Hash}`;
+
+    stringToSign += `\ndigest: ${digestHeader}`;
+    signedHeaders += ' digest';
+  }
   console.log('signing', stringToSign);
   const sign = createSign('RSA-SHA256');
   sign.update(stringToSign);
@@ -78,7 +83,7 @@ export async function createSignedRequestConfig({
     Date: date,
     Host: host,
     ...contentTypeHeader,
-    Signature: `keyId="${keyId}",headers="(request-target) host date digest",signature="${signature}"`,
+    Signature: `keyId="${keyId}",headers="${signedHeaders}",signature="${signature}"`,
   };
 
   console.log('headers', JSON.stringify(headers, null, 2));
