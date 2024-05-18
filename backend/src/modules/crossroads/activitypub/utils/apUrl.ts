@@ -16,7 +16,7 @@ export function getActorUrl(actorId: string): URL {
 }
 
 export function getActorPublicKeyUrl(actorId: string): URL {
-  return new URL(`${activityPubBaseUrl}/actors/${actorId}/publicKey`);
+  return new URL(`${activityPubBaseUrl}/actors/${actorId}#main-key`);
 }
 
 export function getNoteUrl(noteId: string): URL {

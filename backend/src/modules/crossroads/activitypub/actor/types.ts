@@ -1,6 +1,6 @@
 import type { APActor, APRoot } from 'activitypub-types';
 
-export type PublicKeyObject = {
+type PublicKeyObject = {
   id: string;
   owner: string;
   publicKeyPem: string;

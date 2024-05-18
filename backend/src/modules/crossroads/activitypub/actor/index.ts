@@ -1,6 +1,5 @@
 import {
   ActivityPubActorObject,
-  PublicKeyObject,
   SupportedActorType,
 } from '@/modules/crossroads/activitypub/actor/types';
 import {
@@ -37,23 +36,6 @@ async function getActorFromId(
       owner: actorId,
       publicKeyPem: publicKey,
     },
-  };
-}
-
-export async function getPublicKeyOfActor(
-  id: string,
-): Promise<PublicKeyObject> {
-  const serverState = await drizz.query.serverState.findFirst();
-  if (serverState === undefined) {
-    throw new Error('Server state not found.');
-  }
-
-  const { publicKey } = serverState;
-
-  return {
-    id: getActorPublicKeyUrl(id).toString(),
-    owner: getActorUrl(id).toString(),
-    publicKeyPem: publicKey,
   };
 }
 
