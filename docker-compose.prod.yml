@@ -29,7 +29,7 @@ services:
       - internal
 
   backend:
-    image: ghcr.io/maybeanerd/selfhosted-api-trader-game-backend:0.1.9
+    image: ghcr.io/maybeanerd/selfhosted-api-trader-game-backend:0.1.10
     restart: always
     depends_on:
       - database
@@ -49,7 +49,7 @@ services:
       - BASE_URL=https://your-domain.com
 
   frontend:
-    image: ghcr.io/maybeanerd/selfhosted-api-trader-game-frontend:0.1.9
+    image: ghcr.io/maybeanerd/selfhosted-api-trader-game-frontend:0.1.10
     restart: always
     depends_on:
       - backend
