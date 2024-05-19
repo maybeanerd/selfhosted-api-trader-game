@@ -10,12 +10,11 @@ import {
 } from '@nestjs/common';
 import { ActivityPubService } from './activityPub.service';
 import type { ActivityPubActorObject } from '@/modules/crossroads/activitypub/actor/types';
-import { apiVersion } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { crossroadsBasePath } from '@/config/apiPaths';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import { OutboxDto } from '@/modules/crossroads/activitypub/dto/outbox.dto';
 
-@Controller({ path: crossroadsBasePath, version: apiVersion })
+@Controller({ path: crossroadsBasePath })
 export class ActivityPubController {
   constructor(private readonly activityPubService: ActivityPubService) {}
 
