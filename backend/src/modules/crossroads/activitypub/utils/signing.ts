@@ -1,5 +1,4 @@
 import { getInstanceActor } from '@/modules/crossroads/activitypub/actor';
-import { ActivityPubActorObject } from '@/modules/crossroads/activitypub/actor/types';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
@@ -99,7 +98,7 @@ export async function validateSignedRequest(request: {
   body?: Record<string, unknown>;
 }): Promise<null | { ownerId: string }> {
   const { headers, body } = request;
-  const { date, signature, host } = headers;
+  const { signature /* ,date,  host */ } = headers;
 
   console.log('verifying', signature);
 
