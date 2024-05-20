@@ -63,7 +63,15 @@ export const activityPubObjectDto = z.object({
   inReplyTo: inboxActivityActor.optional(),
 });
 
-export const inboxActivityObject = activityPubId.or(activityPubObjectDto);
+export const inboxActivityObject = activityPubId.or(activityPubObjectDto).or(
+  // Activity.object can also reference another activity
+  z.object({
+    id: activityPubId,
+    type: z.nativeEnum(SupportedActivityType),
+    actor: inboxActivityActor,
+    object: activityPubId.or(activityPubObjectDto),
+  }),
+);
 
 export const inboxActivity = z.object({
   '@context': jsonLdContext.optional(),

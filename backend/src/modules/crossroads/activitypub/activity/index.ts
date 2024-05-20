@@ -3,6 +3,7 @@ export enum SupportedActivityType {
   'Update' = 'Update',
   'Delete' = 'Delete',
   'Follow' = 'Follow',
+  'Accept' = 'Accept',
   'Like' = 'Like',
   'Undo' = 'Undo',
 }

@@ -1,0 +1,1 @@
+ALTER TYPE "activityPubActivityType" ADD VALUE 'Accept';

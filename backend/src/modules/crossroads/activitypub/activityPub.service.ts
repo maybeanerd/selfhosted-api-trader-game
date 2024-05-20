@@ -313,6 +313,8 @@ export class ActivityPubService {
   }
 
   async handleFollowActivity(activity: ActivityPubActivity) {
+    // By default, we accept all follows
+    await this.acceptFollowActivity(activity.id);
     await this.updateActorIsFollowing(activity.actor, true);
   }
 
@@ -533,6 +535,33 @@ export class ActivityPubService {
     }
 
     return mapActivityPubObjectToDto(apObject);
+  }
+
+  async acceptFollowActivity(followActivityId: string): Promise<void> {
+    await drizz.transaction(async (transaction) => {
+      const receivedOn = new Date();
+
+      const internalId = randomUUID();
+
+      const newActivityPubActivity: NewActivityPubActivity = {
+        id: getActivityUrl(internalId).toString(),
+        internalId,
+        receivedOn,
+        type: SupportedActivityType.Accept,
+        actor: (await getInstanceActor()).actor.id,
+        object: followActivityId,
+      };
+
+      await transaction
+        .insert(activityPubActivity)
+        .values(newActivityPubActivity);
+
+      await transaction.insert(activityPubActivityQueue).values({
+        id: newActivityPubActivity.id,
+        type: ActivityPubActivityQueueType.Outgoing,
+        objectWasStored: true,
+      });
+    });
   }
 
   async followActor(actorId: string): Promise<void> {
@@ -987,6 +1016,14 @@ export class ActivityPubService {
             (validatedActivity.type === SupportedActivityType.Create ||
               validatedActivity.type === SupportedActivityType.Update)
           ) {
+            if (validatedActivity.object.type !== SupportedObjectType.Note) {
+              console.error(
+                'Unsupported object type for create/update activity:',
+                validatedActivity.object.type,
+              );
+              return;
+            }
+
             objectWasStored = true; // We can't use this value for the if-clause, since type narrowing won't work
             const newObject: NewActivityPubObject = {
               id: validatedActivity.object.id,

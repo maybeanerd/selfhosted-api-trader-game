@@ -190,6 +190,13 @@
       "when": 1715629998938,
       "tag": "0026_keen_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "6",
+      "when": 1716210868181,
+      "tag": "0027_little_lord_hawal",
+      "breakpoints": true
     }
   ]
 }
