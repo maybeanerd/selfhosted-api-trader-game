@@ -21,6 +21,7 @@ export class ActivityPubController {
   // TODO DTOs and validate them
 
   @Get('/actors/:id')
+  @Header('content-type', contentTypeActivityStreams)
   async getActorById(@Param('id') id: string): Promise<ActivityPubActorObject> {
     const actor = await this.activityPubService.findActorById(id);
     if (!actor) {
@@ -30,6 +31,7 @@ export class ActivityPubController {
   }
 
   @Get('/notes/:id')
+  @Header('content-type', contentTypeActivityStreams)
   async getNoteById(@Param('id') id: string): Promise<unknown> {
     const note = await this.activityPubService.findObjectById(id);
     if (!note) {
@@ -39,6 +41,7 @@ export class ActivityPubController {
   }
 
   @Get('/activities/:id')
+  @Header('content-type', contentTypeActivityStreams)
   async getActivityById(@Param('id') id: string): Promise<unknown> {
     const activity = await this.activityPubService.findActivityById(id);
     if (!activity) {
@@ -48,6 +51,7 @@ export class ActivityPubController {
   }
 
   @Get('/outbox')
+  @Header('content-type', contentTypeActivityStreams)
   async getOutbox(): Promise<OutboxDto> {
     // TODO pagination
     const outbox = await this.activityPubService.getOutbox();
