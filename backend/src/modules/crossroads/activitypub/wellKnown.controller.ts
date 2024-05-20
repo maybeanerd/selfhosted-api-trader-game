@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Header,
   HttpException,
   HttpStatus,
   Query,
@@ -16,6 +17,7 @@ import { drizz } from 'db';
 import { and, count, eq, isNotNull } from 'drizzle-orm';
 import { activityPubActivity } from 'db/schema';
 import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
+import { contentTypeWebfinger } from '@/modules/crossroads/activitypub/utils/contentType';
 
 // This is not part of the ActivityPub controller since it needs to be at the root of the API
 
@@ -68,6 +70,7 @@ export class WellKnownController {
 
   // TODO DTOs
   @Get('/webfinger')
+  @Header('content-type', contentTypeWebfinger)
   async useWebfinger(
     @Query('resource') subject: `acct:${string}@${string}`,
   ): Promise<WebfingerResponse> {

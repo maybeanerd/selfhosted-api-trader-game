@@ -7,6 +7,8 @@ import type { APActor } from 'activitypub-types';
 
 export type WebfingerResponse = {
   subject: string;
+  aliases?: Array<string>;
+  properties?: Record<string, unknown>;
   links: Array<{
     rel: 'self';
     type: typeof contentTypeActivityJson | typeof contentTypeActivityStreams;
