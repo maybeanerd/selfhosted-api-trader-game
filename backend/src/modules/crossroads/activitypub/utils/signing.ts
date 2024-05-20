@@ -59,6 +59,9 @@ export async function createSignedRequestConfig({
 
   let stringToSign = `(request-target): ${type} ${pathname}\nhost: ${host}\ndate: ${date}`;
   let signedHeaders = '(request-target) host date';
+
+  const headersForBody: Record<string, string> = {};
+
   // Only add and sign the digest header if there is a body
   if (body) {
     const base64Hash = createHash('sha256')
@@ -68,23 +71,19 @@ export async function createSignedRequestConfig({
 
     stringToSign += `\ndigest: ${digestHeader}`;
     signedHeaders += ' digest';
+    headersForBody.Digest = digestHeader;
+    headersForBody['Content-Type'] = contentTypeActivityStreams;
   }
   console.log('signing', stringToSign);
   const sign = createSign('RSA-SHA256');
   sign.update(stringToSign);
   const signature = sign.sign(privateKey, 'base64');
 
-  const contentTypeHeader = body
-    ? {
-      'Content-Type': contentTypeActivityStreams,
-    }
-    : {};
-
   const headers = {
     Accept: contentTypeActivityStreams,
     Date: date,
     Host: host,
-    ...contentTypeHeader,
+    ...headersForBody,
     Signature: `keyId="${keyId}",headers="${signedHeaders}",signature="${signature}"`,
   };
 
