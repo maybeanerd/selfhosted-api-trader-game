@@ -84,7 +84,33 @@ function mapActivityPubObjectToDto(
 
 function mapActivityPubActivityToDto(
   activity: ActivityPubActivity,
-): APRoot<APActivity> {
+): APRoot<APActivity & { object: APRoot<APActivity> }> | null {
+  // Handle accept activities differently, inline affected object
+  // We assume the accept to be on a follow activity
+  if (activity.type === SupportedActivityType.Accept) {
+    const { target } = activity;
+    if (target === null) {
+      console.error('Accept activity without target.', activity);
+      return null;
+    }
+    return {
+      '@context': [
+        'https://www.w3.org/ns/activitystreams',
+        activityPubIsGameServerExtension,
+      ],
+      id: activity.id,
+      type: activity.type,
+      actor: activity.actor,
+      object: {
+        '@context': ['https://www.w3.org/ns/activitystreams'],
+        id: activity.object,
+        type: SupportedActivityType.Follow,
+        actor: target,
+        object: activity.actor,
+      },
+    };
+  }
+
   return {
     '@context': [
       'https://www.w3.org/ns/activitystreams',
@@ -314,8 +340,7 @@ export class ActivityPubService {
 
   async handleFollowActivity(activity: ActivityPubActivity) {
     // By default, we accept all follows
-    await this.acceptFollowActivity(activity.id);
-    await this.updateActorIsFollowing(activity.actor, true);
+    await this.acceptFollowActivity(activity.id, activity.actor);
   }
 
   async handleUnfollowActivity(activity: ActivityPubActivity) {
@@ -537,7 +562,10 @@ export class ActivityPubService {
     return mapActivityPubObjectToDto(apObject);
   }
 
-  async acceptFollowActivity(followActivityId: string): Promise<void> {
+  async acceptFollowActivity(
+    followActivityId: string,
+    activityActorId: string,
+  ): Promise<void> {
     await drizz.transaction(async (transaction) => {
       const receivedOn = new Date();
 
@@ -550,6 +578,7 @@ export class ActivityPubService {
         type: SupportedActivityType.Accept,
         actor: (await getInstanceActor()).actor.id,
         object: followActivityId,
+        target: activityActorId,
       };
 
       await transaction
@@ -561,6 +590,8 @@ export class ActivityPubService {
         type: ActivityPubActivityQueueType.Outgoing,
         objectWasStored: true,
       });
+
+      await this.updateActorIsFollowing(activityActorId, true);
     });
   }
 
@@ -891,7 +922,9 @@ export class ActivityPubService {
       limit: 100,
     });
 
-    const orderedItems = activities.map(mapActivityPubActivityToDto);
+    const orderedItems = activities
+      .map(mapActivityPubActivityToDto)
+      .filter(Boolean) as Array<APRoot<APActivity>>;
 
     return {
       '@context': 'https://www.w3.org/ns/activitystreams',
