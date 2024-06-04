@@ -43,7 +43,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
     "dotenv": "16.4.5",
-    "drizzle-orm": "0.31.0",
+    "drizzle-orm": "0.31.1",
     "drizzle-zod": "0.5.1",
     "http-signature": "1.4.0",
     "nestjs-pino": "4.1.0",

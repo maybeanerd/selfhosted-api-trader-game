@@ -39,11 +39,11 @@ importers:
         specifier: 16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: 0.31.0
-        version: 0.31.0(@types/pg@8.11.6)(pg@8.11.5)
+        specifier: 0.31.1
+        version: 0.31.1(@types/pg@8.11.6)(pg@8.11.5)
       drizzle-zod:
         specifier: 0.5.1
-        version: 0.5.1(drizzle-orm@0.31.0(@types/pg@8.11.6)(pg@8.11.5))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.31.1(@types/pg@8.11.6)(pg@8.11.5))(zod@3.23.8)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -3823,8 +3823,8 @@ packages:
     resolution: {integrity: sha512-dxluXlhT1N9bpj2eZR3N/z3u4H0PbbrBYgyouIobFF25tOt2Buy1abx26Jii96qcYV0JgxjhnuV+FBcgR0Xa0w==}
     hasBin: true
 
-  drizzle-orm@0.31.0:
-    resolution: {integrity: sha512-Uf5a3sGOqoyC+ZpQ4NCPR373q0pHOHezIJwdumMix+3rzLdtKgRhdaOabYeqNHBB48gF3Q9rrndkNc4ddE3AWA==}
+  drizzle-orm@0.31.1:
+    resolution: {integrity: sha512-hTbYne2XX3y6sV7WSxcPH6/vNSiQSUG9VZsFI27jBMCN0OT3Ok7ao3pIT5OMAqWkzJCRFgGjAaUeTAZWPgOKag==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -12366,14 +12366,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.31.0(@types/pg@8.11.6)(pg@8.11.5):
+  drizzle-orm@0.31.1(@types/pg@8.11.6)(pg@8.11.5):
     optionalDependencies:
       '@types/pg': 8.11.6
       pg: 8.11.5
 
-  drizzle-zod@0.5.1(drizzle-orm@0.31.0(@types/pg@8.11.6)(pg@8.11.5))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.31.1(@types/pg@8.11.6)(pg@8.11.5))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.31.0(@types/pg@8.11.6)(pg@8.11.5)
+      drizzle-orm: 0.31.1(@types/pg@8.11.6)(pg@8.11.5)
       zod: 3.23.8
 
   duplexer@0.1.2: {}
