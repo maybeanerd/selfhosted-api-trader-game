@@ -28,6 +28,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "kriskbx",
+      "name": "kris",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3148865?v=4",
+      "profile": "http://kris.cool",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
