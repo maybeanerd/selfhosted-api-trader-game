@@ -61,6 +61,8 @@ Find more info here: [frontend/README.md](frontend/README.md)
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://diluz.io/sebastian"><img src="https://avatars.githubusercontent.com/u/18548570?v=4?s=100" width="100px;" alt="Sebastian Di Luzio"/><br /><sub><b>Sebastian Di Luzio</b></sub></a><br /><a href="https://github.com/maybeanerd/selfhosted-api-trader-game/commits?author=maybeanerd" title="Code">💻</a> <a href="#ideas-maybeanerd" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/maybeanerd/selfhosted-api-trader-game/pulls?q=is%3Apr+reviewed-by%3Amaybeanerd" title="Reviewed Pull Requests">👀</a> <a href="#business-maybeanerd" title="Business development">💼</a> <a href="#infra-maybeanerd" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-maybeanerd" title="Maintenance">🚧</a> <a href="#projectManagement-maybeanerd" title="Project Management">📆</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/tiborpilz"><img src="https://avatars.githubusercontent.com/u/915045?v=4?s=100" width="100px;" alt="Tibor Pilz"/><br /><sub><b>Tibor Pilz</b></sub></a><br /><a href="https://github.com/maybeanerd/selfhosted-api-trader-game/commits?author=tiborpilz" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://kris.cool"><img src="https://avatars.githubusercontent.com/u/3148865?v=4?s=100" width="100px;" alt="kris"/><br /><sub><b>kris</b></sub></a><br /><a href="https://github.com/maybeanerd/selfhosted-api-trader-game/commits?author=kriskbx" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
 </table>
