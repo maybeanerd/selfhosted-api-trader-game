@@ -5,6 +5,8 @@ import {
 import {
   getActorPublicKeyUrl,
   getActorUrl,
+  getFollowersUrl,
+  getFollowingUrl,
   getInboxUrl,
   getOutboxUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
@@ -30,6 +32,8 @@ async function getActorFromId(
     preferredUsername: username ?? id,
     inbox: getInboxUrl().toString(),
     outbox: getOutboxUrl().toString(),
+    followers: getFollowersUrl().toString(),
+    following: getFollowingUrl().toString(),
 
     publicKey: {
       id: getActorPublicKeyUrl(id).toString(),
