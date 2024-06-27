@@ -32,3 +32,11 @@ export function getInboxUrl(): URL {
 export function getOutboxUrl(): URL {
   return new URL(`${activityPubBaseUrl}/outbox`);
 }
+
+export function getFollowersUrl(): URL {
+  return new URL(`${activityPubBaseUrl}/followers`);
+}
+
+export function getFollowingUrl(): URL {
+  return new URL(`${activityPubBaseUrl}/following`);
+}

@@ -10,9 +10,9 @@ import {
   getUsernameFromWebfingerSubject,
   mapActorToWebfingerResponse,
 } from '@/modules/crossroads/activitypub/webfinger';
-import type { APActivity, APObject, APRoot } from 'activitypub-types';
+import type { APActivity, APActor, APObject, APRoot } from 'activitypub-types';
 import { drizz } from 'db';
-import { and, asc, eq, inArray, isNotNull } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, desc } from 'drizzle-orm';
 import {
   ActivityPubActivity,
   ActivityPubActor,
@@ -24,6 +24,7 @@ import {
   activityPubActivityQueue,
   activityPubActor,
   activityPubObject,
+  storedTreaty,
 } from 'db/schema';
 import { SupportedObjectType } from '@/modules/crossroads/activitypub/object';
 import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity';
@@ -57,6 +58,8 @@ import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import { createSignedRequestConfig } from '@/modules/crossroads/activitypub/utils/signing';
 import { OutboxDto } from '@/modules/crossroads/activitypub/dto/outbox.dto';
+import { FollowerDto } from '@/modules/crossroads/activitypub/dto/followers.dto';
+import { TreatyStatus } from '@/modules/treaty/types/treatyStatus';
 
 type GameActivityObject = APRoot<APObject> & {
   gameContent: GameContent;
@@ -79,6 +82,16 @@ function mapActivityPubObjectToDto(
     gameContent: object.gameContent,
     inReplyTo: object.inReplyTo ?? undefined,
     to: object.to,
+  };
+}
+
+function mapActivityPubActorToFollowerDto(
+  actor: ActivityPubActor,
+): Partial<APRoot<APActor>> {
+  return {
+    '@context': 'https://www.w3.org/ns/activitystreams',
+    id: actor.id,
+    type: actor.type,
   };
 }
 
@@ -690,6 +703,53 @@ export class ActivityPubService {
     });
 
     return followers;
+  }
+
+  async getFollowersCollection(): Promise<FollowerDto> {
+    const followers = await drizz.query.activityPubActor.findMany({
+      where: (actor) => eq(actor.isFollowingThisServer, true),
+      // TODO store and order by follow date
+      orderBy: (actor) => asc(actor.id),
+    });
+
+    return {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      summary: 'Followers',
+      type: 'OrderedCollection',
+      totalItems: followers.length,
+      orderedItems: followers.map(mapActivityPubActorToFollowerDto),
+    };
+  }
+
+  async getFollowingCollection(): Promise<FollowerDto> {
+    const followedActors = await drizz
+      .select()
+      .from(storedTreaty)
+      .innerJoin(
+        activityPubActor,
+        eq(storedTreaty.activityPubActorId, activityPubActor.id),
+      )
+      .where(
+        inArray(storedTreaty.status, [
+          // All statuses that indicate we are following them
+          TreatyStatus.Signed,
+          TreatyStatus.Requested,
+          TreatyStatus.Rejected,
+        ]),
+      )
+      .orderBy(desc(storedTreaty.createdOn));
+
+    const following = followedActors.map(
+      ({ activityPubActor: actor }) => actor,
+    );
+
+    return {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      summary: 'Following',
+      type: 'OrderedCollection',
+      totalItems: following.length,
+      orderedItems: following.map(mapActivityPubActorToFollowerDto),
+    };
   }
 
   async createNoteObject(

@@ -13,6 +13,7 @@ import type { ActivityPubActorObject } from '@/modules/crossroads/activitypub/ac
 import { crossroadsBasePath } from '@/config/apiPaths';
 import { contentTypeActivityStreams } from '@/modules/crossroads/activitypub/utils/contentType';
 import { OutboxDto } from '@/modules/crossroads/activitypub/dto/outbox.dto';
+import { FollowerDto } from '@/modules/crossroads/activitypub/dto/followers.dto';
 
 @Controller({ path: crossroadsBasePath })
 export class ActivityPubController {
@@ -57,6 +58,24 @@ export class ActivityPubController {
     const outbox = await this.activityPubService.getOutbox();
 
     return outbox;
+  }
+
+  @Get('/followers')
+  @Header('content-type', contentTypeActivityStreams)
+  async getFollowers(): Promise<FollowerDto> {
+    // TODO pagination
+    const followers = await this.activityPubService.getFollowersCollection();
+
+    return followers;
+  }
+
+  @Get('/following')
+  @Header('content-type', contentTypeActivityStreams)
+  async getFollowing(): Promise<FollowerDto> {
+    // TODO pagination
+    const following = await this.activityPubService.getFollowingCollection();
+
+    return following;
   }
 
   @Post('/inbox')
