@@ -6,6 +6,9 @@ export class FollowerDto {
     '@context': 'https://www.w3.org/ns/activitystreams';
 
   @IsString()
+    'id': string;
+
+  @IsString()
     'summary': string;
 
   @IsString()

@@ -31,6 +31,8 @@ import { SupportedActivityType } from '@/modules/crossroads/activitypub/activity
 import { randomUUID } from 'crypto';
 import {
   getActivityUrl,
+  getFollowersUrl,
+  getFollowingUrl,
   getNoteUrl,
 } from '@/modules/crossroads/activitypub/utils/apUrl';
 import { ActivityPubActivityQueueType } from 'db/schemas/ActivityPubActivityQueue.schema';
@@ -714,6 +716,7 @@ export class ActivityPubService {
 
     return {
       '@context': 'https://www.w3.org/ns/activitystreams',
+      id: getFollowersUrl().toString(),
       summary: 'Followers',
       type: 'OrderedCollection',
       totalItems: followers.length,
@@ -745,6 +748,7 @@ export class ActivityPubService {
 
     return {
       '@context': 'https://www.w3.org/ns/activitystreams',
+      id: getFollowingUrl().toString(),
       summary: 'Following',
       type: 'OrderedCollection',
       totalItems: following.length,
