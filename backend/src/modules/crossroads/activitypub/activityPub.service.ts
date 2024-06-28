@@ -264,29 +264,6 @@ export class ActivityPubService {
 
       console.log('Followers:', followers);
 
-      // TODO don't send all activities to all followers.
-      await Promise.all(
-        followers.map(async (follower) => {
-          try {
-            const { inbox } = follower;
-
-            await lastValueFrom(
-              this.httpService.post(
-                inbox,
-                activitiesToSend,
-                await createSignedRequestConfig({
-                  body: activitiesToSend,
-                  type: 'post',
-                  url: inbox,
-                }),
-              ),
-            );
-          } catch (e: unknown) {
-            console.error('Failed to send activities to follower', follower, e);
-          }
-        }),
-      );
-
       const treatyTargets = (
         await Promise.all(
           outgoingActivities
@@ -301,7 +278,7 @@ export class ActivityPubService {
                 return null;
               }
 
-              // Don't send activities to followers that already got them earlier
+              // Don't count followers, they will already receive activities
               if (
                 followers.some((follower) => {
                   return follower.id === actor.id;
@@ -315,29 +292,64 @@ export class ActivityPubService {
         )
       ).filter(Boolean) as Array<string>;
 
-      // TODO don't send all activities to all treaty partners.
+      // TODO don't send all activities to all followers.
       await Promise.all(
-        treatyTargets.map(async (targetInbox) => {
-          console.log('targetInbox:', targetInbox);
-          try {
-            await lastValueFrom(
-              this.httpService.post(
-                targetInbox,
-                activitiesToSend,
-                await createSignedRequestConfig({
-                  body: activitiesToSend,
-                  type: 'post',
-                  url: targetInbox,
-                }),
-              ),
-            );
-          } catch (e: unknown) {
-            console.error(
-              'Failed to send activities to targetInbox',
-              targetInbox,
-              e,
-            );
+        activitiesToSend.map(async (activityToSend) => {
+          if (activityToSend === null) {
+            return;
           }
+
+          await Promise.all(
+            followers.map(async (follower) => {
+              try {
+                const { inbox } = follower;
+
+                await lastValueFrom(
+                  this.httpService.post(
+                    inbox,
+                    activityToSend,
+                    await createSignedRequestConfig({
+                      body: activityToSend,
+                      type: 'post',
+                      url: inbox,
+                    }),
+                  ),
+                );
+              } catch (e: unknown) {
+                console.error(
+                  'Failed to send activities to follower',
+                  follower,
+                  e,
+                );
+              }
+            }),
+          );
+
+          // TODO don't send all activities to all treaty partners.
+          await Promise.all(
+            treatyTargets.map(async (targetInbox) => {
+              console.log('targetInbox:', targetInbox);
+              try {
+                await lastValueFrom(
+                  this.httpService.post(
+                    targetInbox,
+                    activityToSend,
+                    await createSignedRequestConfig({
+                      body: activityToSend,
+                      type: 'post',
+                      url: targetInbox,
+                    }),
+                  ),
+                );
+              } catch (e: unknown) {
+                console.error(
+                  'Failed to send activities to targetInbox',
+                  targetInbox,
+                  e,
+                );
+              }
+            }),
+          );
         }),
       );
 
