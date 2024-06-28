@@ -251,6 +251,7 @@ export class ActivityPubService {
           activityPubActivity,
           eq(activityPubActivity.id, activityPubActivityQueue.id),
         )
+        .orderBy(asc(activityPubActivityQueue.createdOn))
     ).map((result) => result.activityPubActivity);
 
     if (outgoingActivities.length > 0) {
