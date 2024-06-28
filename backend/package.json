@@ -1,6 +1,6 @@
 {
   "name": "selfhosted-api-trader-game",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "A WIP game.",
   "author": "Sebastian Di Luzio",
   "packageManager": "pnpm@9.4.0",

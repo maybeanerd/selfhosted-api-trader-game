@@ -724,7 +724,7 @@ export class ActivityPubService {
     const followers = await drizz.query.activityPubActor.findMany({
       where: (actor) => eq(actor.isFollowingThisServer, true),
       // TODO store and order by follow date
-      orderBy: (actor) => asc(actor.id),
+      orderBy: (actor) => desc(actor.id),
     });
 
     return {
@@ -994,8 +994,13 @@ export class ActivityPubService {
     const { actor } = await getInstanceActor();
     const activities = await drizz.query.activityPubActivity.findMany({
       where: (activity) =>
-        and(eq(activity.actor, actor.id), isNotNull(activity.internalId)),
-      orderBy: (activity) => asc(activity.receivedOn),
+        and(
+          eq(activity.actor, actor.id),
+          isNotNull(activity.internalId),
+          // For now, provide only creations in outbox
+          inArray(activity.type, [SupportedActivityType.Create]),
+        ),
+      orderBy: (activity) => desc(activity.receivedOn),
       limit: 100,
     });
 
