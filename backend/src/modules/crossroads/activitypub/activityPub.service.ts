@@ -99,6 +99,7 @@ function mapActivityPubActorToFollowerDto(
 
 function mapActivityPubActivityToDto(
   activity: ActivityPubActivity,
+  object?: ActivityPubObject | null,
 ): APRoot<APActivity & { object: APRoot<APActivity> }> | null {
   // Handle accept activities differently, inline affected object
   // We assume the accept to be on a follow activity
@@ -123,6 +124,24 @@ function mapActivityPubActivityToDto(
         actor: target,
         object: activity.actor,
       },
+    };
+  }
+
+  // Inline created notes, if available
+  if (
+    activity.type === SupportedActivityType.Create &&
+    object !== undefined &&
+    object !== null
+  ) {
+    return {
+      '@context': [
+        'https://www.w3.org/ns/activitystreams',
+        activityPubIsGameServerExtension,
+      ],
+      id: activity.id,
+      type: activity.type,
+      actor: activity.actor,
+      object: mapActivityPubObjectToDto(object),
     };
   }
 
@@ -251,13 +270,25 @@ export class ActivityPubService {
           activityPubActivity,
           eq(activityPubActivity.id, activityPubActivityQueue.id),
         )
+        .leftJoin(
+          activityPubObject,
+          eq(activityPubObject.id, activityPubActivity.object),
+        )
         .orderBy(asc(activityPubActivityQueue.createdOn))
-    ).map((result) => result.activityPubActivity);
+    ).map((result) => ({
+      activity: result.activityPubActivity,
+      object: result.activityPubObject,
+    }));
 
     if (outgoingActivities.length > 0) {
       const activitiesToSend =
         // TODO in this map, already inline objects. Could speed up a lot
-        outgoingActivities.map(mapActivityPubActivityToDto);
+        outgoingActivities.map((outgoingActivity) =>
+          mapActivityPubActivityToDto(
+            outgoingActivity.activity,
+            outgoingActivity.object,
+          ),
+        );
 
       console.log('activitiesToSend:', activitiesToSend);
 
@@ -268,12 +299,12 @@ export class ActivityPubService {
       const treatyTargets = (
         await Promise.all(
           outgoingActivities
-            .filter((activityToSend) => {
+            .filter(({ activity: activityToSend }) => {
               // Find follows that we created
               return activityToSend.type === SupportedActivityType.Follow;
               // TODO also send undo follows here?
             })
-            .map(async (activityToSend) => {
+            .map(async ({ activity: activityToSend }) => {
               const actor = await this.findActorByAPId(activityToSend.object);
               if (actor === null) {
                 return null;
@@ -354,7 +385,9 @@ export class ActivityPubService {
         }),
       );
 
-      const handledOutgoingActivityIds = outgoingActivities.map(({ id }) => id);
+      const handledOutgoingActivityIds = outgoingActivities.map(
+        ({ activity: { id } }) => id,
+      );
 
       await drizz
         .delete(activityPubActivityQueue)
@@ -1005,7 +1038,7 @@ export class ActivityPubService {
     });
 
     const orderedItems = activities
-      .map(mapActivityPubActivityToDto)
+      .map((activity) => mapActivityPubActivityToDto(activity))
       .filter(Boolean) as Array<APRoot<APActivity>>;
 
     return {
