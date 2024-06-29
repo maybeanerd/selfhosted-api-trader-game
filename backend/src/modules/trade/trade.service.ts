@@ -11,6 +11,7 @@ import {
   HandlerContext,
   addActivityGameLogicHandler,
 } from '@/modules/crossroads/activitypub/utils/incomingActivityHandler';
+import { GameContent } from 'db/schemas/ActivityPubObject.schema';
 
 function mapTradeDocumentToTradeOfferDto(t: Trade): TradeOfferDto {
   return {
@@ -19,6 +20,39 @@ function mapTradeDocumentToTradeOfferDto(t: Trade): TradeOfferDto {
     requestedResources: t.requestedResources,
     creatorId: t.creatorId,
   };
+}
+
+function getReadableContentFromGameContent({
+  requestedResources,
+  offeredResources,
+}: GameContent): string {
+  let tradeDescription = 'A villager requests to trade ';
+
+  requestedResources.forEach((resource, index) => {
+    tradeDescription += `${resource.amount} ${resource.type}`;
+    if (index < requestedResources.length - 1) {
+      tradeDescription += ', ';
+      if (index === requestedResources.length - 2) {
+        tradeDescription += 'and ';
+      }
+    }
+  });
+
+  tradeDescription += ', offering ';
+
+  offeredResources.forEach((resource, index) => {
+    tradeDescription += `${resource.amount} ${resource.type}`;
+    if (index < offeredResources.length - 1) {
+      tradeDescription += ', ';
+      if (index === offeredResources.length - 2) {
+        tradeDescription += 'and ';
+      }
+    }
+  });
+
+  tradeDescription += ' in exchange.';
+
+  return tradeDescription;
 }
 
 @Injectable()
@@ -101,10 +135,8 @@ export class TradeService {
         return null;
       }
 
-      const tradeMessageContent = `A user (${creatorId}) offers 
-${JSON.stringify(offeredTrade.offeredResources, null, 2)}
-for
-${JSON.stringify(offeredTrade.requestedResources, null, 2)}.`;
+      const tradeMessageContent =
+        getReadableContentFromGameContent(offeredTrade);
 
       const noteId = await this.activityPubService.createNoteObject(
         tradeMessageContent,
