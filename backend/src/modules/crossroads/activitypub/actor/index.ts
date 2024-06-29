@@ -44,9 +44,7 @@ For more information about the game itself, check out ${getHtmlLink(gitHubProjec
     icon: {
       type: 'Image',
       mediaType: 'image/png',
-      url:
-        gitHubProjectUrl.toString() +
-        '/blob/main/backend/src/modules/crossroads/activitypub/assets/merchant-profile-picture.png',
+      url: 'https://raw.githubusercontent.com/maybeanerd/selfhosted-api-trader-game/main/backend/src/modules/crossroads/activitypub/assets/merchant-profile-picture.png',
     },
     // image: ...  // Banner image, if we wanted it
 
