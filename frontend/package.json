@@ -38,6 +38,6 @@
     "git-commit-info": "2.0.2",
     "nuxt": "3.12.4",
     "prettier": "3.3.3",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   }
 }
