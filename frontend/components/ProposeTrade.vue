@@ -32,7 +32,7 @@ const offeredResources = ref<{
   amount?: number,
 }>({});
 
-async function submitTrade() {
+async function submitTrade () {
   const trade = {
     requestedResources: [requestedResources.value],
     offeredResources: [offeredResources.value],
