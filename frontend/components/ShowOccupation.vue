@@ -15,7 +15,6 @@
         </template>
       </UButton>
     </div>
-
   </div>
 </template>
 
@@ -34,8 +33,7 @@ const occupationIcon = {
   [Occupation.HUNTER]: '🏹',
 };
 
-
-function getOccupationIcon(occupation: Occupation) {
+function getOccupationIcon (occupation: Occupation) {
   return occupationIcon[occupation];
 }
 
@@ -49,24 +47,24 @@ const { data: occupation, refresh } = await useFetch<Occupation>(
 
 const availableOccupations =
   computed(() => Object.values(Occupation)
-    .filter((availableOccupation) => availableOccupation !== occupation.value));
+    .filter(availableOccupation => availableOccupation !== occupation.value));
 
 const cantChangeOccupation =
-  computed(() => chosenOccupation.value === null || chosenOccupation.value === occupation.value)
+  computed(() => chosenOccupation.value === null || chosenOccupation.value === occupation.value);
 
-const chosenOccupation = ref<null | Occupation>(null)
+const chosenOccupation = ref<null | Occupation>(null);
 
-async function changeOccupation() {
+async function changeOccupation () {
   await useFetch(
     basePath + 'occupations',
     {
       method: 'PUT',
       body: {
-        occupation: chosenOccupation.value
+        occupation: chosenOccupation.value,
       },
       lazy: true,
       server: false,
-    }
+    },
   );
 
   chosenOccupation.value = null;

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <template v-if="resources">
-      <div v-if="resources.length === 0">
+    <template v-if="sortedResources">
+      <div v-if="sortedResources.length === 0">
         No resources found.
       </div>
-      <div v-for="resource in resources" v-else :key="resource.type">
+      <div v-for="resource in sortedResources" v-else :key="resource.type">
         <p>Type: {{ resource.type }}</p>
         <p>Amount: {{ resource.amount }}</p>
         <p>Upgrade Level: {{ resource.upgradeLevel }}</p>
@@ -20,15 +20,29 @@
 <script setup lang="ts">
 import { basePath } from '~/utils/api';
 
-const { data: resources, refresh } = await useFetch<Array<{
+type Resource = {
   ownerId: string, type: string, amount: number, 'upgradeLevel': number
-}>>(
+}
+
+const { data: resources, refresh } = await useFetch<Array<Resource>>(
   basePath + 'resources',
   {
     lazy: true,
     server: false,
   },
 );
+
+function sortResourceAlphabetically (resourceA: Resource, resourceB: Resource) {
+  if (resourceA.type < resourceB.type) {
+    return -1;
+  }
+  if (resourceA.type > resourceB.type) {
+    return 1;
+  }
+  return 0;
+}
+
+const sortedResources = computed(() => resources.value?.sort(sortResourceAlphabetically));
 
 let stopInterval: NodeJS.Timeout;
 
