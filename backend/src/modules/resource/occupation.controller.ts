@@ -1,9 +1,9 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
-  Param,
   Put,
 } from '@nestjs/common';
 import { ResourceService } from '@/modules/resource/resource.service';
@@ -21,12 +21,12 @@ export class OccupationController {
     return occupation;
   }
 
-  @Put(':type')
-  async upgradeResource(@Param() params: OccupationTypeDto): Promise<void> {
+  @Put()
+  async changeOccupation(@Body() body: OccupationTypeDto): Promise<void> {
     const { id } = await getUser();
 
     try {
-      await this.resourceService.changeOccupation(id, params.occupation);
+      await this.resourceService.changeOccupation(id, body.occupation);
     } catch (e) {
       throw new HttpException(
         'Failed to change occupation: ' + e,

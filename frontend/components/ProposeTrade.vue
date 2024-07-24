@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col space-y-2 max-w-56">
     <h1>Requested Resources:</h1>
     <UInputMenu v-model="requestedResources.type" :options="resourceOptions" />
     <UInput v-model="requestedResources.amount" type="number" />
@@ -32,7 +32,7 @@ const offeredResources = ref<{
   amount?: number,
 }>({});
 
-async function submitTrade () {
+async function submitTrade() {
   const trade = {
     requestedResources: [requestedResources.value],
     offeredResources: [offeredResources.value],
