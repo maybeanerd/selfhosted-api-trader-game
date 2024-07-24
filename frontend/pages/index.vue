@@ -1,12 +1,10 @@
 <template>
   <div>
-    <h1>Home</h1>
+    <h1>User Overview</h1>
+    <br>
+    <ShowOccupation />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useHeader } from '~/composables/useHeader';
-
-const { title } = useHeader();
-title.value = 'Home';
 </script>

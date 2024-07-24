@@ -1,6 +1,21 @@
 <template>
   <div v-if="occupation">
     <p>Occupation: {{ occupation }} {{ getOccupationIcon(occupation) }}</p>
+    <br>
+    <div class="flex flex-col space-y-2 max-w-56">
+      <p>Change Occupation:</p>
+      <UInputMenu v-model="chosenOccupation" :options="availableOccupations" />
+      <UButton :disabled="cantChangeOccupation" @click="changeOccupation">
+        <template v-if="chosenOccupation === null">
+          Apply
+        </template>
+        <template v-else>
+          Apply change to {{ chosenOccupation }} {{
+            getOccupationIcon(chosenOccupation) }}
+        </template>
+      </UButton>
+    </div>
+
   </div>
 </template>
 
@@ -19,7 +34,8 @@ const occupationIcon = {
   [Occupation.HUNTER]: '🏹',
 };
 
-function getOccupationIcon (occupation: Occupation) {
+
+function getOccupationIcon(occupation: Occupation) {
   return occupationIcon[occupation];
 }
 
@@ -31,14 +47,30 @@ const { data: occupation, refresh } = await useFetch<Occupation>(
   },
 );
 
-let stopInterval: NodeJS.Timeout;
+const availableOccupations =
+  computed(() => Object.values(Occupation)
+    .filter((availableOccupation) => availableOccupation !== occupation.value));
 
-onMounted(() => {
-  // Refresh data every 2.5 seconds
-  stopInterval = setInterval(refresh, 2500);
-});
+const cantChangeOccupation =
+  computed(() => chosenOccupation.value === null || chosenOccupation.value === occupation.value)
 
-onUnmounted(() => {
-  clearInterval(stopInterval);
-});
+const chosenOccupation = ref<null | Occupation>(null)
+
+async function changeOccupation() {
+  await useFetch(
+    basePath + 'occupations',
+    {
+      method: 'PUT',
+      body: {
+        occupation: chosenOccupation.value
+      },
+      lazy: true,
+      server: false,
+    }
+  );
+
+  chosenOccupation.value = null;
+  await refresh();
+}
+
 </script>
