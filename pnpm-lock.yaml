@@ -163,8 +163,8 @@ importers:
         specifier: 12.1.0
         version: 12.1.0(eslint@8.57.0)(typescript@5.5.4)
       '@nuxtjs/i18n':
-        specifier: 8.3.2
-        version: 8.3.2(magicast@0.3.4)(rollup@4.18.0)(vue@3.4.32(typescript@5.5.4))
+        specifier: 8.3.3
+        version: 8.3.3(magicast@0.3.4)(rollup@4.18.0)(vue@3.4.32(typescript@5.5.4))
       '@types/node':
         specifier: 20.14.12
         version: 20.14.12
@@ -2212,8 +2212,8 @@ packages:
     peerDependencies:
       eslint: ^8.23.0
 
-  '@nuxtjs/i18n@8.3.2':
-    resolution: {integrity: sha512-bRzYE5ql0EqxBvt81/t/n2txGCG9E0sq7EJH/RZBd5pNOlnMmxpqJdWhh5NX3Cc/jyVrXFGF9WAoQ/H+/dcepQ==}
+  '@nuxtjs/i18n@8.3.3':
+    resolution: {integrity: sha512-R/Q7GgBf9sVKlB4Mz/2KPhlZwO7nm+YcADcJcBDGfQVoNZjGg2muDCkCXSqpqIjkm264QcERFoPP42aBR+SlgA==}
     engines: {node: ^14.16.0 || >=16.11.0}
 
   '@nuxtjs/opencollective@0.3.2':
@@ -4957,10 +4957,6 @@ packages:
     engines: {node: '>=16 || 14 >=14.18'}
     hasBin: true
 
-  glob@7.1.6:
-    resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
-    deprecated: Glob versions prior to v9 are no longer supported
-
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
     deprecated: Glob versions prior to v9 are no longer supported
@@ -7331,11 +7327,6 @@ packages:
     engines: {node: ^18.12.0 || ^20.9.0 || >=22.0}
     peerDependencies:
       postcss: ^8.4.31
-
-  sucrase@3.34.0:
-    resolution: {integrity: sha512-70/LQEZ07TEcxiU2dz51FKaE6hCTWC6vr7FOk3Gr0U60C3shtAN+H+BFr9XlYe5xqf3RA8nrc+VIwzCfnxuXJw==}
-    engines: {node: '>=8'}
-    hasBin: true
 
   sucrase@3.35.0:
     resolution: {integrity: sha512-8EbVDiu9iN/nESwxeSxDKe0dunta1GOlHufmSSXxMD2z2/tMZpDMpvXQGsc+ajGo8y2uYUmixaSRUc/QPoQ0GA==}
@@ -10784,7 +10775,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  '@nuxtjs/i18n@8.3.2(magicast@0.3.4)(rollup@4.18.0)(vue@3.4.32(typescript@5.5.4))':
+  '@nuxtjs/i18n@8.3.3(magicast@0.3.4)(rollup@4.18.0)(vue@3.4.32(typescript@5.5.4))':
     dependencies:
       '@intlify/h3': 0.5.0
       '@intlify/shared': 9.9.1
@@ -14029,15 +14020,6 @@ snapshots:
       package-json-from-dist: 1.0.0
       path-scurry: 1.11.1
 
-  glob@7.1.6:
-    dependencies:
-      fs.realpath: 1.0.0
-      inflight: 1.0.6
-      inherits: 2.0.4
-      minimatch: 3.1.2
-      once: 1.4.0
-      path-is-absolute: 1.0.1
-
   glob@7.2.3:
     dependencies:
       fs.realpath: 1.0.0
@@ -16888,16 +16870,6 @@ snapshots:
       postcss: 8.4.39
       postcss-selector-parser: 6.1.0
 
-  sucrase@3.34.0:
-    dependencies:
-      '@jridgewell/gen-mapping': 0.3.5
-      commander: 4.1.1
-      glob: 7.1.6
-      lines-and-columns: 1.2.4
-      mz: 2.7.0
-      pirates: 4.0.6
-      ts-interface-checker: 0.1.13
-
   sucrase@3.35.0:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
@@ -17026,7 +16998,7 @@ snapshots:
       postcss-nested: 6.0.1(postcss@8.4.39)
       postcss-selector-parser: 6.1.0
       resolve: 1.22.2
-      sucrase: 3.34.0
+      sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
 
