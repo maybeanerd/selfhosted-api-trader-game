@@ -33,7 +33,7 @@
     "@types/node": "20.14.14",
     "@typescript-eslint/parser": "7.18.0",
     "@vite-pwa/nuxt": "0.9.1",
-    "autoprefixer": "10.4.19",
+    "autoprefixer": "10.4.20",
     "eslint": "8.57.0",
     "git-commit-info": "2.0.2",
     "nuxt": "3.12.4",
