@@ -27,7 +27,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxt/image": "1.7.0",
-    "@nuxt/ui": "2.18.3",
+    "@nuxt/ui": "2.18.4",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/i18n": "8.3.3",
     "@types/node": "20.14.14",
