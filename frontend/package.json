@@ -30,7 +30,7 @@
     "@nuxt/ui": "2.18.4",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
     "@nuxtjs/i18n": "8.3.3",
-    "@types/node": "20.14.14",
+    "@types/node": "20.14.15",
     "@typescript-eslint/parser": "7.18.0",
     "@vite-pwa/nuxt": "0.9.1",
     "autoprefixer": "10.4.20",
