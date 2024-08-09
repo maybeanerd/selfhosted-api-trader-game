@@ -67,8 +67,8 @@ importers:
         specifier: 7.0.4
         version: 7.0.4
       '@nestjs/cli':
-        specifier: 10.4.2
-        version: 10.4.2(esbuild@0.19.12)
+        specifier: 10.4.3
+        version: 10.4.3(esbuild@0.19.12)
       '@nestjs/schematics':
         specifier: 10.1.3
         version: 10.1.3(chokidar@3.6.0)(typescript@5.5.4)
@@ -137,7 +137,7 @@ importers:
         version: 29.2.4(@babel/core@7.24.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.0))(esbuild@0.19.12)(jest@29.7.0(@types/node@20.14.14)(ts-node@10.9.2(@types/node@20.14.14)(typescript@5.5.4)))(typescript@5.5.4)
       ts-loader:
         specifier: 9.5.1
-        version: 9.5.1(typescript@5.5.4)(webpack@5.92.1(esbuild@0.19.12))
+        version: 9.5.1(typescript@5.5.4)(webpack@5.93.0(esbuild@0.19.12))
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.14.14)(typescript@5.5.4)
@@ -1990,8 +1990,8 @@ packages:
       axios: ^1.3.1
       rxjs: ^6.0.0 || ^7.0.0
 
-  '@nestjs/cli@10.4.2':
-    resolution: {integrity: sha512-fQexIfLHfp6GUgX+CO4fOg+AEwV5ox/LHotQhyZi9wXUQDyIqS0NTTbumr//62EcX35qV4nU0359nYnuEdzG+A==}
+  '@nestjs/cli@10.4.3':
+    resolution: {integrity: sha512-m902UdU21Bcj1FWyNIBUW9BNL7w+birbt+wNaO7lew+Lj1G4fFaPWBElx9ULThSnalLp1NEmcy3mzLnzDgeodw==}
     engines: {node: '>= 16.14'}
     hasBin: true
     peerDependencies:
@@ -3517,11 +3517,6 @@ packages:
     resolution: {integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==}
     engines: {node: '>=8'}
 
-  browserslist@4.23.1:
-    resolution: {integrity: sha512-TUfofFo/KsK/bWZ9TWQ5O26tsWW4Uhmt8IYklbnUa70udB6P2wA7w7o4PY4muaEPBQaAX+CEnmmIA41NVHtPVw==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-
   browserslist@4.23.3:
     resolution: {integrity: sha512-btwCFJVjI4YWDNfau8RhZ+B1Q/VLoUITrm3RlP6y1tYGWIOa+InuYiRGXUBXo8nA1qKmHMyLB/iVQg5TT4eFoA==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -4273,9 +4268,6 @@ packages:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
     engines: {node: '>=0.10.0'}
     hasBin: true
-
-  electron-to-chromium@1.4.816:
-    resolution: {integrity: sha512-EKH5X5oqC6hLmiS7/vYtZHZFTNdhsYG5NVPRN6Yn0kQHNBlT59+xSM8HBy66P5fxWpKgZbPqb+diC64ng295Jw==}
 
   electron-to-chromium@1.5.4:
     resolution: {integrity: sha512-orzA81VqLyIGUEA77YkVA1D+N+nNfl2isJVjjmOyrlxuooZ19ynb+dOlaDTqd/idKRS9lDCSBmtzM+kyCsMnkA==}
@@ -6083,9 +6075,6 @@ packages:
   node-int64@0.4.0:
     resolution: {integrity: sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==}
 
-  node-releases@2.0.14:
-    resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
-
   node-releases@2.0.18:
     resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
 
@@ -7824,12 +7813,6 @@ packages:
     resolution: {integrity: sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==}
     engines: {node: '>=4'}
 
-  update-browserslist-db@1.0.16:
-    resolution: {integrity: sha512-KVbTxlBYlckhF5wgfyZXTWnMn7MMZjMu9XG8bPlliUOP9ThaF4QnhP8qrjrH7DRzHfSk0oQv1wToW+iA5GajEQ==}
-    hasBin: true
-    peerDependencies:
-      browserslist: '>= 4.21.0'
-
   update-browserslist-db@1.1.0:
     resolution: {integrity: sha512-EdRAaAyk2cUE1wOf2DkEhzxqOQvFOoRJFNS6NeyJ01Gp2beMRpBAINjM2iDXE3KCuKhwnvHIQCJm6ThL2Z+HzQ==}
     hasBin: true
@@ -8066,8 +8049,8 @@ packages:
   webpack-virtual-modules@0.6.1:
     resolution: {integrity: sha512-poXpCylU7ExuvZK8z+On3kX+S8o/2dQ/SVYueKA0D4WEMXROXgY8Ez50/bQEUmvoSMMrWcrJqCHuhAbsiwg7Dg==}
 
-  webpack@5.92.1:
-    resolution: {integrity: sha512-JECQ7IwJb+7fgUFBlrJzbyu3GEuNBcdqr1LD7IbSzwkSmIevTm8PF+wej3Oxuz/JFBUZ6O1o43zsPkwm1C4TmA==}
+  webpack@5.93.0:
+    resolution: {integrity: sha512-Y0m5oEY1LRuwly578VqluorkXbvXKh7U3rLoQCEO04M97ScRr44afGVkI0FQFsXzysk5OgFAxjZAb9rsGQVihA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     peerDependencies:
@@ -8389,7 +8372,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.23.5
       '@babel/helper-validator-option': 7.23.5
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -8397,7 +8380,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.24.7
       '@babel/helper-validator-option': 7.24.7
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -10147,7 +10130,7 @@ snapshots:
       axios: 1.7.3
       rxjs: 7.8.1
 
-  '@nestjs/cli@10.4.2(esbuild@0.19.12)':
+  '@nestjs/cli@10.4.3(esbuild@0.19.12)':
     dependencies:
       '@angular-devkit/core': 17.3.8(chokidar@3.6.0)
       '@angular-devkit/schematics': 17.3.8(chokidar@3.6.0)
@@ -10157,7 +10140,7 @@ snapshots:
       chokidar: 3.6.0
       cli-table3: 0.6.5
       commander: 4.1.1
-      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.3.3)(webpack@5.92.1(esbuild@0.19.12))
+      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.3.3)(webpack@5.93.0(esbuild@0.19.12))
       glob: 10.4.2
       inquirer: 8.2.6
       node-emoji: 1.11.0
@@ -10166,7 +10149,7 @@ snapshots:
       tsconfig-paths: 4.2.0
       tsconfig-paths-webpack-plugin: 4.1.0
       typescript: 5.3.3
-      webpack: 5.92.1(esbuild@0.19.12)
+      webpack: 5.93.0(esbuild@0.19.12)
       webpack-node-externals: 3.0.0
     transitivePeerDependencies:
       - esbuild
@@ -11980,10 +11963,6 @@ snapshots:
       mime-types: 2.1.35
       negotiator: 0.6.3
 
-  acorn-import-attributes@1.9.5(acorn@8.12.0):
-    dependencies:
-      acorn: 8.12.0
-
   acorn-import-attributes@1.9.5(acorn@8.12.1):
     dependencies:
       acorn: 8.12.1
@@ -12341,13 +12320,6 @@ snapshots:
     dependencies:
       fill-range: 7.0.1
 
-  browserslist@4.23.1:
-    dependencies:
-      caniuse-lite: 1.0.30001639
-      electron-to-chromium: 1.4.816
-      node-releases: 2.0.14
-      update-browserslist-db: 1.0.16(browserslist@4.23.1)
-
   browserslist@4.23.3:
     dependencies:
       caniuse-lite: 1.0.30001646
@@ -12449,7 +12421,7 @@ snapshots:
 
   caniuse-api@3.0.0:
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       caniuse-lite: 1.0.30001639
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
@@ -12754,7 +12726,7 @@ snapshots:
 
   cssnano-preset-default@7.0.4(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       css-declaration-sorter: 7.2.0(postcss@8.4.39)
       cssnano-utils: 5.0.0(postcss@8.4.39)
       postcss: 8.4.39
@@ -12975,8 +12947,6 @@ snapshots:
   ejs@3.1.10:
     dependencies:
       jake: 10.8.7
-
-  electron-to-chromium@1.4.816: {}
 
   electron-to-chromium@1.5.4: {}
 
@@ -13812,7 +13782,7 @@ snapshots:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
 
-  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.3.3)(webpack@5.92.1(esbuild@0.19.12)):
+  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.3.3)(webpack@5.93.0(esbuild@0.19.12)):
     dependencies:
       '@babel/code-frame': 7.24.7
       chalk: 4.1.2
@@ -13824,10 +13794,10 @@ snapshots:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
-      semver: 7.6.2
+      semver: 7.6.3
       tapable: 2.2.1
       typescript: 5.3.3
-      webpack: 5.92.1(esbuild@0.19.12)
+      webpack: 5.93.0(esbuild@0.19.12)
 
   form-data@4.0.0:
     dependencies:
@@ -15280,7 +15250,7 @@ snapshots:
 
   mlly@1.6.1:
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.1
       pathe: 1.1.2
       pkg-types: 1.1.1
       ufo: 1.5.4
@@ -15455,8 +15425,6 @@ snapshots:
   node-gyp-build@4.6.0: {}
 
   node-int64@0.4.0: {}
-
-  node-releases@2.0.14: {}
 
   node-releases@2.0.18: {}
 
@@ -15970,7 +15938,7 @@ snapshots:
 
   postcss-colormin@7.0.1(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       caniuse-api: 3.0.0
       colord: 2.9.3
       postcss: 8.4.39
@@ -15978,7 +15946,7 @@ snapshots:
 
   postcss-convert-values@7.0.2(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       postcss: 8.4.39
       postcss-value-parser: 4.2.0
 
@@ -16027,7 +15995,7 @@ snapshots:
 
   postcss-merge-rules@7.0.2(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       caniuse-api: 3.0.0
       cssnano-utils: 5.0.0(postcss@8.4.39)
       postcss: 8.4.39
@@ -16047,7 +16015,7 @@ snapshots:
 
   postcss-minify-params@7.0.1(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       cssnano-utils: 5.0.0(postcss@8.4.39)
       postcss: 8.4.39
       postcss-value-parser: 4.2.0
@@ -16101,7 +16069,7 @@ snapshots:
 
   postcss-normalize-unicode@7.0.1(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       postcss: 8.4.39
       postcss-value-parser: 4.2.0
 
@@ -16123,7 +16091,7 @@ snapshots:
 
   postcss-reduce-initial@7.0.1(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       caniuse-api: 3.0.0
       postcss: 8.4.39
 
@@ -16872,7 +16840,7 @@ snapshots:
 
   stylehacks@7.0.2(postcss@8.4.39):
     dependencies:
-      browserslist: 4.23.1
+      browserslist: 4.23.3
       postcss: 8.4.39
       postcss-selector-parser: 6.1.0
 
@@ -17060,14 +17028,14 @@ snapshots:
       type-fest: 0.16.0
       unique-string: 2.0.0
 
-  terser-webpack-plugin@5.3.10(esbuild@0.19.12)(webpack@5.92.1(esbuild@0.19.12)):
+  terser-webpack-plugin@5.3.10(esbuild@0.19.12)(webpack@5.93.0(esbuild@0.19.12)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.1
       terser: 5.27.0
-      webpack: 5.92.1(esbuild@0.19.12)
+      webpack: 5.93.0(esbuild@0.19.12)
     optionalDependencies:
       esbuild: 0.19.12
 
@@ -17162,7 +17130,7 @@ snapshots:
       babel-jest: 29.7.0(@babel/core@7.24.0)
       esbuild: 0.19.12
 
-  ts-loader@9.5.1(typescript@5.5.4)(webpack@5.92.1(esbuild@0.19.12)):
+  ts-loader@9.5.1(typescript@5.5.4)(webpack@5.93.0(esbuild@0.19.12)):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.15.0
@@ -17170,7 +17138,7 @@ snapshots:
       semver: 7.5.4
       source-map: 0.7.4
       typescript: 5.5.4
-      webpack: 5.92.1(esbuild@0.19.12)
+      webpack: 5.93.0(esbuild@0.19.12)
 
   ts-node@10.9.2(@types/node@20.14.14)(typescript@5.5.4):
     dependencies:
@@ -17409,7 +17377,7 @@ snapshots:
 
   unplugin@1.10.1:
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.1
       chokidar: 3.6.0
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.6.1
@@ -17466,12 +17434,6 @@ snapshots:
       unplugin: 1.11.0
 
   upath@1.2.0: {}
-
-  update-browserslist-db@1.0.16(browserslist@4.23.1):
-    dependencies:
-      browserslist: 4.23.1
-      escalade: 3.1.2
-      picocolors: 1.0.1
 
   update-browserslist-db@1.1.0(browserslist@4.23.3):
     dependencies:
@@ -17702,16 +17664,16 @@ snapshots:
 
   webpack-virtual-modules@0.6.1: {}
 
-  webpack@5.92.1(esbuild@0.19.12):
+  webpack@5.93.0(esbuild@0.19.12):
     dependencies:
       '@types/eslint-scope': 3.7.4
       '@types/estree': 1.0.5
       '@webassemblyjs/ast': 1.12.1
       '@webassemblyjs/wasm-edit': 1.12.1
       '@webassemblyjs/wasm-parser': 1.12.1
-      acorn: 8.12.0
-      acorn-import-attributes: 1.9.5(acorn@8.12.0)
-      browserslist: 4.23.1
+      acorn: 8.12.1
+      acorn-import-attributes: 1.9.5(acorn@8.12.1)
+      browserslist: 4.23.3
       chrome-trace-event: 1.0.3
       enhanced-resolve: 5.17.0
       es-module-lexer: 1.3.0
@@ -17725,7 +17687,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(esbuild@0.19.12)(webpack@5.92.1(esbuild@0.19.12))
+      terser-webpack-plugin: 5.3.10(esbuild@0.19.12)(webpack@5.93.0(esbuild@0.19.12))
       watchpack: 2.4.1
       webpack-sources: 3.2.3
     transitivePeerDependencies:
