@@ -40,10 +40,10 @@ importers:
         version: 16.4.5
       drizzle-orm:
         specifier: 0.33.0
-        version: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0)
+        version: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.7)(pg@8.12.0)
       drizzle-zod:
         specifier: 0.5.1
-        version: 0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.7)(pg@8.12.0))(zod@3.23.8)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -85,8 +85,8 @@ importers:
         specifier: 20.16.2
         version: 20.16.2
       '@types/pg':
-        specifier: 8.11.6
-        version: 8.11.6
+        specifier: 8.11.7
+        version: 8.11.7
       '@types/supertest':
         specifier: 6.0.2
         version: 6.0.2
@@ -2834,8 +2834,8 @@ packages:
   '@types/normalize-package-data@2.4.1':
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
 
-  '@types/pg@8.11.6':
-    resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
+  '@types/pg@8.11.7':
+    resolution: {integrity: sha512-k4VGqp1LQzJP5pSK2TR3bJGr9CnErXeRubUEtJu+l1hFGbUwKyMZEjLAlWpfGkrZAatz0O4jP4YPqDepv8CRbQ==}
 
   '@types/qs@6.9.7':
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
@@ -11240,7 +11240,7 @@ snapshots:
 
   '@types/normalize-package-data@2.4.1': {}
 
-  '@types/pg@8.11.6':
+  '@types/pg@8.11.7':
     dependencies:
       '@types/node': 20.16.2
       pg-protocol: 1.6.1
@@ -12749,15 +12749,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0):
+  drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.7)(pg@8.12.0):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
-      '@types/pg': 8.11.6
+      '@types/pg': 8.11.7
       pg: 8.12.0
 
-  drizzle-zod@0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.7)(pg@8.12.0))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0)
+      drizzle-orm: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.7)(pg@8.12.0)
       zod: 3.23.8
 
   duplexer@0.1.2: {}
