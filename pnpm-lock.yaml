@@ -172,8 +172,8 @@ importers:
         specifier: 7.18.0
         version: 7.18.0(eslint@8.57.0)(typescript@5.5.4)
       '@vite-pwa/nuxt':
-        specifier: 0.10.4
-        version: 0.10.4(magicast@0.3.4)(rollup@4.21.0)(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(webpack-sources@3.2.3)(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
+        specifier: 0.10.5
+        version: 0.10.5(magicast@0.3.4)(rollup@4.21.0)(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(webpack-sources@3.2.3)(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.45)
@@ -2951,8 +2951,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  '@vite-pwa/nuxt@0.10.4':
-    resolution: {integrity: sha512-5+1JaKh/tB3+uZRyuKJYNMnvOo+VgDIthDVHYCXHnAAIXQwu44n0XxH5EnXbd/cAffL+T/R8+M6nL6UdRNvE9g==}
+  '@vite-pwa/nuxt@0.10.5':
+    resolution: {integrity: sha512-I+qTkgQB2lvpoKQGgARgszsV/rBDys2xstczmTIgYoaNPALz2+zkhN/O8Fl8QI2ZHBL+ZnfpSOCOm/77ugrFHg==}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.6
     peerDependenciesMeta:
@@ -7877,8 +7877,8 @@ packages:
       '@nuxt/kit':
         optional: true
 
-  vite-plugin-pwa@0.20.4:
-    resolution: {integrity: sha512-AreLrlstKCn56bzfIIhg5P4p12QNsYmHfKiSlrVk9FK8028IfBFeMvhQNSumBgQmb4RaHLm0SaOLvh/rzOImvw==}
+  vite-plugin-pwa@0.20.5:
+    resolution: {integrity: sha512-aweuI/6G6n4C5Inn0vwHumElU/UEpNuO+9iZzwPZGTCH87TeZ6YFMrEY6ZUBQdIHHlhTsbMDryFARcSuOdsz9Q==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.6
@@ -11478,12 +11478,12 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vite-pwa/nuxt@0.10.4(magicast@0.3.4)(rollup@4.21.0)(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(webpack-sources@3.2.3)(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)':
+  '@vite-pwa/nuxt@0.10.5(magicast@0.3.4)(rollup@4.21.0)(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(webpack-sources@3.2.3)(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)':
     dependencies:
       '@nuxt/kit': 3.13.1(magicast@0.3.4)(rollup@4.21.0)(webpack-sources@3.2.3)
       pathe: 1.1.2
       ufo: 1.5.4
-      vite-plugin-pwa: 0.20.4(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
+      vite-plugin-pwa: 0.20.5(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
     transitivePeerDependencies:
       - magicast
       - rollup
@@ -17373,7 +17373,7 @@ snapshots:
       - rollup
       - supports-color
 
-  vite-plugin-pwa@0.20.4(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0):
+  vite-plugin-pwa@0.20.5(vite@5.4.3(@types/node@20.16.5)(terser@5.27.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0):
     dependencies:
       debug: 4.3.6
       pretty-bytes: 6.1.1
