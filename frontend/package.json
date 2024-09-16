@@ -34,7 +34,7 @@
     "@typescript-eslint/parser": "7.18.0",
     "@vite-pwa/nuxt": "0.10.5",
     "autoprefixer": "10.4.20",
-    "eslint": "8.57.0",
+    "eslint": "8.57.1",
     "git-commit-info": "2.0.2",
     "nuxt": "3.13.2",
     "prettier": "3.3.3",
