@@ -29,7 +29,7 @@
     "@nuxt/image": "1.8.0",
     "@nuxt/ui": "2.18.5",
     "@nuxtjs/eslint-config-typescript": "12.1.0",
-    "@nuxtjs/i18n": "8.5.3",
+    "@nuxtjs/i18n": "8.5.4",
     "@types/node": "20.16.5",
     "@typescript-eslint/parser": "7.18.0",
     "@vite-pwa/nuxt": "0.10.5",
