@@ -39,11 +39,11 @@ importers:
         specifier: 16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: 0.33.0
-        version: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0)
+        specifier: 0.34.1
+        version: 0.34.1(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0)
       drizzle-zod:
         specifier: 0.5.1
-        version: 0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0))(zod@3.23.8)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -4082,13 +4082,13 @@ packages:
     resolution: {integrity: sha512-Rcf0nYCAKizwjWQCY+d3zytyuTbDb81NcaPor+8NebESlUz1+9W3uGl0+r9FhU4Qal5Zv9j/7neXCSCe7DHzjA==}
     hasBin: true
 
-  drizzle-orm@0.33.0:
-    resolution: {integrity: sha512-SHy72R2Rdkz0LEq0PSG/IdvnT3nGiWuRk+2tXZQ90GVq/XQhpCzu/EFT3V2rox+w8MlkBQxifF8pCStNYnERfA==}
+  drizzle-orm@0.34.1:
+    resolution: {integrity: sha512-t+zCwyWWt8xTqtYV4doE/xYmT7hpv1L8pQ66zddEz+3VWyedBBtctjMAp22mAJPfyWurRQXUJ1nrTtqLq+DqNA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
       '@electric-sql/pglite': '>=0.1.1'
-      '@libsql/client': '*'
+      '@libsql/client': '>=0.10.0'
       '@neondatabase/serverless': '>=0.1'
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
@@ -12657,15 +12657,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0):
+  drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.10
       pg: 8.13.0
 
-  drizzle-zod@0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.34.1(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0)
+      drizzle-orm: 0.34.1(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.0)
       zod: 3.23.8
 
   duplexer@0.1.2: {}
