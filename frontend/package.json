@@ -3,7 +3,7 @@
   "version": "0.1.22",
   "description": "A WIP example client for the game.",
   "author": "Sebastian Di Luzio",
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@9.15.0",
   "private": true,
   "repository": {
     "type": "git",
