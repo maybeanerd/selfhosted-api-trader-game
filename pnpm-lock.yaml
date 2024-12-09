@@ -21,8 +21,8 @@ importers:
         specifier: 10.4.13
         version: 10.4.13(@fastify/static@8.0.3)(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))
       '@nestjs/schedule':
-        specifier: 4.1.1
-        version: 4.1.1(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))
+        specifier: 4.1.2
+        version: 4.1.2(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))
       '@nestjs/swagger':
         specifier: 7.4.2
         version: 7.4.2(@fastify/static@8.0.3)(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
@@ -1964,8 +1964,8 @@ packages:
       '@fastify/view':
         optional: true
 
-  '@nestjs/schedule@4.1.1':
-    resolution: {integrity: sha512-VxAnCiU4HP0wWw8IdWAVfsGC/FGjyToNjjUtXDEQL6oj+w/N5QDd2VT9k6d7Jbr8PlZuBZNdWtDKSkH5bZ+RXQ==}
+  '@nestjs/schedule@4.1.2':
+    resolution: {integrity: sha512-hCTQ1lNjIA5EHxeu8VvQu2Ed2DBLS1GSC6uKPYlBiQe6LL9a7zfE9iVSK+zuK8E2odsApteEBmfAQchc8Hx0Gg==}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
       '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -3717,8 +3717,8 @@ packages:
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
 
-  cron@3.1.7:
-    resolution: {integrity: sha512-tlBg7ARsAMQLzgwqVxy8AZl/qlTc5nibqYwtNGoCrd+cV+ugI+tvZC1oT/8dFH8W455YrywGykx/KMmAqOr7Jw==}
+  cron@3.2.1:
+    resolution: {integrity: sha512-w2n5l49GMmmkBFEsH9FIDhjZ1n1QgTMOCMGuQtOXs5veNiosZmso6bQGuqOJSYAXXrG84WQFVneNk+Yt0Ua9iw==}
 
   croner@9.0.0:
     resolution: {integrity: sha512-onMB0OkDjkXunhdW9htFjEhqrD54+M94i6ackoUkjHKbRnXdyEyKRelp4nJ1kAz32+s27jP1FsebpJCVl0BsvA==}
@@ -5715,8 +5715,8 @@ packages:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
 
-  luxon@3.4.3:
-    resolution: {integrity: sha512-tFWBiv3h7z+T/tDaoxA8rqTxy1CHV6gHS//QdaH4pulbq/JuBSGgQspQQqcgnwdAx6pNI7cmvz5Sv/addzHmUg==}
+  luxon@3.5.0:
+    resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
     engines: {node: '>=12'}
 
   magic-string-ast@0.6.2:
@@ -7837,8 +7837,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  uuid@10.0.0:
-    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+  uuid@11.0.3:
+    resolution: {integrity: sha512-d0z310fCWv5dJwnX1Y/MncBAqGMKEzlBb1AOf7z9K8ALnd0utBX/msg/fA0+sbyN1ihbMsLhrBlnl1ak7Wa0rg==}
     hasBin: true
 
   v8-compile-cache-lib@3.0.1:
@@ -10206,12 +10206,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nestjs/schedule@4.1.1(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))':
+  '@nestjs/schedule@4.1.2(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))':
     dependencies:
       '@nestjs/common': 10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@nestjs/core': 10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1)
-      cron: 3.1.7
-      uuid: 10.0.0
+      cron: 3.2.1
+      uuid: 11.0.3
 
   '@nestjs/schematics@10.2.3(chokidar@3.6.0)(typescript@5.6.3)':
     dependencies:
@@ -12622,10 +12622,10 @@ snapshots:
 
   create-require@1.1.1: {}
 
-  cron@3.1.7:
+  cron@3.2.1:
     dependencies:
       '@types/luxon': 3.4.2
-      luxon: 3.4.3
+      luxon: 3.5.0
 
   croner@9.0.0: {}
 
@@ -15105,7 +15105,7 @@ snapshots:
     dependencies:
       yallist: 4.0.0
 
-  luxon@3.4.3: {}
+  luxon@3.5.0: {}
 
   magic-string-ast@0.6.2:
     dependencies:
@@ -17492,7 +17492,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  uuid@10.0.0: {}
+  uuid@11.0.3: {}
 
   v8-compile-cache-lib@3.0.1: {}
 
