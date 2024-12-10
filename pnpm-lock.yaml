@@ -43,7 +43,7 @@ importers:
         version: 0.38.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.1)
       drizzle-zod:
         specifier: 0.6.0
-        version: 0.6.0(drizzle-orm@0.38.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.1))(zod@3.23.8)
+        version: 0.6.0(drizzle-orm@0.38.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.1))(zod@3.24.0)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -60,8 +60,8 @@ importers:
         specifier: 7.8.1
         version: 7.8.1
       zod:
-        specifier: 3.23.8
-        version: 3.23.8
+        specifier: 3.24.0
+        version: 3.24.0
     devDependencies:
       '@fastify/static':
         specifier: 8.0.3
@@ -8213,8 +8213,8 @@ packages:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
 
-  zod@3.23.8:
-    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+  zod@3.24.0:
+    resolution: {integrity: sha512-Hz+wiY8yD0VLA2k/+nsg2Abez674dDGTai33SwNvMPuf9uIrBC9eFgIMQxBBbHFxVXi8W+5nX9DcAh9YNSQm/w==}
 
 snapshots:
 
@@ -12779,10 +12779,10 @@ snapshots:
       '@types/pg': 8.11.10
       pg: 8.13.1
 
-  drizzle-zod@0.6.0(drizzle-orm@0.38.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.1))(zod@3.23.8):
+  drizzle-zod@0.6.0(drizzle-orm@0.38.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.1))(zod@3.24.0):
     dependencies:
       drizzle-orm: 0.38.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(pg@8.13.1)
-      zod: 3.23.8
+      zod: 3.24.0
 
   duplexer@0.1.2: {}
 
@@ -17851,4 +17851,4 @@ snapshots:
       compress-commons: 6.0.2
       readable-stream: 4.4.2
 
-  zod@3.23.8: {}
+  zod@3.24.0: {}
