@@ -1,4 +1,4 @@
-FROM node:20.18.1
+FROM node:20.18.3
 WORKDIR /app
 
 COPY ["package.json", ".npmrc", "./"]
