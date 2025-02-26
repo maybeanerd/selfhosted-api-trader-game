@@ -6,7 +6,7 @@ name: ${INSTANCE_NAME:-self-hosted-api-trader-game}
 
 services:
   traefik:
-    image: 'traefik:v3.3.3'
+    image: 'traefik:v3.3.4'
     container_name: 'Reverse-Proxy'
     command:
       - '--providers.docker=true'
