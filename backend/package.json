@@ -61,7 +61,7 @@
     "@types/jest": "29.5.14",
     "@types/node": "22.13.13",
     "@types/pg": "8.11.11",
-    "@types/supertest": "6.0.2",
+    "@types/supertest": "6.0.3",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "activitypub-types": "1.1.0",
