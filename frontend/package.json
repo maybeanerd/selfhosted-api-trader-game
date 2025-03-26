@@ -32,7 +32,7 @@
     "@nuxtjs/i18n": "8.5.5",
     "@types/node": "22.13.13",
     "@typescript-eslint/parser": "7.18.0",
-    "@vite-pwa/nuxt": "0.10.7",
+    "@vite-pwa/nuxt": "0.10.8",
     "autoprefixer": "10.4.21",
     "eslint": "8.57.1",
     "git-commit-info": "2.0.2",
