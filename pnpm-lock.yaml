@@ -172,8 +172,8 @@ importers:
         specifier: 7.18.0
         version: 7.18.0(eslint@8.57.1)(typescript@5.8.2)
       '@vite-pwa/nuxt':
-        specifier: 0.10.7
-        version: 0.10.7(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
+        specifier: 0.10.8
+        version: 0.10.8(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
       autoprefixer:
         specifier: 10.4.21
         version: 10.4.21(postcss@8.5.1)
@@ -2876,8 +2876,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  '@vite-pwa/nuxt@0.10.7':
-    resolution: {integrity: sha512-W9RFPjWj3SggzjQEFXh2vOOAXmytg5vHmPY+croCAoKwOAjDQbLiYdEIthHE3D5JhGwgixgdGi5G/pMA2oVZRQ==}
+  '@vite-pwa/nuxt@0.10.8':
+    resolution: {integrity: sha512-nC7Zv13AbUHXg7JgPZEILi4sQ9I7KwFsUm3M82PKApW5q3nIRI8q6djQ2+3ep3HIk+RtbL6hhmGcnqmtSmPMBA==}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.6
     peerDependenciesMeta:
@@ -11837,7 +11837,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vite-pwa/nuxt@0.10.7(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)':
+  '@vite-pwa/nuxt@0.10.8(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)':
     dependencies:
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
       pathe: 1.1.2
