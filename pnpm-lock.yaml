@@ -152,7 +152,7 @@ importers:
     devDependencies:
       '@nuxt/devtools':
         specifier: latest
-        version: 2.3.1(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
+        version: 2.3.2(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
       '@nuxt/image':
         specifier: 1.10.0
         version: 1.10.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)(magicast@0.3.5)
@@ -172,8 +172,8 @@ importers:
         specifier: 7.18.0
         version: 7.18.0(eslint@8.57.1)(typescript@5.8.2)
       '@vite-pwa/nuxt':
-        specifier: 0.10.6
-        version: 0.10.6(magicast@0.3.5)(rollup@4.24.4)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
+        specifier: 0.10.7
+        version: 0.10.7(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
       autoprefixer:
         specifier: 10.4.21
         version: 10.4.21(postcss@8.5.1)
@@ -2018,8 +2018,8 @@ packages:
     peerDependencies:
       vite: '*'
 
-  '@nuxt/devtools-kit@2.3.1':
-    resolution: {integrity: sha512-sggap7UTV0823cZk1buCEdd3KG+dMo73DpBuN+zHFC8UG3PfSKDlbVmQGb0TegxWTXG6BwItNQo8gd+pZzf/MA==}
+  '@nuxt/devtools-kit@2.3.2':
+    resolution: {integrity: sha512-K0citnz9bSecPCLl4jGfE5I5St+E9XtDmOvYqq3ranGZGZ2Mvs5RwgUkaOrn4rulvUmBGBl7Exwh5YX9PONrEQ==}
     peerDependencies:
       vite: '>=6.0'
 
@@ -2027,8 +2027,8 @@ packages:
     resolution: {integrity: sha512-86Gd92uEw0Dh2ErIYT9TMIrMOISE96fCRN4rxeryTvyiowQOsyrbkCeMNYrEehoRL+lohoyK6iDmFajadPNwWQ==}
     hasBin: true
 
-  '@nuxt/devtools-wizard@2.3.1':
-    resolution: {integrity: sha512-FqJVncQ9XiVR3uVwnqxHysCShfwrsK8JL4Q8rNrQoY9ly0Q7h6vimX44asFZSSCQ25WYo74PikdvVKV/bZW+qg==}
+  '@nuxt/devtools-wizard@2.3.2':
+    resolution: {integrity: sha512-vrGjcb7O/ojrWM9FXjAyWgMLUTkb9bmQUCXc//wZw8YnJLR/hmmvo0XFwmz31BN7nMLZaMpUclROdlhRSPNf1Q==}
     hasBin: true
 
   '@nuxt/devtools@1.7.0':
@@ -2037,8 +2037,8 @@ packages:
     peerDependencies:
       vite: '*'
 
-  '@nuxt/devtools@2.3.1':
-    resolution: {integrity: sha512-SA/ShgsB/E1DMAC7BZI6sP00djvOXfhrwaqdpb1rNNOqNJ/JX1oc+LVNtKTPAzxUouDsv5sAeEVdPT5enync2g==}
+  '@nuxt/devtools@2.3.2':
+    resolution: {integrity: sha512-MMx7pUW0aPDRmhe3jy91srEiFWq/Q70rjbGoHhzpVosuvyvy/fi0oKOFQqN5V4V7jJLiEx4HAoD0QdqP0I6xBA==}
     hasBin: true
     peerDependencies:
       vite: '>=6.0'
@@ -2077,10 +2077,6 @@ packages:
 
   '@nuxt/schema@3.15.4':
     resolution: {integrity: sha512-pAYZb/3ocSC/db1EFd5y+otmgHqUkvfxfhd9EknDB5DygnJuOIQNuGJ7LMJM6S2c0DYgBIHOdEelLxKHOjwbgQ==}
-    engines: {node: ^14.18.0 || >=16.10.0}
-
-  '@nuxt/schema@3.16.0':
-    resolution: {integrity: sha512-uCpcqWO6C4P5c4vi1/sq5GyajO0EOp+ZWFtPrnKaJ1pXAhA+W1aMVxAjfi2f18QMJHuRXBz1TouFg1RmWA6FuA==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
   '@nuxt/schema@3.16.1':
@@ -2880,8 +2876,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  '@vite-pwa/nuxt@0.10.6':
-    resolution: {integrity: sha512-yQTrMNLz2KuroEaqstHYvylT258BgYryON1tC2MQGCG8VVyWXfmYZPeffid/zCE8pkKMQpp6e9owKUyVLgT5xg==}
+  '@vite-pwa/nuxt@0.10.7':
+    resolution: {integrity: sha512-W9RFPjWj3SggzjQEFXh2vOOAXmytg5vHmPY+croCAoKwOAjDQbLiYdEIthHE3D5JhGwgixgdGi5G/pMA2oVZRQ==}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.6
     peerDependenciesMeta:
@@ -3417,8 +3413,8 @@ packages:
   birpc@0.2.19:
     resolution: {integrity: sha512-5WeXXAvTmitV1RqJFppT5QtUiz2p1mRSYU000Jkft5ZUCLJIk4uQriYNO50HknxKwM6jd8utNc66K1qGIwwWBQ==}
 
-  birpc@2.2.0:
-    resolution: {integrity: sha512-1/22obknhoj56PcE+pZPp6AbWDdY55M81/ofpPW3Ltlp9Eh4zoFFLswvZmNpRTb790CY5tsNfgbYeNOqIARJfQ==}
+  birpc@2.3.0:
+    resolution: {integrity: sha512-ijbtkn/F3Pvzb6jHypHRyve2QApOCZDR25D/VnkY2G/lBNcXCTsnsCxgY4k4PkVB7zfwzYbY3O9Lcqe3xufS5g==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -8078,14 +8074,14 @@ packages:
       '@nuxt/kit':
         optional: true
 
-  vite-plugin-pwa@0.20.5:
-    resolution: {integrity: sha512-aweuI/6G6n4C5Inn0vwHumElU/UEpNuO+9iZzwPZGTCH87TeZ6YFMrEY6ZUBQdIHHlhTsbMDryFARcSuOdsz9Q==}
+  vite-plugin-pwa@0.21.2:
+    resolution: {integrity: sha512-vFhH6Waw8itNu37hWUJxL50q+CBbNcMVzsKaYHQVrfxTt3ihk3PeLO22SbiP1UNWzcEPaTQv+YVxe4G0KOjAkg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.6
-      vite: ^3.1.0 || ^4.0.0 || ^5.0.0
-      workbox-build: ^7.1.0
-      workbox-window: ^7.1.0
+      vite: ^3.1.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
+      workbox-build: ^7.3.0
+      workbox-window: ^7.3.0
     peerDependenciesMeta:
       '@vite-pwa/assets-generator':
         optional: true
@@ -8095,8 +8091,8 @@ packages:
     peerDependencies:
       vite: ^3.0.0-0 || ^4.0.0-0 || ^5.0.0-0 || ^6.0.0-0
 
-  vite-plugin-vue-tracer@0.1.1:
-    resolution: {integrity: sha512-8BuReHmbSPd6iRQDQhlyK5+DexY1Hmb4K0GUVo9Te1Yaz8gyOZspBm9qdG1SvebdSIKw3WNlzpdstJ47TJ4bOw==}
+  vite-plugin-vue-tracer@0.1.3:
+    resolution: {integrity: sha512-+fN6oo0//dwZP9Ax9gRKeUroCqpQ43P57qlWgL0ljCIxAs+Rpqn/L4anIPZPgjDPga5dZH+ZJsshbF0PNJbm3Q==}
     peerDependencies:
       vite: ^6.0.0
       vue: ^3.5.0
@@ -10536,14 +10532,14 @@ snapshots:
 
   '@nuxt/devtools-kit@1.7.0(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))':
     dependencies:
-      '@nuxt/kit': 3.16.0(magicast@0.3.5)
-      '@nuxt/schema': 3.16.0
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
+      '@nuxt/schema': 3.16.1
       execa: 7.2.0
       vite: 6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/devtools-kit@2.3.1(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))':
+  '@nuxt/devtools-kit@2.3.2(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))':
     dependencies:
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
       '@nuxt/schema': 3.16.1
@@ -10565,7 +10561,7 @@ snapshots:
       rc9: 2.1.2
       semver: 7.7.1
 
-  '@nuxt/devtools-wizard@2.3.1':
+  '@nuxt/devtools-wizard@2.3.2':
     dependencies:
       consola: 3.4.2
       diff: 7.0.0
@@ -10581,7 +10577,7 @@ snapshots:
       '@antfu/utils': 0.7.10
       '@nuxt/devtools-kit': 1.7.0(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
       '@nuxt/devtools-wizard': 1.7.0
-      '@nuxt/kit': 3.16.0(magicast@0.3.5)
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
       '@vue/devtools-core': 7.6.8(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
       '@vue/devtools-kit': 7.6.8
       birpc: 0.2.19
@@ -10612,7 +10608,7 @@ snapshots:
       tinyglobby: 0.2.10
       unimport: 3.14.6(rollup@4.24.4)
       vite: 6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
-      vite-plugin-inspect: 0.8.9(@nuxt/kit@3.16.0(magicast@0.3.5))(rollup@4.24.4)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
+      vite-plugin-inspect: 0.8.9(@nuxt/kit@3.16.1(magicast@0.3.5))(rollup@4.24.4)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
       vite-plugin-vue-inspector: 5.3.1(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
       which: 3.0.1
       ws: 8.18.0
@@ -10623,14 +10619,14 @@ snapshots:
       - utf-8-validate
       - vue
 
-  '@nuxt/devtools@2.3.1(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))':
+  '@nuxt/devtools@2.3.2(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))':
     dependencies:
-      '@nuxt/devtools-kit': 2.3.1(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
-      '@nuxt/devtools-wizard': 2.3.1
+      '@nuxt/devtools-kit': 2.3.2(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
+      '@nuxt/devtools-wizard': 2.3.2
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
       '@vue/devtools-core': 7.7.2(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
       '@vue/devtools-kit': 7.7.2
-      birpc: 2.2.0
+      birpc: 2.3.0
       consola: 3.4.2
       destr: 2.0.3
       error-stack-parser-es: 1.0.5
@@ -10655,7 +10651,7 @@ snapshots:
       tinyglobby: 0.2.12
       vite: 6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
       vite-plugin-inspect: 11.0.0(@nuxt/kit@3.16.1(magicast@0.3.5))(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
-      vite-plugin-vue-tracer: 0.1.1(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
+      vite-plugin-vue-tracer: 0.1.3(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
       which: 5.0.0
       ws: 8.18.1
     transitivePeerDependencies:
@@ -10671,7 +10667,7 @@ snapshots:
       '@iconify/utils': 2.2.1
       '@iconify/vue': 4.2.0(vue@3.5.13(typescript@5.8.2))
       '@nuxt/devtools-kit': 1.7.0(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
-      '@nuxt/kit': 3.16.0(magicast@0.3.5)
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
       consola: 3.4.2
       local-pkg: 0.5.1
       mlly: 1.7.4
@@ -10857,13 +10853,6 @@ snapshots:
       pathe: 2.0.3
       std-env: 3.8.1
 
-  '@nuxt/schema@3.16.0':
-    dependencies:
-      consola: 3.4.2
-      defu: 6.1.4
-      pathe: 2.0.3
-      std-env: 3.8.1
-
   '@nuxt/schema@3.16.1':
     dependencies:
       consola: 3.4.2
@@ -10873,7 +10862,7 @@ snapshots:
 
   '@nuxt/telemetry@2.6.4(magicast@0.3.5)':
     dependencies:
-      '@nuxt/kit': 3.16.0(magicast@0.3.5)
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
       citty: 0.1.6
       consola: 3.4.2
       destr: 2.0.3
@@ -10993,7 +10982,7 @@ snapshots:
 
   '@nuxtjs/color-mode@3.5.2(magicast@0.3.5)':
     dependencies:
-      '@nuxt/kit': 3.16.0(magicast@0.3.5)
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
       pathe: 1.1.2
       pkg-types: 1.3.1
       semver: 7.7.1
@@ -11067,7 +11056,7 @@ snapshots:
 
   '@nuxtjs/tailwindcss@6.13.1(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.13.13)(typescript@5.8.2))':
     dependencies:
-      '@nuxt/kit': 3.16.0(magicast@0.3.5)
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
       autoprefixer: 10.4.21(postcss@8.5.2)
       c12: 2.0.1(magicast@0.3.5)
       consola: 3.4.2
@@ -11848,15 +11837,14 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vite-pwa/nuxt@0.10.6(magicast@0.3.5)(rollup@4.24.4)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)':
+  '@vite-pwa/nuxt@0.10.7(magicast@0.3.5)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)':
     dependencies:
-      '@nuxt/kit': 3.13.2(magicast@0.3.5)(rollup@4.24.4)
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
       pathe: 1.1.2
       ufo: 1.5.4
-      vite-plugin-pwa: 0.20.5(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
+      vite-plugin-pwa: 0.21.2(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0)
     transitivePeerDependencies:
       - magicast
-      - rollup
       - supports-color
       - vite
       - workbox-build
@@ -12546,7 +12534,7 @@ snapshots:
 
   birpc@0.2.19: {}
 
-  birpc@2.2.0: {}
+  birpc@2.3.0: {}
 
   bl@4.1.0:
     dependencies:
@@ -17943,7 +17931,7 @@ snapshots:
 
   vite-dev-rpc@1.0.7(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
     dependencies:
-      birpc: 2.2.0
+      birpc: 2.3.0
       vite: 6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
       vite-hot-client: 2.0.4(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))
 
@@ -17998,7 +17986,7 @@ snapshots:
       optionator: 0.9.3
       typescript: 5.8.2
 
-  vite-plugin-inspect@0.8.9(@nuxt/kit@3.16.0(magicast@0.3.5))(rollup@4.24.4)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
+  vite-plugin-inspect@0.8.9(@nuxt/kit@3.16.1(magicast@0.3.5))(rollup@4.24.4)(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)):
     dependencies:
       '@antfu/utils': 0.7.10
       '@rollup/pluginutils': 5.1.4(rollup@4.24.4)
@@ -18011,7 +17999,7 @@ snapshots:
       sirv: 3.0.0
       vite: 6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
     optionalDependencies:
-      '@nuxt/kit': 3.16.0(magicast@0.3.5)
+      '@nuxt/kit': 3.16.1(magicast@0.3.5)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -18033,11 +18021,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-pwa@0.20.5(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0):
+  vite-plugin-pwa@0.21.2(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(workbox-build@7.0.0(@types/babel__core@7.20.1))(workbox-window@7.0.0):
     dependencies:
-      debug: 4.3.6
+      debug: 4.4.0(supports-color@9.4.0)
       pretty-bytes: 6.1.1
-      tinyglobby: 0.2.10
+      tinyglobby: 0.2.12
       vite: 6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0)
       workbox-build: 7.0.0(@types/babel__core@7.20.1)
       workbox-window: 7.0.0
@@ -18059,9 +18047,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-tracer@0.1.1(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)):
+  vite-plugin-vue-tracer@0.1.3(vite@6.1.1(@types/node@22.13.13)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)):
     dependencies:
       estree-walker: 3.0.3
+      exsolve: 1.0.4
       magic-string: 0.30.17
       pathe: 2.0.3
       source-map-js: 1.2.1
