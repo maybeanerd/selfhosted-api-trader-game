@@ -42,8 +42,8 @@ importers:
         specifier: 0.41.0
         version: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)
       drizzle-zod:
-        specifier: 0.7.0
-        version: 0.7.0(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2)
+        specifier: 0.7.1
+        version: 0.7.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -4208,8 +4208,8 @@ packages:
       sqlite3:
         optional: true
 
-  drizzle-zod@0.7.0:
-    resolution: {integrity: sha512-xgCRYYVEzRkeXTS33GSMgoowe3vKsMNBjSI+cwG1oLQVEhAWWbqtb/AAMlm7tkmV4fG/uJjEmWzdzlEmTgWOoQ==}
+  drizzle-zod@0.7.1:
+    resolution: {integrity: sha512-nZzALOdz44/AL2U005UlmMqaQ1qe5JfanvLujiTHiiT8+vZJTBFhj3pY4Vk+L6UWyKFfNmLhk602Hn4kCTynKQ==}
     peerDependencies:
       drizzle-orm: '>=0.36.0'
       zod: '>=3.0.0'
@@ -13220,7 +13220,7 @@ snapshots:
       gel: 2.0.0
       pg: 8.14.1
 
-  drizzle-zod@0.7.0(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2):
+  drizzle-zod@0.7.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2):
     dependencies:
       drizzle-orm: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)
       zod: 3.24.2

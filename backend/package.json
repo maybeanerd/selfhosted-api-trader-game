@@ -44,7 +44,7 @@
     "class-validator": "0.14.1",
     "dotenv": "16.4.7",
     "drizzle-orm": "0.41.0",
-    "drizzle-zod": "0.7.0",
+    "drizzle-zod": "0.7.1",
     "http-signature": "1.4.0",
     "nestjs-pino": "4.4.0",
     "pg": "8.14.1",
