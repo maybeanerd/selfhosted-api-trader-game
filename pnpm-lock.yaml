@@ -40,10 +40,10 @@ importers:
         version: 16.5.0
       drizzle-orm:
         specifier: 0.41.0
-        version: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)
+        version: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)
       drizzle-zod:
         specifier: 0.7.1
-        version: 0.7.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2)
+        version: 0.7.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -85,8 +85,8 @@ importers:
         specifier: 22.14.1
         version: 22.14.1
       '@types/pg':
-        specifier: 8.11.11
-        version: 8.11.11
+        specifier: 8.11.12
+        version: 8.11.12
       '@types/supertest':
         specifier: 6.0.3
         version: 6.0.3
@@ -155,7 +155,7 @@ importers:
         version: 2.3.2(vite@6.1.1(@types/node@22.14.1)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
       '@nuxt/image':
         specifier: 1.10.0
-        version: 1.10.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)(magicast@0.3.5)
+        version: 1.10.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)(magicast@0.3.5)
       '@nuxt/ui':
         specifier: 2.21.1
         version: 2.21.1(axios@1.8.4)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.14.1)(typescript@5.8.3))(typescript@5.8.3)(vite@6.1.1(@types/node@22.14.1)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))
@@ -185,7 +185,7 @@ importers:
         version: 2.0.2
       nuxt:
         specifier: 3.15.4
-        version: 3.15.4(@parcel/watcher@2.4.1)(@types/node@22.14.1)(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(eslint@8.57.1)(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.3)(rollup@4.24.4)(terser@5.39.0)(typescript@5.8.3)(vite@6.1.1(@types/node@22.14.1)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(yaml@2.7.0)
+        version: 3.15.4(@parcel/watcher@2.4.1)(@types/node@22.14.1)(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(eslint@8.57.1)(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.3)(rollup@4.24.4)(terser@5.39.0)(typescript@5.8.3)(vite@6.1.1(@types/node@22.14.1)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(yaml@2.7.0)
       prettier:
         specifier: 3.5.3
         version: 3.5.3
@@ -2797,8 +2797,8 @@ packages:
   '@types/parse-path@7.0.3':
     resolution: {integrity: sha512-LriObC2+KYZD3FzCrgWGv/qufdUy4eXrxcLgQMfYXgPbLIecKIsVBaQgUPmxSSLcjmYbDTQbMgr6qr6l/eb7Bg==}
 
-  '@types/pg@8.11.11':
-    resolution: {integrity: sha512-kGT1qKM8wJQ5qlawUrEkXgvMSXoV213KfMGXcwfDwUIfUHXqXYXOfS1nE1LINRJVVVx5wCm70XnFlMHaIcQAfw==}
+  '@types/pg@8.11.12':
+    resolution: {integrity: sha512-D8qPxnq0rgpvZPYwMxAZffxvlk2mtgimLC5kos8uM7+3wPKfTESxtpD49cfB5w1UnodZL7oYnjFHT5+cB3Gw9Q==}
 
   '@types/qs@6.9.7':
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
@@ -6533,9 +6533,6 @@ packages:
     resolution: {integrity: sha512-VBw3jiVm6ZOdLBTIcXLNdSotb6Iy3uOCwDGFAksZCXmi10nyRvnP2v3jl4d+IsLYRyXf6o9hIm/ZtUzlByNUdw==}
     peerDependencies:
       pg: '>=8.0'
-
-  pg-protocol@1.7.0:
-    resolution: {integrity: sha512-hTK/mE36i8fDDhgDFjy6xNOG+LCorxLG3WO17tku+ij6sVHXh1jQUJ8hYAnRhNla4QVD2H8er/FOjc/+EgC6yQ==}
 
   pg-protocol@1.8.0:
     resolution: {integrity: sha512-jvuYlEkL03NRvOoyoRktBK7+qU5kOvlAwvmrH8sr3wbLrOdVWsRxQfz8mMy9sZFsqJ1hEWNfdWKI4SAmoL+j7g==}
@@ -10880,7 +10877,7 @@ snapshots:
       - vite
       - vue
 
-  '@nuxt/image@1.10.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)(magicast@0.3.5)':
+  '@nuxt/image@1.10.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)(magicast@0.3.5)':
     dependencies:
       '@nuxt/kit': 3.16.0(magicast@0.3.5)
       consola: 3.4.2
@@ -10893,7 +10890,7 @@ snapshots:
       std-env: 3.8.1
       ufo: 1.5.4
     optionalDependencies:
-      ipx: 2.1.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
+      ipx: 2.1.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -11776,10 +11773,10 @@ snapshots:
 
   '@types/parse-path@7.0.3': {}
 
-  '@types/pg@8.11.11':
+  '@types/pg@8.11.12':
     dependencies:
       '@types/node': 22.14.1
-      pg-protocol: 1.7.0
+      pg-protocol: 1.8.0
       pg-types: 4.0.2
 
   '@types/qs@6.9.7': {}
@@ -13256,9 +13253,9 @@ snapshots:
     dependencies:
       assert-plus: 1.0.0
 
-  db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)):
+  db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)):
     optionalDependencies:
-      drizzle-orm: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)
+      drizzle-orm: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)
 
   debug@2.6.9:
     dependencies:
@@ -13415,17 +13412,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1):
+  drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1):
     optionalDependencies:
       '@libsql/client-wasm': 0.14.0
       '@opentelemetry/api': 1.9.0
-      '@types/pg': 8.11.11
+      '@types/pg': 8.11.12
       gel: 2.0.0
       pg: 8.14.1
 
-  drizzle-zod@0.7.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2):
+  drizzle-zod@0.7.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))(zod@3.24.2):
     dependencies:
-      drizzle-orm: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)
+      drizzle-orm: 0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)
       zod: 3.24.2
 
   duplexer@0.1.2: {}
@@ -14777,7 +14774,7 @@ snapshots:
 
   ipaddr.js@2.2.0: {}
 
-  ipx@2.1.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1):
+  ipx@2.1.0(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1):
     dependencies:
       '@fastify/accept-negotiator': 1.1.0
       citty: 0.1.6
@@ -14793,7 +14790,7 @@ snapshots:
       sharp: 0.32.6
       svgo: 3.3.2
       ufo: 1.5.4
-      unstorage: 1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
+      unstorage: 1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
       xss: 1.0.14
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -15803,7 +15800,7 @@ snapshots:
       pino-http: 9.0.0
       rxjs: 7.8.2
 
-  nitropack@2.10.4(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(typescript@5.8.3):
+  nitropack@2.10.4(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(typescript@5.8.3):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.4
       '@netlify/functions': 2.8.2
@@ -15827,7 +15824,7 @@ snapshots:
       cookie-es: 1.2.2
       croner: 9.0.0
       crossws: 0.3.1
-      db0: 0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))
+      db0: 0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))
       defu: 6.1.4
       destr: 2.0.3
       dot-prop: 9.0.0
@@ -15870,7 +15867,7 @@ snapshots:
       unctx: 2.4.1
       unenv: 1.10.0
       unimport: 3.14.6(rollup@4.24.4)
-      unstorage: 1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
+      unstorage: 1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
       untyped: 1.5.2
       unwasm: 0.3.9
     transitivePeerDependencies:
@@ -15974,7 +15971,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt@3.15.4(@parcel/watcher@2.4.1)(@types/node@22.14.1)(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(eslint@8.57.1)(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.3)(rollup@4.24.4)(terser@5.39.0)(typescript@5.8.3)(vite@6.1.1(@types/node@22.14.1)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(yaml@2.7.0):
+  nuxt@3.15.4(@parcel/watcher@2.4.1)(@types/node@22.14.1)(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(eslint@8.57.1)(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.3)(rollup@4.24.4)(terser@5.39.0)(typescript@5.8.3)(vite@6.1.1(@types/node@22.14.1)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(yaml@2.7.0):
     dependencies:
       '@nuxt/cli': 3.21.1(magicast@0.3.5)
       '@nuxt/devalue': 2.0.2
@@ -16012,7 +16009,7 @@ snapshots:
       magic-string: 0.30.17
       mlly: 1.7.4
       nanotar: 0.2.0
-      nitropack: 2.10.4(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(typescript@5.8.3)
+      nitropack: 2.10.4(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))(encoding@0.1.13)(typescript@5.8.3)
       nypm: 0.5.2
       ofetch: 1.4.1
       ohash: 1.1.4
@@ -16034,7 +16031,7 @@ snapshots:
       unimport: 4.1.1
       unplugin: 2.1.2
       unplugin-vue-router: 0.11.2(rollup@4.24.4)(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))
-      unstorage: 1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
+      unstorage: 1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1)
       untyped: 1.5.2
       vue: 3.5.13(typescript@5.8.3)
       vue-bundle-renderer: 2.1.1
@@ -16368,8 +16365,6 @@ snapshots:
   pg-pool@3.8.0(pg@8.14.1):
     dependencies:
       pg: 8.14.1
-
-  pg-protocol@1.7.0: {}
 
   pg-protocol@1.8.0: {}
 
@@ -18034,7 +18029,7 @@ snapshots:
       acorn: 8.14.0
       webpack-virtual-modules: 0.6.2
 
-  unstorage@1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1):
+  unstorage@1.14.4(db0@0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1)))(ioredis@5.4.1):
     dependencies:
       anymatch: 3.1.3
       chokidar: 3.6.0
@@ -18045,7 +18040,7 @@ snapshots:
       ofetch: 1.4.1
       ufo: 1.5.4
     optionalDependencies:
-      db0: 0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.0)(pg@8.14.1))
+      db0: 0.2.1(drizzle-orm@0.41.0(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.12)(gel@2.0.0)(pg@8.14.1))
       ioredis: 5.4.1
 
   untun@0.1.3:
