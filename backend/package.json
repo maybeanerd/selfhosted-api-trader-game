@@ -41,7 +41,7 @@
     "@nestjs/swagger": "7.4.2",
     "axios": "1.9.0",
     "class-transformer": "0.5.1",
-    "class-validator": "0.14.1",
+    "class-validator": "0.14.2",
     "dotenv": "16.5.0",
     "drizzle-orm": "0.43.1",
     "drizzle-zod": "0.7.1",
