@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@nestjs/axios':
         specifier: 4.0.1
-        version: 4.0.1(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.9.0)(rxjs@7.8.2)
+        version: 4.0.1(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.10.0)(rxjs@7.8.2)
       '@nestjs/common':
         specifier: 11.1.5
         version: 11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -27,8 +27,8 @@ importers:
         specifier: 7.4.2
         version: 7.4.2(@fastify/static@8.2.0)(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.5(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)
       axios:
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.10.0
+        version: 1.10.0
       class-transformer:
         specifier: 0.5.1
         version: 0.5.1
@@ -158,7 +158,7 @@ importers:
         version: 1.10.0(db0@0.2.1(drizzle-orm@0.43.1(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.14)(gel@2.0.0)(pg@8.15.6)))(ioredis@5.4.1)(magicast@0.3.5)
       '@nuxt/ui':
         specifier: 2.22.1
-        version: 2.22.1(axios@1.9.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)
+        version: 2.22.1(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)
       '@nuxtjs/eslint-config-typescript':
         specifier: 12.1.0
         version: 12.1.0(eslint@8.57.1)(typescript@5.8.3)
@@ -3433,8 +3433,8 @@ packages:
   avvio@9.1.0:
     resolution: {integrity: sha512-fYASnYi600CsH/j9EQov7lECAniYiBFiiAtBNuZYLA2leLe9qOvZzqYHFjtIj6gD2VMoMLP14834LFWvr4IfDw==}
 
-  axios@1.9.0:
-    resolution: {integrity: sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==}
+  axios@1.10.0:
+    resolution: {integrity: sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==}
 
   b4a@1.6.4:
     resolution: {integrity: sha512-fpWrvyVHEKyeEvbKZTVOeZF3VSKKWtJxFIxX/jaVPf+cLbGUSitjb49pHLqPV2BUNNZ0LcoeEGfE/YCpyDYHIw==}
@@ -10560,10 +10560,10 @@ snapshots:
       json5: 2.2.3
       rollup: 4.24.4
 
-  '@nestjs/axios@4.0.1(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.9.0)(rxjs@7.8.2)':
+  '@nestjs/axios@4.0.1(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.10.0)(rxjs@7.8.2)':
     dependencies:
       '@nestjs/common': 11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      axios: 1.9.0
+      axios: 1.10.0
       rxjs: 7.8.2
 
   '@nestjs/cli@11.0.7(@types/node@22.16.5)(esbuild@0.25.6)':
@@ -11166,7 +11166,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/ui@2.22.1(axios@1.9.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)':
+  '@nuxt/ui@2.22.1(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)':
     dependencies:
       '@headlessui/tailwindcss': 0.2.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3)))
       '@headlessui/vue': 1.7.23(vue@3.5.13(typescript@5.8.3))
@@ -11182,7 +11182,7 @@ snapshots:
       '@tailwindcss/forms': 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3)))
       '@tailwindcss/typography': 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3)))
       '@vueuse/core': 13.5.0(vue@3.5.13(typescript@5.8.3))
-      '@vueuse/integrations': 13.5.0(axios@1.9.0)(change-case@5.4.4)(focus-trap@7.5.4)(fuse.js@7.1.0)(vue@3.5.13(typescript@5.8.3))
+      '@vueuse/integrations': 13.5.0(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(fuse.js@7.1.0)(vue@3.5.13(typescript@5.8.3))
       '@vueuse/math': 13.5.0(vue@3.5.13(typescript@5.8.3))
       defu: 6.1.4
       fuse.js: 7.1.0
@@ -12372,13 +12372,13 @@ snapshots:
       '@vueuse/shared': 13.5.0(vue@3.5.13(typescript@5.8.3))
       vue: 3.5.13(typescript@5.8.3)
 
-  '@vueuse/integrations@13.5.0(axios@1.9.0)(change-case@5.4.4)(focus-trap@7.5.4)(fuse.js@7.1.0)(vue@3.5.13(typescript@5.8.3))':
+  '@vueuse/integrations@13.5.0(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(fuse.js@7.1.0)(vue@3.5.13(typescript@5.8.3))':
     dependencies:
       '@vueuse/core': 13.5.0(vue@3.5.13(typescript@5.8.3))
       '@vueuse/shared': 13.5.0(vue@3.5.13(typescript@5.8.3))
       vue: 3.5.13(typescript@5.8.3)
     optionalDependencies:
-      axios: 1.9.0
+      axios: 1.10.0
       change-case: 5.4.4
       focus-trap: 7.5.4
       fuse.js: 7.1.0
@@ -12734,7 +12734,7 @@ snapshots:
       '@fastify/error': 4.0.0
       fastq: 1.17.1
 
-  axios@1.9.0:
+  axios@1.10.0:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
