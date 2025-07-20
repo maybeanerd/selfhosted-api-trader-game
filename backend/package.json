@@ -47,7 +47,7 @@
     "drizzle-zod": "0.8.2",
     "http-signature": "1.4.0",
     "nestjs-pino": "4.4.0",
-    "pg": "8.15.6",
+    "pg": "8.16.3",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
     "zod": "3.24.3"
@@ -60,7 +60,7 @@
     "@types/express": "5.0.3",
     "@types/jest": "29.5.14",
     "@types/node": "22.16.5",
-    "@types/pg": "8.11.14",
+    "@types/pg": "8.15.4",
     "@types/supertest": "6.0.3",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
