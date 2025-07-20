@@ -43,7 +43,7 @@ importers:
         version: 0.44.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.4)(gel@2.0.0)(pg@8.16.3)
       drizzle-zod:
         specifier: 0.8.2
-        version: 0.8.2(drizzle-orm@0.44.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.4)(gel@2.0.0)(pg@8.16.3))(zod@3.24.3)
+        version: 0.8.2(drizzle-orm@0.44.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.4)(gel@2.0.0)(pg@8.16.3))(zod@3.25.76)
       http-signature:
         specifier: 1.4.0
         version: 1.4.0
@@ -60,8 +60,8 @@ importers:
         specifier: 7.8.2
         version: 7.8.2
       zod:
-        specifier: 3.24.3
-        version: 3.24.3
+        specifier: 3.25.76
+        version: 3.25.76
     devDependencies:
       '@fastify/static':
         specifier: 8.2.0
@@ -158,7 +158,7 @@ importers:
         version: 1.10.0(db0@0.2.1(drizzle-orm@0.44.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.4)(gel@2.0.0)(pg@8.16.3)))(ioredis@5.4.1)(magicast@0.3.5)
       '@nuxt/ui':
         specifier: 2.22.1
-        version: 2.22.1(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)
+        version: 2.22.1(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.25.76)
       '@nuxtjs/eslint-config-typescript':
         specifier: 12.1.0
         version: 12.1.0(eslint@8.57.1)(typescript@5.8.3)
@@ -8615,8 +8615,8 @@ packages:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
 
-  zod@3.24.3:
-    resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
 snapshots:
 
@@ -11138,7 +11138,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/ui@2.22.1(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)':
+  '@nuxt/ui@2.22.1(axios@1.10.0)(change-case@5.4.4)(focus-trap@7.5.4)(magicast@0.3.5)(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))(vite@6.1.1(@types/node@22.16.5)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.3))(zod@3.25.76)':
     dependencies:
       '@headlessui/tailwindcss': 0.2.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3)))
       '@headlessui/vue': 1.7.23(vue@3.5.13(typescript@5.8.3))
@@ -11164,7 +11164,7 @@ snapshots:
       tailwind-merge: 2.6.0
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.16.5)(typescript@5.8.3))
     optionalDependencies:
-      zod: 3.24.3
+      zod: 3.25.76
     transitivePeerDependencies:
       - async-validator
       - axios
@@ -13532,10 +13532,10 @@ snapshots:
       gel: 2.0.0
       pg: 8.16.3
 
-  drizzle-zod@0.8.2(drizzle-orm@0.44.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.4)(gel@2.0.0)(pg@8.16.3))(zod@3.24.3):
+  drizzle-zod@0.8.2(drizzle-orm@0.44.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.4)(gel@2.0.0)(pg@8.16.3))(zod@3.25.76):
     dependencies:
       drizzle-orm: 0.44.3(@libsql/client-wasm@0.14.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.4)(gel@2.0.0)(pg@8.16.3)
-      zod: 3.24.3
+      zod: 3.25.76
 
   duplexer@0.1.2: {}
 
@@ -18833,4 +18833,4 @@ snapshots:
       compress-commons: 6.0.2
       readable-stream: 4.4.2
 
-  zod@3.24.3: {}
+  zod@3.25.76: {}
