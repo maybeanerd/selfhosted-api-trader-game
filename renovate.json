@@ -1,12 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>maybeanerd/renovate-config"],
+  "extends": [
+    "local>maybeanerd/renovate-config"
+  ],
   "packageRules": [
     {
-      "matchSourceUrlPrefixes": [
-        "https://github.com/maybeanerd/selfhosted-api-trader-game"
-      ],
-      "groupName": "example image use"
+      "groupName": "example image use",
+      "matchSourceUrls": [
+        "https://github.com/maybeanerd/selfhosted-api-trader-game{/,}**"
+      ]
     }
   ]
 }
